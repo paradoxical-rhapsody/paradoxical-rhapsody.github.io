@@ -1,0 +1,80 @@
++++
+title = "✓ Reshape Data"
+icon = "sticky-fill"
+icon = "r-project"
+tags = ["reshape", ]
+
+link = "https://nbviewer.org/github/paradoxical-rhapsody/jupyterNBs/blob/master/211104-reshape.ipynb"
++++
+
+# Reshape Data
+*2021-11-04*
+
+The repeated measurements in observed data can be orginazed as `wide` or `long` format:
+
+* `wide`: the repeated measurements are arranged into sepearated columns of the same row.
+* `long`: repeated measurements are arranged into sepearated rows of the same column.
+
+Two ways to tranform the data between long and wide format are considered:
+
+1. Built-in fuction `reshape` is qualified to the conversion.
+2. Pkg `data.table` provide function `melt` (wide-to-long) and `dcast` (long-to-wide).
+
+
+## `stats::reshape`
+
+Let `DF` be a wide data, i.e.
+
+```{r}
+rm(list=ls())
+set.seed(2021)
+DF <- matrix(rnorm(3*9), 3) |> round(digits=2) |> data.frame()
+colnames(DF) <- paste(rep(c('F', 'G', 'H'), each=3), c('a', 'b', 'c'), sep='.')
+
+DF <- data.frame(ID=letters[1:3], DF)
+show(DF)
+```
+
+In the cell below the `DF` is melted into a long table.
+
+```{r}
+varying <- list(
+    c('F.a', 'G.a', 'H.a'),
+    c('F.b', 'G.b', 'H.b'),
+    c('F.c', 'G.c', 'H.c')
+)
+
+times <- c('F', 'G', 'H')
+
+v.names <- c('a', 'b', 'c')
+timevar <- 'method'
+
+DF.long <- reshape(DF, direction='long', varying=varying, times=times, v.names=v.names, timevar=timevar)
+show(DF.long)
+```
+
+
+## `data.table::melt/dcast`
+
+```{r}
+library(data.table)
+DT <- copy(DF) |> as.data.table()
+
+DT.long <- melt(DT, id.vars='ID', 
+    measure.vars=list(
+        a=c('F.a', 'G.a', 'H.a'), 
+        b=c('F.b', 'G.b', 'H.b'), 
+        c=c('F.c', 'G.c', 'H.c')), 
+    variable.name='method')
+
+DT.long[method==1, method:='F']
+DT.long[method==2, method:='G']
+DT.long[method==3, method:='H']
+
+show(DT.long)
+```
+
+```{r}
+show(dcast(DT.long, ID ~ method, value.var=c('a', 'b', 'c')))
+```
+

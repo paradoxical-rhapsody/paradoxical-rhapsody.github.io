@@ -1,0 +1,171 @@
+/* 以下是自己定义的格式
+ *
+ */
+
+a.href {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+}
+
+a.href:hover,
+a.href:focus {
+    text-decoration: none;
+    border-bottom: 1px solid;
+}
+
+a.delete,
+a.delete:hover,
+a.delete:focus {
+    text-decoration: line-through;
+    color: gainsboro;
+}
+
+a.underline,
+a.underline:hover,
+a.underline:focus {
+    text-decoration: underline;
+}
+
+a.dotted,
+a.dotted:hover,
+a.dotted:focus {
+    text-decoration: none;
+    border-bottom: 1.0px dotted;
+}
+
+a.emph,
+a.emph:hover,
+a.emph:focus {
+    text-decoration: none;
+    font-style: oblique;
+    font-size: 1.02rem;
+}
+
+a.courierNew,
+a.courierNew:hover,
+a.courierNew:focus {
+    text-decoration: none;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.colorful {
+    background-color: rgb(250, 253, 255);
+    border-left: 3px solid rgb(228, 229, 235);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 0.5em;
+}
+
+.blank {
+    margin-bottom: 0.5rem;
+}
+
+.no-number .katex-display::after {
+    counter-increment: nothing;
+    content: "";
+}
+
+.ref-item {
+    position: relative;
+    top: -0.5em;
+    font-size: 70%;
+    background-color: #F9F9F9;
+    border-left: 2px solid #D3D3D3;
+    border-right: 1px solid #E5E5E5;
+    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
+    margin-bottom: 0.35em;
+    padding-left: 0.5em;
+}
+
+.block {
+    background-color: #F9F9F9;
+    border: 1px solid #D3D3D3;
+    padding: 0.5rem;
+    padding-bottom: 0.0rem;
+    padding-top: 0.0rem;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em
+}
+
+.log {
+    font-size: smaller;
+    background-color: #F9F9F9;
+    border-top: 1px solid #D3D3D3;
+    border-bottom: 1px solid #D3D3D3;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+}
+
+
+/*** clipboard for code block ***/
+
+pre {
+    position: relative;
+    /* padding: 30px; */
+}
+
+.copy-button {
+    cursor: pointer;
+    border: 0;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 6px 10px 10px;
+    color: #795548;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.copy-button:hover,
+.copy-button:focus,
+.copy-button:active {
+    outline: 0;
+    background-color: #eee9e6;
+}
+
+.toc-sidebar{
+    font-size: 80%;
+    font-family: Arial, serif;
+    color: #a6a2a0;
+    text-align: justify;
+    max-width: 16rem;
+    width: max-width ;
+    margin-top: 2em;
+    margin-bottom: 4em;
+    padding-top: 1em;
+    padding-right: 1em;
+    border: 1.0px solid white;
+    border-radius: 0.5rem;
+}
+
+
+
+/* figure and image */
+figure {
+    text-align: center;
+    border: 1px solid gray;
+}
+
+.franklin-content figure > img {
+    padding:0;
+    margin:0;
+}
+
+figcaption {
+    text-align: center;
+}
+
+.small-imgc {
+    text-align: center;
+}
+.small-imgc img {
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+    padding-bottom: 1.0rem;
+    width: 40%;
+}
+
