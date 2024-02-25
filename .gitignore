@@ -1,0 +1,15 @@
+__site/
+.DS_Store
+franklin
+franklin.pub
+node_modules/
+
+teaching/
+tales/
+pgp-mail/
+dataexpo/
+archived-expo/
+
+_assets/research/pubs/
+
+.vscode/
