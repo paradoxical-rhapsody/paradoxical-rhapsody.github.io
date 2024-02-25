@@ -1,0 +1,35 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>xu-zc | Calendar</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <img src="/assets/recipe/tikz/calendar/calendar.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+&#37; https://tikz.dev/library-folding
+\usepackage&#123;tikz&#125;
+\usetikzlibrary&#123;calendar, folding&#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;&#93;
+\scriptsize\sffamily
+
+\pic &#91;transform shape,
+        every calendar/.style&#61;&#123;
+            at&#61;&#123;&#40;-8ex, 4ex&#41;&#125;,
+            week list,
+            month label above centered,
+            month text&#61;\bfseries\textcolor&#123;red&#125;&#123;\&#37;mt&#125; \&#37;y0,
+            if&#61;&#123;&#40;Sunday&#41; &#91;black&#33;50&#93;&#125;
+        &#125;,
+        folding line length&#61;2.5cm,
+        face 1&#61;&#123; \calendar&#91;dates&#61;\the\year-01-01 to \the\year-01-last&#93; ; &#125;,
+        face 2&#61;&#123; \calendar&#91;dates&#61;\the\year-02-01 to \the\year-02-last&#93; ; &#125;,
+        face 3&#61;&#123; \calendar&#91;dates&#61;\the\year-03-01 to \the\year-03-last&#93; ; &#125;,
+        face 4&#61;&#123; \calendar&#91;dates&#61;\the\year-04-01 to \the\year-04-last&#93; ; &#125;,
+        face 5&#61;&#123; \calendar&#91;dates&#61;\the\year-05-01 to \the\year-05-last&#93; ; &#125;,
+        face 6&#61;&#123; \calendar&#91;dates&#61;\the\year-06-01 to \the\year-06-last&#93; ; &#125;,
+        face 7&#61;&#123; \calendar&#91;dates&#61;\the\year-07-01 to \the\year-07-last&#93; ; &#125;,
+        face 8&#61;&#123; \calendar&#91;dates&#61;\the\year-08-01 to \the\year-08-last&#93; ; &#125;,
+        face 9&#61;&#123; \calendar&#91;dates&#61;\the\year-09-01 to \the\year-09-last&#93; ; &#125;,
+        face 10&#61;&#123; \calendar&#91;dates&#61;\the\year-10-01 to \the\year-10-last&#93; ; &#125;,
+        face 11&#61;&#123; \calendar&#91;dates&#61;\the\year-11-01 to \the\year-11-last&#93; ; &#125;,
+        face 12&#61;&#123; \calendar&#91;dates&#61;\the\year-12-01 to \the\year-12-last&#93; ; &#125;
+    &#93; &#123;dodecahedron folding&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div>

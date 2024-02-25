@@ -1,0 +1,121 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>xu-zc | beamer 设置</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <pre><code class="plaintext hljs">% \documentclass{article}
+% \usepackage[notheorems]{beamerarticle}
+% \input{../article-preamble.tex}
+
+\documentclass[aspectratio=169, notheorems, slidecentered, compress, handout]{beamer}
+\setbeameroption{show notes} % show notes / hide notes / show notes on second screen / show only notes
+
+\numberwithin{page}{section}
+\renewcommand{\thepage}{\thesection-\arabic{page}}
+
+\mode&lt;presentation&gt;{
+	\usefonttheme{professionalfonts} % normal font for math formulas
+	% \usefonttheme[onlymath]{serif}
+	% \setbeamerfont{title}{shape=\itshape, family=\rmfamily}
+
+	\setbeamercolor{title}{fg=black}
+	\setbeamercolor{frametitle}{fg=black}
+	\setbeamercolor{block title}{fg=black}
+	\setbeamercolor{foot}{fg=black}
+	\setbeamercolor{section in toc}{fg=black}
+	\setbeamercolor{background canvas}{bg=white}
+	\setbeamercolor{alerted text}{fg=red}
+	\setbeamercolor{caption name}{fg=black}
+	% \setbeamercolor{section number projected}{bg=black, fg=white}
+
+	\setbeamerfont{frametitle}{series=\bfseries}
+
+	\AtBeginSection[]{ % insert section page
+        \begin{frame}[plain] %[noframenumbering]
+			\vfill
+			\centering
+			\begin{beamercolorbox}[sep=8pt, center, shadow=true, rounded=true]{title}
+				\usebeamerfont{title}
+				\thesection. \insertsectionhead
+				\par
+			\end{beamercolorbox}
+			\vfill
+        \end{frame}
+    }
+
+	% \logo{
+	% 	\begin{tikzpicture}[remember picture, overlay]
+	% 	  \fill[gray] (current page.north west) -- +(1.618, 0) -- +(0, -0.809) -- cycle ;
+	% 	  \draw[black] (current page.north west) ++(0.403, -0.35) node {\rotatebox{30}{STAT}} ;
+	% 	\end{tikzpicture}
+	% }
+
+	\setbeamertemplate{theorems}[numbered] % numbering theorem environment
+	\setbeamertemplate{navigation symbols}{} % % &lt;&lt;beamer&gt;&gt; Page 74
+	\setbeamertemplate{frametitle continuation}[from second][] % &lt;&lt;beamer&gt;&gt; Page 60
+
+	\setbeamertemplate{frametitle}{
+		% \leavevmode
+		\begin{beamercolorbox}[shadow=true, center]{section in head/foot}
+			\usebeamerfont{title}
+			\insertframetitle
+		\end{beamercolorbox}
+	}
+	
+	\setbeamertemplate{footline}{
+		\leavevmode
+		\hbox{
+			\begin{beamercolorbox}[wd=.5\paperwidth, left]{section in head/foot}%
+				\hspace*{20pt}
+				\insertsection
+			\end{beamercolorbox}
+			\begin{beamercolorbox}[wd=.5\paperwidth, right]{section in head/foot}%
+				\thepage
+				\hspace*{40pt}
+				% \hspace*{20pt}
+				% \rotatebox{30}{xzc}
+				% \hspace*{20pt}
+			\end{beamercolorbox}
+		}
+		\vskip 12pt
+	}
+}
+
+\usepackage{hyperref}
+\hypersetup{
+    unicode = true,         % non-Latin characters in Acrobat’s bookmarks
+    pdfencoding = unicode,
+    pdftoolbar = true,      % show Acrobat’s toolbar?
+    pdfmenubar = true,      % show Acrobat’s menu?
+    pdffitwindow = false,   % window fit to page when opened
+    pdfstartview = {FitH},  % fits the width of the page to the window
+    pdftitle = {Workflow of Data Analysis},
+    pdfauthor = {Zengchao XU},
+    pdfsubject = {lecture notes},
+    pdfcreator = {Zengchao XU},
+    pdfproducer = {XeLaTeX},
+	allbordercolors = 1 1 1, % set all border color as white
+    pdfnewwindow = true,    % links in new window
+    colorlinks = false,     % false: boxed links; true: colored links
+    linkcolor = false,      % color of internal links (change box color with linkbordercolor)
+    urlcolor = false
+}
+
+\usepackgage{...}
+\usepackage{biblatex}
+\addbibresource{refs.bib}
+
+\logo{
+    \begin{tikzpicture}[remember picture, overlay]
+        \fill[gray] (current page.north west) -- +(1.618, 0) -- +(0, -0.809) -- cycle ;
+        \draw[black] (current page.north west) ++(0.403, -0.35) node {\rotatebox{30}{STAT}} ;
+    \end{tikzpicture}
+}
+
+
+\title{...}
+\author{...}
+\institute[SHNU]{...}
+\date[\today]{\today}
+
+\begin{document}
+\baselineskip 6mm
+
+...
+
+\end{document}</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

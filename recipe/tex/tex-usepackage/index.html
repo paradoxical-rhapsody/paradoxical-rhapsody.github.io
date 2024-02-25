@@ -1,0 +1,112 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>xu-zc | usepackage</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <pre><code class="plaintext hljs">\usepackage{lipsum}
+% \usepackage{zhlipsum}
+
+\usepackage{ctex}
+% \usepackage[heading=true]{ctex}
+%% \pagestyle{plain}
+% \ctexset{
+%     section = {
+%         name = {,、}, 
+%         number = \chinese{section},
+%         format = \large\bfseries,
+%         aftername = {}
+%     }
+% }
+
+\setCJKsansfont{SimSun}
+% \setCJKsansfont{LXGWWENKAI-REGULAR.TTF} % [BoldFont=LXGWWENKAI-BOLD.TTF]
+% \newCJKfontfamily \yozai {YOZAI-REGULAR.TTF}
+
+\usepackage{amsmath, bm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\everymath{\displaystyle}
+\numberwithin{equation}{section}
+
+
+% \newtheorem{theorem}{定理}[section]
+% \newtheorem{lemma}[theorem]{引理}
+% \newtheorem{proposition}[theorem]{命题}
+% \newtheorem{corollary}[theorem]{推论}
+% \theoremstyle{definition}
+% \newtheorem{definition}[theorem]{定义}
+% \newtheorem{example}[theorem]{例}
+% \numberwithin{equation}{section}
+
+
+\usepackage{xcolor}
+% \definecolor{myred}{RGB}{255,0,0}
+% \definecolor{myblue}{rgb}{0,0,1}
+% \definecolor{dgreen}{RGB}{63,127,0}
+% \definecolor{dred}{RGB}{144,14,3}
+% \textcolor{Blue}{蓝色字体}
+% \textcolor[RGB]{255,0,0}{红色字体}
+
+
+\usepackage{graphicx}
+\usepackage{adjustbox}
+
+
+\usepackage{longtable}
+
+\usepackage{tabularray}
+\UseTblrLibrary{amsmath}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{diagbox}
+\UseTblrLibrary{varwidth}
+
+\usepackage{csvsimple-l3}
+
+\usepackage[normalem]{ulem}
+\usepackage{caption}
+\usepackage{cleveref}
+
+\usepackage{fancyvrb}
+
+\usepackage{listings}
+\lstset{
+    language=R,
+    morekeywords = {fread, fwrite, readClipboard, write.foreign, readMat, writeMat, read.octave}
+}
+
+
+
+\usepackage{fontawesome5}
+\newcommand{\exampletitle}{\rotatebox{90}{\faThumbtack}~}
+
+\usepackage[inline]{enumitem}
+\AddEnumerateCounter{\chinese}{\chinese}{\quad}
+\newlist{homework}{enumerate}{1}
+\setlist[homework]{label=\textbf{\thesection.\arabic*}}
+\setlist[enumerate]{label=\textbullet}
+
+\usepackage{tcolorbox}
+\tcbset{colframe=white}
+
+\tcbuselibrary{theorems}
+\newtcbtheorem[number within=section]{definition}{定义}{coltitle=black, colbacktitle=black!11, colback=black!11, halign=left}{} % colframe=black!11,
+\newtcbtheorem[number within=section]{theorem}{定理}{coltitle=black, colbacktitle=black!11, colback=black!11, halign=left}{} % colframe=black!11,
+\newtcbtheorem[number within=section]{lemma}{引理}{coltitle=black, colbacktitle=black!11, colback=black!11, halign=left}{} % colframe=black!11,
+\newtcbtheorem[number within=section]{proposition}{命题}{coltitle=black, colbacktitle=black!11, colback=black!11, halign=left}{} % colframe=black!11,
+\newtcbtheorem[number within=section]{example}{例}{coltitle=black, colbacktitle=white, colback=white, halign=left}{} % colframe=black!11,
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\diag}{diag}
+
+\DeclareMathOperator{\e}{e}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\var}{Var}
+\DeclareMathOperator{\corr}{Corr}
+\DeclareMathOperator{\cov}{Cov}
+\DeclareMathOperator{\ECD}{ECD}
+
+\newcommand{\mailto}[1]{\href{mailto:#1}{#1}}
+
+\renewcommand{\d}{\mbox{d}}
+\renewcommand{\P}{\mbox{P}}
+\renewcommand{\vec}{\mbox{vec}}</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

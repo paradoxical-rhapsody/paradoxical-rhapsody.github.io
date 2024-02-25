@@ -1,0 +1,44 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>xu-zc | 箭头汇集</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <img src="/assets/recipe/tikz/tidy-arrows/tidy-arrows.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+&#37; https://tikz.dev/library-folding
+\usetikzlibrary&#123;positioning, calc&#125;
+
+\tikzset&#123;
+    DynkinNode/.style &#61; &#123;fill&#61;gray&#33;50, circle, draw, minimum size&#61;1em, inner sep&#61;0pt, font&#61;\scriptsize&#125;
+&#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;&#93;
+\foreach \i in &#123;0, ..., 6&#125; &#123;
+    \pgfmathtruncatemacro&#123;\angle&#125;&#123;90-\i*60&#125;
+    \ifnum \i &lt; 6
+        \node&#91;DynkinNode&#93; &#40;c\i&#41; at &#40;\angle:1&#41; &#123;\i&#125;;
+        \ifnum \i &gt; 0
+            \pgfmathtruncatemacro&#123;\j&#125;&#123;\i-1&#125;
+            \draw&#91;thick, blue, -latex&#93; &#40;c\j&#41; to&#91;bend left&#61;18&#93; &#40;c\i&#41;;
+        \fi
+    \fi
+&#125;
+
+\draw&#91;thick,blue,-latex&#93; &#40;c5&#41; to&#91;bend left&#61;18&#93; &#40;c0&#41;;
+
+\node&#91;DynkinNode&#93; &#40;a0&#41; at &#40;-3, 3&#41; &#123;0&#125;;
+\foreach \i in &#123;1, ..., 9&#125; &#123;
+    \pgfmathtruncatemacro&#123;\j&#125;&#123;\i-1&#125;
+    \pgfmathtruncatemacro&#123;\k&#125;&#123;\i*2&#125;
+    
+    \node&#91;DynkinNode, below&#61;0.3cm of a\j&#93; &#40;a\i&#41;&#123;\i&#125;;
+    \draw&#91;thick, red, -latex&#93;&#40;a\j&#41; --  &#40;a\i&#41;;
+    
+    \ifodd \i
+        \draw&#91;dotted, -latex&#93; plot&#91;smooth&#93; coordinates&#123;&#40;a\i.east&#41; &#40;&#36;&#40;c3&#41;-&#40;1cm,\k pt&#41;&#36;&#41; &#40;c3.south west&#41;&#125;;
+    \else
+        \draw&#91;dotted, -latex&#93; plot&#91;smooth&#93; coordinates&#123;&#40;a\i.east&#41; &#40;&#36;&#40;c0&#41;-&#40;1.3cm,-1cm&#41;&#43;&#40;0,-\k pt&#41;&#36;&#41; &#40;c0.north west&#41;&#125;;
+    \fi
+&#125;
+
+\draw&#91;dotted, -latex&#93; plot&#91;smooth&#93; coordinates&#123;&#40;a0.east&#41; &#40;&#36;&#40;c0&#41;-&#40;1.3cm,-1cm&#41;&#36;&#41; &#40;c0.north west&#41;&#125;;
+\draw&#91;thick, red, -latex&#93; plot&#91;smooth&#93; coordinates&#123;&#40;a9.north west&#41; &#40;&#36;&#40;a4&#41;&#33;0.5&#33;&#40;a5&#41;-&#40;0.5cm,0&#41;&#36;&#41;  &#40;a0.south west&#41;&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div>

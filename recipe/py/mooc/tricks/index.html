@@ -1,0 +1,243 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | 技巧</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <p>同一行代码中, 引号避免重复使用, 比如下面的代码就会报错:</p> <blockquote> <p>eval&#40;&#39;print&#40;&#39;abc&#39;&#41;&#39;&#41;</p> </blockquote> <p>下面的代码是可以执行的:</p> <blockquote> <p>eval&#40;&quot;print&#40;&#39;abc&#39;&#41;&quot;&#41;</p> </blockquote> <p>python 注释使用的 <code>#</code> 有很多的英文名字：</p> <ul> <li><p>octothorpe&#40;八角帽&#41;</p> <li><p>pound&#40;英镑符&#41;</p> <li><p>hash&#40;电话的 # 键&#41;</p> <li><p>mesh&#40;网&#41;</p> </ul> <h1 id="一行语句输出乘法表"><a href="#一行语句输出乘法表" class=header-anchor >一行语句输出乘法表</a></h1> <pre><code class="py hljs"><span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;\n&#x27;</span>.join([<span class=hljs-string >&#x27; &#x27;</span>.join([<span class=hljs-string >&#x27;{}x{}={}&#x27;</span>.<span class=hljs-built_in >format</span>(i, j, i\*j) <span class=hljs-keyword >for</span> j <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(<span class=hljs-number >1</span>, i+<span class=hljs-number >1</span>)])  <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(<span class=hljs-number >1</span>, <span class=hljs-number >10</span>)]))</code></pre>
+<h1 id="格式化输出的两种方式"><a href="#格式化输出的两种方式" class=header-anchor >格式化输出的两种方式: </a></h1>
+<ol>
+<li><p><code>&#39;&#37;s*&#37;s&#39; &#37; &#40;2, 3&#41;</code></p>
+
+<li><p><code>&#39;&#123;&#125;*&#123;&#125;&#39;.format&#40;2, 3&#41;</code> </p>
+
+</ol>
+<p>比较起来, 使用槽进行格式化输出可以更加利于控制输出格式. 字符串的标准化格式为 <code>tplt.format&#40;&lt;逗号分隔的参数&gt;&#41;</code>:</p>
+<ul>
+<li><p>tplt 是带有槽的字符串模板, 槽使用大括号表示. 例: <code>&quot;&#123;&#125;: 计算v机&#123;&#125;的CPU占用率为&#123;&#125;&#37;&quot;.format&#40;&quot;2018-06-29&quot;, &quot;C&quot;, 10&#41;</code> </p>
+
+<li><p>槽中可以添加序号表明使用 <code>format</code> 中相应位置的参数. 例: <code>&quot;&#123;1&#125;: 计算机&#123;0&#125;的CPU占用率为&#123;2&#125;&#37;&quot;.format&#40;&quot;C&quot;, &quot;2018-06-29&quot;, 10&#41;</code></p>
+
+<li><p>每个槽的序号后可以用分号引导一些格式配置参数</p>
+<ul>
+<li><p><code>&#123;2:&lt;填充&gt;&lt;对齐&gt;&lt;宽度&gt;&lt;数字千位分隔符,&gt;&lt;.精度&gt;&lt;类型&gt;&#125;</code></p>
+<ul>
+<li><p>2           序号</p>
+
+<li><p>填充        自己设定</p>
+
+<li><p>对齐        左对齐,右对齐,居中 分别为 &quot;&lt;&quot; 和 &quot;&gt;&quot; 和 &quot;^&quot;</p>
+
+<li><p>宽度        自己设定, 为了让不同长度字符串保持整齐输出.</p>
+<ul>
+<li><p><code>&quot;&#123;0:&#61;^20&#125;&quot;.format&#40;&quot;PYTHON&quot;&#41;</code></p>
+
+<li><p><code>&quot;&#123;0:&gt;20&#125;&quot;.format&#40;&quot;PYTHON&quot;&#41;</code></p>
+
+<li><p><code>&quot;&#123;0:20&#125;&quot;.format&#40;&quot;PYTHON&quot;&#41;</code>   # 默认左对齐, 空格填充.</p>
+
+</ul>
+
+<li><p>千位分隔    用逗号分隔&#40;对十进制有用&#41;</p>
+
+<li><p>精度        小数点和数字</p>
+
+<li><p>类型        b,c,d,o,x,X; e,E,f,&#37;, 如 <code>&quot;&#123;0:b&#125;, &#123;0:c&#125;, &#123;0:,d&#125;, &#123;0:x&#125;, &#123;0:e&#125;&quot;.format&#40;1234&#41;</code></p>
+
+</ul>
+
+</ul>
+
+<li><p>使用百分号格式化输出时的一些格式记号</p>
+
+</ul>
+<pre><code class="julia hljs">%d %i %o %u
+    %x %X %e %E
+    %f %F %g %G
+    %c %r %s %%</code></pre>
+<ul>
+<li><p>&quot;&#123;0:&#61;^20,d&#125;&quot;.format&#40;102487&#41;</p>
+
+</ul>
+<h1 id="命令行执行脚本"><a href="#命令行执行脚本" class=header-anchor >命令行执行脚本</a></h1>
+<p>如果在 cmd 执行脚本文件, 命令为 <code>python file.py</code>. 但是有些情况下, 在执行脚本时需要用户直接设定一些参数&#40;如读取文件或写入文件的名字&#41;, 只需要在 <code>file.py</code> 的第一行加上</p>
+<pre><code class="julia hljs">from sys <span class=hljs-keyword >import</span> argv
+script, arg1, arg2, arg3 = argv</code></pre>
+<p>其中 <code>script</code> 是脚本文件名, <code>arg1</code> 到 <code>arg3</code> 是一些参数. <code>argv</code> 是所谓的参数变量&#40;argument variables&#41;, 这是非常标准的编程技术, 在其他程序语言中也有应用. 对 <code>argv</code> 进行解包的好处也是显而易见的. 也可以对 <code>argv</code> 直接进行一些分析, 得到更多的参数细节&#40;如参数长度&#41;. </p>
+<ul>
+<li><p>关于用户输入, 将上述的 <code>argv</code> 和 <code>input&#40;&#41;</code> 结合起来, 能够实现更加灵活的效果.</p>
+
+<li><p>文件处理要非常仔细, 不然容易把有用的文件弄坏或者清空. 有一点非常重要的事情：<strong>处理完文件要 close 掉</strong>.</p>
+
+<li><p>执行过程中, 在每一个用户可能出错的地方加入提示信息，是一个很好的习惯. 这样看起来可能比较繁琐, 但是在文件操作这样需要特别小心的地方, 这些提示是必要的.</p>
+
+</ul>
+<h1 id="下面可以作为一个脚本文件在命令行中执行"><a href="#下面可以作为一个脚本文件在命令行中执行" class=header-anchor >下面可以作为一个脚本文件在命令行中执行</a></h1>
+<pre><code class="julia hljs">from sys <span class=hljs-keyword >import</span> argv
+
+script, filename = argv
+txt = open(filename)
+
+print(<span class=hljs-string >&quot;Here&#x27;s your file %r:&quot;</span> % filename)
+print(txt.read())
+
+print(<span class=hljs-string >&quot;I&#x27;ll also ask you to type it again:&quot;</span>)
+file_again = input(<span class=hljs-string >&quot;&gt; &quot;</span>)
+txt_again = open(file_again)
+print(txt_again.read())</code></pre>
+<p>在 <code>open</code> 文件时, 有一些选项可以设定文件被打开的方式. 文件被 <code>open</code> 之后, 得到的文件句柄主要有如下的方法:</p>
+<ul>
+<li><p><code>close</code>             菜单操作中 <code>文件 -&gt; 保存</code> 类似</p>
+
+<li><p><code>read</code>              读取全部内容</p>
+
+<li><p><code>readline</code>          读取一行的内容</p>
+
+<li><p><code>truncate</code>          清空整个文件【慎用】</p>
+
+<li><p><code>write&#40;stuff&#41;</code>      将 stuff 写入文件</p>
+
+</ul>
+<p>如果每次写入一行字符串, 可以紧随其后添加一句写入换行符的命令&#40;看需要&#41;.</p>
+<h1 id="复制文件"><a href="#复制文件" class=header-anchor >复制文件</a></h1>
+<pre><code class="julia hljs">from sys <span class=hljs-keyword >import</span> argv
+from os.path <span class=hljs-keyword >import</span> exists
+
+script, from_file, to_file = argv
+
+print(<span class=hljs-string >&quot;Copying from %s to %s&quot;</span> % (from_file, to_file))
+
+<span class=hljs-comment ># we could do these two on one line too, how?</span>
+input = open(from_file)
+indata = input.read()
+
+print(<span class=hljs-string >&quot;The input file is %d bytes long&quot;</span> % len(indata))
+print(<span class=hljs-string >&quot;Does the output file exist? %r&quot;</span> % exists(to_file))
+print(<span class=hljs-string >&quot;Ready, hit RETURN to continue, CTRL-C to abort.&quot;</span>)
+input()
+
+output = open(to_file, <span class=hljs-string >&#x27;w&#x27;</span>)
+output.write(indata)
+
+print(<span class=hljs-string >&quot;Alright, all done.&quot;</span>)
+output.close()
+input.close()</code></pre>
+<p>上面这段复制文件的程序的提示信息看起来非常详细, 但是输出的内容在很多情况下并不需要, 可以适当删减一些.</p>
+<hr />
+<ul>
+<li><p>python 中, 包含 <code>__init__.py</code> 文件的文件夹目录目录被视为可导入的包. 导入一个包时, <code>__init__.py</code> 会执行并定义这个包暴露给外界的属性.</p>
+
+<li><p>字符串是被过度优化的序列类型, 索引方式跟 <code>list</code> 和 <code>tuple</code> 等序列类型相同. <code>list&#40;&#39;ABC&#39;&#41;</code> 会拆分出一个列表, 进一步可以 <code>tuple&#40;list&#40;&#39;ABC&#39;&#41;&#41;</code>.</p>
+
+<li><p>使用 <code>collections.Counter</code> 对像进行计数</p>
+
+</ul>
+<pre><code class="julia hljs">from collections <span class=hljs-keyword >import</span> Counter
+  c = Counter(&#x27;Hellow World!&#x27;)
+  c.most_common(<span class=hljs-number >2</span>) <span class=hljs-comment ># the top 2 most characters</span></code></pre>
+<ul>
+<li><p>打印数字 1 到 100, 其中 3 的倍数打印 &quot;Fizz&quot; 来替换这个数字, 5 的倍数打印 &quot;Buzz&quot;, 既是 3 的倍数又是 5 的倍数则打印 &quot;FizzBuzz&quot;.</p>
+
+</ul>
+<pre><code class="julia hljs"><span class=hljs-keyword >for</span> x <span class=hljs-keyword >in</span> range(<span class=hljs-number >1</span>, <span class=hljs-number >101</span>):
+    print(&#x27;Fizz&#x27;[x%<span class=hljs-number >3</span>*len(<span class=hljs-string >&quot;Fizz&quot;</span>)::] + &#x27;Buzz&#x27;[x%<span class=hljs-number >5</span>*len(&#x27;Buzz&#x27;)::] or x)</code></pre>
+<ul>
+<li><p>同时迭代两个列表</p>
+
+</ul>
+<pre><code class="julia hljs">ls01 = [&#x27;Packers&#x27;, &#x27;<span class=hljs-number >49</span>ers&#x27;]
+  ls02 = [&#x27;Ravens&#x27;, &#x27;Patriots&#x27;]
+  <span class=hljs-keyword >for</span> t01, t02 <span class=hljs-keyword >in</span> zip(ls01, ls02):
+    print(t01 + &#x27; vs &#x27; + t02)</code></pre>
+<ul>
+<li><p>带索引的列表迭代</p>
+
+</ul>
+<pre><code class="julia hljs">ls = list(&#x27;EDCBA&#x27;)
+  <span class=hljs-keyword >for</span> idx, ele <span class=hljs-keyword >in</span> enumerate(ls):
+    print(idx, ele)</code></pre>
+<ul>
+<li><p>使用 <code>itertools.combinations</code> 查找所有组合</p>
+
+</ul>
+<pre><code class="julia hljs">from itertools <span class=hljs-keyword >import</span> combinations
+  ls = [&#x27;Packers&#x27;, &#x27;<span class=hljs-number >49</span>ers&#x27;, &#x27;Ravens&#x27;, &#x27;Patriots&#x27;]
+  <span class=hljs-keyword >for</span> iEle <span class=hljs-keyword >in</span> combinations(ls, <span class=hljs-number >2</span>):
+    print(iEle)</code></pre>
+<ul>
+<li><p>将 <code>json</code> 数据以更可读的方式打印</p>
+
+</ul>
+<pre><code class="julia hljs"><span class=hljs-keyword >import</span> json
+  print(json.dumps(data))
+  print(json.dumps(data, indent=<span class=hljs-number >2</span>))</code></pre>
+<div class=page-foot >
+  <div class=copyright >
+    
+    
+    &copy; 许曾超. Last touched: September 01, 2022.
+    
+  </div>
+</div>
+</div>
+    </div>  
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>

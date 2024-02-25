@@ -1,0 +1,84 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/git.svg"> <title>xu-zc | ✓ Git 推送本地内容到服务器</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h2 id="推送本地内容到服务器"><a href="#推送本地内容到服务器" class=header-anchor >推送本地内容到服务器</a></h2> <p><em>2022-01-19</em></p> <p>在服务器端创建 git 目录, 修改目录的所有权和用户权限, 初始化目录:</p> <pre><code class="text hljs">sudo mkdir git
+sudo chown -R $USER:$USER /home/git
+sudo chmod -R 755 /home/git
+cd /home/git
+git init --bare asy.git</code></pre> <p>关于<a class=href  href=" https://zhuanlan.zhihu.com/p/111733515"> 权限 </a>, 三位数字分别表示所有者、同组用户和公共用户的权限.</p> <p>创建 git 钩子: 在 <code>vi /home/git/asy.git/hooks/post-receive</code> 中添加两行内容:</p> <pre><code class="text hljs">#!/bin/bash
+git --work-tree=/home/asy --git-dir=/home/git/asy.git checkout -f</code></pre> <p>保存退出后, 增加执行权限:</p> <pre><code class="text hljs">chmod +x /home/git/asy.git/hooks/post-receive</code></pre>
+<p>在本地目录添加服务器的目录:</p>
+<pre><code class="text hljs">git remote add origin usename@server_ip:/home/git/asy.git</code></pre>
+<div class=page-foot >
+  <div class=copyright >
+    
+    
+    &copy; 许曾超. Last touched: September 01, 2022.
+    
+  </div>
+</div>
+</div>
+    </div>  
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>

@@ -1,0 +1,158 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | Jinja2 模板引擎</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h2 id="模板的作用"><a href="#模板的作用" class=header-anchor >模板的作用</a></h2> <p>在 <code>模板&#43;数据</code> 的响应模式中, 模板提供了页面外观布局&#40;表现逻辑&#41;, 数据提供了要展示的关键信息&#40;业务逻辑指针对数据的后台操作, 包括提取, 处理, 计算等&#41;, 通过渲染可以将两者结合在一起, 在视图函数中作为响应返回. <strong>渲染的意思是, 将需要展示的数据嵌入到预先设定的模板中, 将结果返回给用户</strong>.</p> <p>本质上, 模板是提供了“占位符变量”的 html 页面文件, 用于渲染时填充数据. </p> <p>Flask 的一个核心功能是提供了 Jinja2 模板引擎 &#40;注意不是模板&#41;, 对模板渲染提供了强大支持.</p> <hr /> <h2 id="jinja2_之_渲染方式"><a href="#jinja2_之_渲染方式" class=header-anchor >Jinja2 之 <strong>渲染方式</strong></a></h2> <p>Flask 默认在程序的 <code>templates</code> 子文件夹下搜索 html 模板. 假设有模板 <code>index.html 和 user.html</code>, 只有一个用户名变量, 模板渲染用法如下:</p> <pre><code class="python hljs"><span class=hljs-keyword >from</span> flask <span class=hljs-keyword >import</span> render_template
+
+<span class=hljs-comment ># ...</span>
+
+<span class=hljs-meta >@app.route(<span class=hljs-params ><span class=hljs-string >&#x27;/&#x27;</span></span>)</span>
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">index</span>():
+    <span class=hljs-keyword >return</span> render_template(<span class=hljs-string >&#x27;index.html&#x27;</span>)
+
+<span class=hljs-meta >@app.route(<span class=hljs-params ><span class=hljs-string >&#x27;/user/&lt;name&gt;&#x27;</span></span>)</span>
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">user</span>(<span class=hljs-params >name</span>):
+    <span class=hljs-keyword >return</span> render_template(<span class=hljs-string >&#x27;user.html&#x27;</span>, name=name)</code></pre> <h2 id="jinja2_之_变量"><a href="#jinja2_之_变量" class=header-anchor >Jinja2 之 <strong>变量</strong></a></h2> <p>jinja2 的占位符变量, 可以识别<em>所有的变量类型</em>并进行调用, 举例如下:</p> <pre><code class="html hljs"><span class=hljs-tag >&lt;<span class=hljs-name >p</span>&gt;</span>A value from a dictionary: {{ mydict[&#x27;key&#x27;] }}.<span class=hljs-tag >&lt;/<span class=hljs-name >p</span>&gt;</span>
+<span class=hljs-tag >&lt;<span class=hljs-name >p</span>&gt;</span>A value from a list: {{ mylist[2] }}.<span class=hljs-tag >&lt;/<span class=hljs-name >p</span>&gt;</span>
+<span class=hljs-tag >&lt;<span class=hljs-name >p</span>&gt;</span>A value from a list, with a variable index: {{ mylist[a] }}.<span class=hljs-tag >&lt;/<span class=hljs-name >p</span>&gt;</span>
+<span class=hljs-tag >&lt;<span class=hljs-name >p</span>&gt;</span>A value from an object&#x27;s method: {{ myObj.fun() }}.<span class=hljs-tag >&lt;/<span class=hljs-name >p</span>&gt;</span></code></pre> <h2 id="jinja2_之_过滤器"><a href="#jinja2_之_过滤器" class=header-anchor >Jinja2 之 <strong>过滤器</strong></a></h2> <p>jinja2 提供了<code>过滤器</code>, 可以对变量进行一些特定的加工处理&#40;比如大小写自动转换等&#41;, 这对数据显示的严谨性是很有必要的. Jinja2 提供完整的<a href="http://jinjw.pocoo.org/docs/templates/#builtin-filters">过滤器列表</a>. 过滤器的用法是“在占位符变量名后添加过滤器名, 中间用数线分隔”, 举例如下:</p> <pre><code class="python hljs">Hello, {{ name|safe }}          <span class=hljs-comment ># 渲染时不转义</span>
+Hello, {{ name|striptags }}     <span class=hljs-comment ># 渲染前把 name 里的 html 标签删掉.</span>
+Hello, {{ name|capitalize }}    <span class=hljs-comment ># 首字母大写</span>
+Hello, {{ name|lower }}         <span class=hljs-comment ># 全部字母小写</span>
+Hello, {{ name|upper }}         <span class=hljs-comment ># 全部字母大写</span>
+Hello, {{ name|trim }}          <span class=hljs-comment ># 把 name 的首尾空格去掉</span></code></pre> <p>要特别强调 <code>safe 过滤器</code>的使用. 出于安全考虑, Jinja2 默认转义所有变量. 比如 <code>&lt;h1&gt;Hello&lt;/h1&gt;</code> 会被渲染成 h1 元素. 如果需要在响应中显示这个变量的完整 html 代码, 可以用 <code>safe</code> 过滤器. 但是, 切记不要再不可信的值上使用 safe 过滤器, 比如用户在表单中填写的文本&#40;鬼知道输入的是什么文本&#41;.</p> <h2 id="jinja2_之_控制结构"><a href="#jinja2_之_控制结构" class=header-anchor >Jinja2 之 <strong>控制结构</strong></a></h2> <p>将数据渲染到模板可以认为是一个过程, 所以在模板中添加特定的<em>控制结构</em>可以改变渲染流程, 满足某些特定地渲染顺序. 条件控制&#40;if-else&#41;可以控制是否渲染某些内容, 循环控制&#40;for&#41;可以按照相同地方式渲染一组元素. 占位符变量用 <strong>双大括号</strong> 标记, <em>控制结构</em>和其他<em>执行语句</em>用 <code>&#123;&#37; ... &#37;&#125;</code> 标记. 举例如下:</p> <pre><code class="html hljs">{% if user %}
+    Hello, {{ user }}
+{% else %}
+    Hello, stranger.
+{% endif %}</code></pre> <pre><code class="html hljs"><span class=hljs-tag >&lt;<span class=hljs-name >ul</span>&gt;</span>
+    {% for comment in comments %}
+        <span class=hljs-tag >&lt;<span class=hljs-name >li</span>&gt;</span>{{ comment }}<span class=hljs-tag >&lt;/<span class=hljs-name >li</span>&gt;</span>
+    {% endfor %}
+<span class=hljs-tag >&lt;/<span class=hljs-name >ul</span>&gt;</span></code></pre> <ul> <li><p><code>模板宏</code>&#40;macro&#41; 类似于定义了一个函数, 导入后可重复调用&#40;执行相同的渲染操作&#41;. 可以在模板中定义或单独存为文件通过导入进行调用.</p> </ul> <pre><code class="python hljs"><span class=hljs-comment ># 用法 1 -------------------------</span>
+{% macro  f(x) %}
+    &lt;li&gt;{{ x }}&lt;/li&gt;
+{% endmacro %}
+
+&lt;ul&gt;
+{% <span class=hljs-keyword >for</span> comment <span class=hljs-keyword >in</span> comments %}
+    {{ f(comment) }}
+{% endfor %}
+&lt;/ul&gt;
+
+<span class=hljs-comment ># 用法 2 ---------------------</span>
+{% <span class=hljs-keyword >import</span> <span class=hljs-string >&#x27;macros.html&#x27;</span> <span class=hljs-keyword >as</span> macros %}
+
+&lt;ul&gt;
+{% <span class=hljs-keyword >for</span> comment <span class=hljs-keyword >in</span> comments %}
+    {{ macros.f(comment) }}
+{% endfor %}
+&lt;/ul&gt;</code></pre> <ul> <li><p><strong>重复使用的模板片段</strong></p> </ul> <p>如果在模板中有一些地方使用了完全相同的内容, 可以把这部分内容单独建立一个文件, 模板中需要这些内容的位置插入&#40;include&#41;. </p> <pre><code class="html hljs">{% include &#x27;common.html&#x27; %}</code></pre>
+<ul>
+<li><p><strong>基模板</strong></p>
+
+</ul>
+<p>如果有些模板使用了相同的布局结构, 可能只有局部细节不同, 可以把它们的基础结构单独写入文件, 这样其他模板都可以&lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;继承&lt;/emph&gt;这个基模板, 只需对局部细节进行修改即可.</p>
+<pre><code class="html hljs"># base.html -------------------
+<span class=hljs-tag >&lt;<span class=hljs-name >html</span>&gt;</span>
+<span class=hljs-tag >&lt;<span class=hljs-name >head</span>&gt;</span>
+    {% block head %}
+        <span class=hljs-tag >&lt;<span class=hljs-name >title</span>&gt;</span>{% block title %} {% endblock %} - My App<span class=hljs-tag >&lt;/<span class=hljs-name >title</span>&gt;</span>
+    {% endblock %}
+<span class=hljs-tag >&lt;/<span class=hljs-name >head</span>&gt;</span>
+
+<span class=hljs-tag >&lt;<span class=hljs-name >body</span>&gt;</span>
+    {% block body %} {% endblock %}
+<span class=hljs-tag >&lt;/<span class=hljs-name >body</span>&gt;</span>
+<span class=hljs-tag >&lt;/<span class=hljs-name >html</span>&gt;</span></code></pre>
+<pre><code class="html hljs">{% extends &#x27;base.html&#x27; %}
+
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}               # 继承原先的内容
+    <span class=hljs-tag >&lt;<span class=hljs-name >style</span>&gt;</span> <span class=hljs-tag >&lt;/<span class=hljs-name >style</span>&gt;</span>
+{% endblock %}
+{% block body %}
+    <span class=hljs-tag >&lt;<span class=hljs-name >h1</span>&gt;</span>Hello, World!<span class=hljs-tag >&lt;/<span class=hljs-name >h1</span>&gt;</span>
+{% endblock %}</code></pre>
+<p>如果要在继承后的模板中重新定义基模板的 block, 需要在新定义的 block 中使用 <code>&#123;&#123; super&#40;&#41; &#125;&#125;</code> 保留原有内容, 然后才能添加自己需要的内容. <code>体会上面这个例子的 super&#40;&#41;</code>.</p>
+<h2 id="关于模板的作用_再多说一点"><a href="#关于模板的作用_再多说一点" class=header-anchor >关于模板的作用, 再多说一点</a></h2>
+<ul>
+<li><p><strong>页面布局</strong>: 可以按需要自己设计基模板, 但是具有观赏性的模板离不开 css 和 js. 可以直接继承一些发布出来的优秀模板框架, 如 <a href=06-flask-bootstrap.md >flask-bootstrap</a>.</p>
+
+</ul>
+<ul>
+<li><p><strong>网页表单</strong>: 表单能用整洁的方式让用户输入内容, 自己当然再 html 模板中设计表单细节, 但是非常单调重复. 由于表单是一项广泛的功能, 有一些扩展能够用来高效地建立表单模板. <a href=06-flask-wtf.md >flask-wtf</a>.</p>
+
+</ul>
+<div class=page-foot >
+  <div class=copyright >
+    
+    
+    &copy; 许曾超. Last touched: September 01, 2022.
+    
+  </div>
+</div>
+</div>
+    </div>  
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>

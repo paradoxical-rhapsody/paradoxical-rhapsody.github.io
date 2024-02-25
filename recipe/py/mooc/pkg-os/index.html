@@ -1,0 +1,53 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | os</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=os ><a href="#os" class=header-anchor >os</a></h1> <p><code>os</code> 库是标准库, 提供了 <code>几百个</code> 通用的与操作系统交互的功能, 在 win, MacOs, linux 系统下通用. 功能包括:</p> <ul> <li><p>路径操作: os.path 子库, 处理文件路径和信息等.</p> <li><p>进程管理: 启动系统中其他程序.</p> <li><p>环境参数: 获得系统软硬件等环境参数.</p> <li><p>其他很多功能...</p> </ul> <blockquote> <p>import os.path as op</p> </blockquote> <h2 id="路径操作"><a href="#路径操作" class=header-anchor >路径操作</a></h2> <p>下面参数都为 <code>path</code>, 表示一个 <code>文件</code> 或者 <code>目录</code></p> <pre><code class="python hljs">op.abspath(<span class=hljs-string >&#x27;file.txt&#x27;</span>)            <span class=hljs-comment ># 返回绝对路径</span>
+op.normpath(<span class=hljs-string >&#x27;file.txt&#x27;</span>)        <span class=hljs-comment ># 归一化路径表示, 用 \\ 分隔路径</span>
+op.relpath(<span class=hljs-string >&#x27;file.txt&#x27;</span>)            <span class=hljs-comment ># 当前程序与文件之间的相对路径</span>
+
+op.dirname(<span class=hljs-string >&#x27;file.txt&#x27;</span>)            <span class=hljs-comment ># 文件的目录名</span>
+op.basename(<span class=hljs-string >&#x27;file.txt&#x27;</span>)           <span class=hljs-comment ># 返回 path 的文件名称</span>
+op.join(<span class=hljs-string >&#x27;D:/&#x27;</span>, <span class=hljs-string >&#x27;file.txt&#x27;</span>)        <span class=hljs-comment ># 合并参数, 返回路径`字符串`</span>
+
+op.exists(<span class=hljs-string >&#x27;file.txt&#x27;</span>)             <span class=hljs-comment ># path的文件或目录是否存在, 返回True/False</span>
+op.isfile(<span class=hljs-string >&#x27;file.txt&#x27;</span>)             <span class=hljs-comment ># 路径是否为存在的文件, True/False</span>
+op.isdir(<span class=hljs-string >&#x27;file.txt&#x27;</span>)              <span class=hljs-comment ># 路径是否为存在的目录, True/False</span>
+
+<span class=hljs-comment ># 可以用time.ctime() 查看下面操作的具体时间</span>
+op.getctime(<span class=hljs-string >&#x27;file.txt&#x27;</span>)           <span class=hljs-comment ># path 的创建时间</span>
+op.getatime(<span class=hljs-string >&#x27;file.txt&#x27;</span>)           <span class=hljs-comment ># path 的上一次访问时间</span>
+op.getmtime(<span class=hljs-string >&#x27;file.txt&#x27;</span>)           <span class=hljs-comment ># path 的最近一次修改时间</span>
+
+op.getsize(<span class=hljs-string >&#x27;file.txt&#x27;</span>)            <span class=hljs-comment ># path 的大小, 单位:字节</span></code></pre> <h2 id="环境参数_获取和改变系统环境信息"><a href="#环境参数_获取和改变系统环境信息" class=header-anchor >环境参数: 获取和改变系统环境信息</a></h2> <pre><code class="python hljs"><span class=hljs-keyword >import</span> os
+
+os.chdir(<span class=hljs-string >&quot;D:&quot;</span>)                <span class=hljs-comment ># 更改路径</span>
+os.getcwd()                   <span class=hljs-comment ># 获取当前路径</span>
+os.listdir()
+
+os.getlogin()                 <span class=hljs-comment ># 当前登陆系统的用户名</span>
+os.cpu_count()                <span class=hljs-comment ># cpu 的数量</span>
+
+os.urandom(n)                 <span class=hljs-comment ># 获得 n 字节长度的随机字符串, 常用于加解密运算</span></code></pre> <h2 id="进程管理"><a href="#进程管理" class=header-anchor >进程管理</a></h2> <p>进程管理就是在 <code>python</code> 中调用其他程序, 命令为: </p> <blockquote> <p>os.system&#40;command&#41; # 可以执行程序或cmd命令.</p> </blockquote> <p>在 <code>win</code> 中, 返回值为 cmd 的返回信息&#40;返回 0 表示成功运行&#41;.</p> <p><code>os.system&#40;cmd&#41;</code> 能实现的功能:</p> <ul> <li><p>编写各类语言的代码脚本, 在python中自动运行; 对用时间程序等.</p> <li><p>自动安装维护很多第三方库. 可以将库名录入文件, 以后只修改这个文件. 假设要安装 20 个第三方库&#40;pip 时全部小写&#41;:</p> </ul> <pre><code class="plaintext hljs">numpy, matplotlib, jieba, beautifulsoup4, django, pandas, requests
+PIL(pillow)         图像处理
+scikit-learn        机器学习和数据挖掘
+wheel               第三方库文件见打包工具
+pyinstaller         打包为可执行文件
+flask               轻量级 Web 开发
+WeRoBot             微信机器人开发
+SymPy               符号计算
+Networkx            复杂网络和图结构的建模和分析
+PyQt5               基于Qt的专业级GUI开发
+PyOpenGL            多平台OpenGL开发
+PyPDF2              pdf 文件内容提取及处理
+docopt              python 命令行解析
+PyGame              简单小游戏开发</code></pre> <pre><code class="python hljs"><span class=hljs-keyword >import</span> os
+
+<span class=hljs-comment ># 可以将库名写在文件里, 在程序中读取</span>
+libs = {<span class=hljs-string >&#x27;numpy&#x27;</span>, <span class=hljs-string >&#x27;matplotlib&#x27;</span>, <span class=hljs-string >&#x27;pillow&#x27;</span>, <span class=hljs-string >&#x27;sklearn&#x27;</span>, <span class=hljs-string >&#x27;requests&#x27;</span>, \
+        <span class=hljs-string >&#x27;jieba&#x27;</span>, <span class=hljs-string >&#x27;beautifulsoup4&#x27;</span>, <span class=hljs-string >&#x27;django&#x27;</span>, <span class=hljs-string >&#x27;pandas&#x27;</span>, <span class=hljs-string >&#x27;wheel&#x27;</span>, \
+        <span class=hljs-string >&#x27;sklearn&#x27;</span>, <span class=hljs-string >&#x27;pyinstaller&#x27;</span>, <span class=hljs-string >&#x27;flask&#x27;</span>, <span class=hljs-string >&#x27;werobot&#x27;</span>, \
+        <span class=hljs-string >&#x27;sympy&#x27;</span>, <span class=hljs-string >&#x27;networkx&#x27;</span>, <span class=hljs-string >&#x27;pyqt5&#x27;</span>, <span class=hljs-string >&#x27;pyopengl&#x27;</span>, <span class=hljs-string >&#x27;pypdf2&#x27;</span>, \
+        <span class=hljs-string >&#x27;docopt&#x27;</span>, <span class=hljs-string >&#x27;pygame&#x27;</span>}
+<span class=hljs-keyword >try</span>:
+    <span class=hljs-keyword >for</span> lib <span class=hljs-keyword >in</span> libs:
+        os.system(<span class=hljs-string >&quot;pip install -i https://pypi.tuna.tsinghua.edu.cn/simple &quot;</span> + lib)
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&quot;Sucessful&quot;</span>)
+<span class=hljs-keyword >except</span>:
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&quot;Failed Somehow&quot;</span>)</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

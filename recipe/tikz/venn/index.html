@@ -1,0 +1,503 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/katex/katex.min.css"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>xu-zc | Venn</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> <div class=toc-sidebar > <div class=franklin-toc ><ol><li><a href="#a_cap_b"><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∩</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A \cap B</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></a><li><a href="#a_cap_b_cap_c"><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∩</mo><mi>B</mi><mo>∩</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \cap B \cap C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a><li><a href="#a_cup_b"><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∪</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A \cup B</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></a><li><a href="#a_cup_b_cup_c"><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∪</mo><mi>B</mi><mo>∪</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \cup B \cup C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a><li><a href="#a_cup_b_cap_c"><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy=false >(</mo><mi>A</mi><mo>∪</mo><mi>B</mi><mo stretchy=false >)</mo><mo>∩</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">(A \cup B) \cap C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mclose >)</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a><li><a href="#a_cup_b_cap_c__2"><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy=false >(</mo><mi>A</mi><mo>∪</mo><mi>B</mi><mo stretchy=false >)</mo><mo>∩</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">(A \cup B) \cap C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mclose >)</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a><li><a href="#a_cap_b_cap_c__2"><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∩</mo><mi>B</mi><mo>∩</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \cap B \cap C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a><li><a href="#a_cap_b_a_cap_b_cap_c_a_cap_b_cap_c"><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∩</mo><mi>B</mi><mo>=</mo><mo stretchy=false >(</mo><mi>A</mi><mo>∩</mo><mi>B</mi><mo>∩</mo><mi>C</mi><mo stretchy=false >)</mo><mo>+</mo><mo stretchy=false >(</mo><mi>A</mi><mo>∩</mo><mi>B</mi><mo>∩</mo><msup><mi>C</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mo stretchy=false >)</mo></mrow><annotation encoding="application/x-tex">A \cap B = (A \cap B \cap C) + (A \cap B \cap C&#x27;)</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class=mclose >)</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >+</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1.001892em;vertical-align:-0.25em;"></span><span class=mord ><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class=mclose >)</span></span></span></span></a></ol></div> </div> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h2 id=a_cap_b ><a href="#a_cap_b" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∩</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A \cap B</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></a></h2> <img src="/assets/recipe/tikz/venn/venn-cap.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+  \usepackage&#123;tikz-network&#125;
+  \usetikzlibrary&#123;patterns&#125;
+
+
+  &#37; \usepackage&#123;xcolor&#125;
+  &#37; \pagecolor&#123;lightgray&#33;15&#125;
+
+
+  \def\firstcircle&#123; &#40;0.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\secondcircle&#123;&#40;2.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\thirdcircle&#123; &#40;1.0,-1.5&#41; circle &#40;1.5&#41;&#125;
+  \def\rectangle&#123; &#40;-1.5,-3.0&#41; rectangle &#40;3.5,1.0&#41; &#125;
+  \colorlet&#123;circle edge&#125;&#123;black&#125;
+  \colorlet&#123;circle area&#125;&#123;blue&#33;20&#125;
+  \tikzset&#123;filled/.style&#61;&#123;fill&#61;circle area, draw&#61;circle edge, thick&#125;,
+      outline/.style&#61;&#123;draw&#61;circle edge, thick&#125;&#125;
+  \setlength&#123;\parskip&#125;&#123;5mm&#125;
+
+
+  \def\radius&#123;1cm&#125;
+  \def\ratio&#123;0.8&#125;
+
+  \def\circleA&#123;&#40;90:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleB&#123;&#40;-150:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleC&#123;&#40;-30:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+
+  \tikzset&#123;set label/.style&#61;&#123;fill&#61;white,circle,inner sep&#61;.5mm&#125;&#125;
+
+  \def\drawLabels&#123;
+  \node&#91;set label&#93; at &#40;90:\radius&#43;\ratio*\radius&#41; &#123;A&#125;;
+  \node&#91;set label&#93; at &#40;-150:\radius&#43;\ratio*\radius&#41; &#123;B&#125;;
+  \node&#91;set label&#93; at &#40;-30:\radius&#43;\ratio*\radius&#41; &#123;C&#125;;
+  &#125;
+  \def\drawCaption#1&#123;\node at &#40;-90:2*\radius&#41; &#123;&#36;#1&#36;&#125;;&#125;
+
+  \def\drawVenn#1#2&#123;
+  \begin&#123;tikzpicture&#125;&#91;baseline&#61;0pt&#93;
+      \path&#91;use as bounding box&#93; &#40;0,0&#41; circle &#91;radius&#61;2.5*\radius&#93;;
+      \draw \circleA \circleB \circleC;
+      \begin&#123;scope&#125;&#91;pattern&#61;north west lines,pattern color&#61;blue&#93;
+      #2
+      \end&#123;scope&#125;
+      \drawLabels
+      \drawCaption&#123;#1&#125;
+  \end&#123;tikzpicture&#125;&#37;
+  &#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;scale&#61;0.5
+&#93;
+\begin&#123;scope&#125;
+        \clip \firstcircle;
+        \fill&#91;filled&#93; \secondcircle;
+    \end&#123;scope&#125;
+    \draw&#91;outline&#93; \firstcircle  node&#91;left&#93;  &#123;&#36;A&#36;&#125;;
+    \draw&#91;outline&#93; \secondcircle node&#91;right&#93; &#123;&#36;B&#36;&#125;;
+     \node&#91;anchor&#61;north,align&#61;center&#93; at &#40;current bounding box.south&#41;
+      &#123;A &#36;\cap&#36; B&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <h2 id=a_cap_b_cap_c ><a href="#a_cap_b_cap_c" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∩</mo><mi>B</mi><mo>∩</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \cap B \cap C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a></h2> <img src="/assets/recipe/tikz/venn/venn-cap-triple-sets.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+  \usepackage&#123;tikz-network&#125;
+  \usetikzlibrary&#123;patterns&#125;
+
+
+  &#37; \usepackage&#123;xcolor&#125;
+  &#37; \pagecolor&#123;lightgray&#33;15&#125;
+
+
+  \def\firstcircle&#123; &#40;0.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\secondcircle&#123;&#40;2.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\thirdcircle&#123; &#40;1.0,-1.5&#41; circle &#40;1.5&#41;&#125;
+  \def\rectangle&#123; &#40;-1.5,-3.0&#41; rectangle &#40;3.5,1.0&#41; &#125;
+  \colorlet&#123;circle edge&#125;&#123;black&#125;
+  \colorlet&#123;circle area&#125;&#123;blue&#33;20&#125;
+  \tikzset&#123;filled/.style&#61;&#123;fill&#61;circle area, draw&#61;circle edge, thick&#125;,
+      outline/.style&#61;&#123;draw&#61;circle edge, thick&#125;&#125;
+  \setlength&#123;\parskip&#125;&#123;5mm&#125;
+
+
+  \def\radius&#123;1cm&#125;
+  \def\ratio&#123;0.8&#125;
+
+  \def\circleA&#123;&#40;90:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleB&#123;&#40;-150:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleC&#123;&#40;-30:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+
+  \tikzset&#123;set label/.style&#61;&#123;fill&#61;white,circle,inner sep&#61;.5mm&#125;&#125;
+
+  \def\drawLabels&#123;
+  \node&#91;set label&#93; at &#40;90:\radius&#43;\ratio*\radius&#41; &#123;A&#125;;
+  \node&#91;set label&#93; at &#40;-150:\radius&#43;\ratio*\radius&#41; &#123;B&#125;;
+  \node&#91;set label&#93; at &#40;-30:\radius&#43;\ratio*\radius&#41; &#123;C&#125;;
+  &#125;
+  \def\drawCaption#1&#123;\node at &#40;-90:2*\radius&#41; &#123;&#36;#1&#36;&#125;;&#125;
+
+  \def\drawVenn#1#2&#123;
+  \begin&#123;tikzpicture&#125;&#91;baseline&#61;0pt&#93;
+      \path&#91;use as bounding box&#93; &#40;0,0&#41; circle &#91;radius&#61;2.5*\radius&#93;;
+      \draw \circleA \circleB \circleC;
+      \begin&#123;scope&#125;&#91;pattern&#61;north west lines,pattern color&#61;blue&#93;
+      #2
+      \end&#123;scope&#125;
+      \drawLabels
+      \drawCaption&#123;#1&#125;
+  \end&#123;tikzpicture&#125;&#37;
+  &#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;scale&#61;0.5
+&#93;
+\begin&#123;scope&#125;
+        \clip  \firstcircle;
+        \clip  \secondcircle;
+        \fill&#91;filled&#93;   \thirdcircle ;
+    \end&#123;scope&#125;
+    \draw&#91;outline&#93; \firstcircle  node&#91;left&#93;  &#123;&#36;A&#36;&#125;;
+    \draw&#91;outline&#93; \secondcircle node&#91;right&#93; &#123;&#36;B&#36;&#125;;
+    \draw&#91;outline&#93; \thirdcircle  node&#91;below&#93; &#123;&#36;C&#36;&#125;;
+    \node&#91;anchor&#61;north&#93; at &#40;current bounding box.south&#41; &#123;A &#36;\cap&#36; B &#36;\cap&#36; C&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <h2 id=a_cup_b ><a href="#a_cup_b" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∪</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A \cup B</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></a></h2> <img src="/assets/recipe/tikz/venn/venn-cup.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+  \usepackage&#123;tikz-network&#125;
+  \usetikzlibrary&#123;patterns&#125;
+
+
+  &#37; \usepackage&#123;xcolor&#125;
+  &#37; \pagecolor&#123;lightgray&#33;15&#125;
+
+
+  \def\firstcircle&#123; &#40;0.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\secondcircle&#123;&#40;2.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\thirdcircle&#123; &#40;1.0,-1.5&#41; circle &#40;1.5&#41;&#125;
+  \def\rectangle&#123; &#40;-1.5,-3.0&#41; rectangle &#40;3.5,1.0&#41; &#125;
+  \colorlet&#123;circle edge&#125;&#123;black&#125;
+  \colorlet&#123;circle area&#125;&#123;blue&#33;20&#125;
+  \tikzset&#123;filled/.style&#61;&#123;fill&#61;circle area, draw&#61;circle edge, thick&#125;,
+      outline/.style&#61;&#123;draw&#61;circle edge, thick&#125;&#125;
+  \setlength&#123;\parskip&#125;&#123;5mm&#125;
+
+
+  \def\radius&#123;1cm&#125;
+  \def\ratio&#123;0.8&#125;
+
+  \def\circleA&#123;&#40;90:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleB&#123;&#40;-150:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleC&#123;&#40;-30:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+
+  \tikzset&#123;set label/.style&#61;&#123;fill&#61;white,circle,inner sep&#61;.5mm&#125;&#125;
+
+  \def\drawLabels&#123;
+  \node&#91;set label&#93; at &#40;90:\radius&#43;\ratio*\radius&#41; &#123;A&#125;;
+  \node&#91;set label&#93; at &#40;-150:\radius&#43;\ratio*\radius&#41; &#123;B&#125;;
+  \node&#91;set label&#93; at &#40;-30:\radius&#43;\ratio*\radius&#41; &#123;C&#125;;
+  &#125;
+  \def\drawCaption#1&#123;\node at &#40;-90:2*\radius&#41; &#123;&#36;#1&#36;&#125;;&#125;
+
+  \def\drawVenn#1#2&#123;
+  \begin&#123;tikzpicture&#125;&#91;baseline&#61;0pt&#93;
+      \path&#91;use as bounding box&#93; &#40;0,0&#41; circle &#91;radius&#61;2.5*\radius&#93;;
+      \draw \circleA \circleB \circleC;
+      \begin&#123;scope&#125;&#91;pattern&#61;north west lines,pattern color&#61;blue&#93;
+      #2
+      \end&#123;scope&#125;
+      \drawLabels
+      \drawCaption&#123;#1&#125;
+  \end&#123;tikzpicture&#125;&#37;
+  &#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;scale&#61;0.5
+&#93;
+\begin&#123;scope&#125;
+        \clip \firstcircle \secondcircle \thirdcircle;
+        \fill&#91;filled&#93;  \firstcircle \secondcircle;
+    \end&#123;scope&#125;
+    \draw&#91;outline&#93; \firstcircle  node&#91;left&#93;  &#123;&#36;A&#36;&#125;;
+    \draw&#91;outline&#93; \secondcircle node&#91;right&#93; &#123;&#36;B&#36;&#125;;
+    \node&#91;anchor&#61;north&#93; at &#40;&#36;&#40;current bounding box.south&#41;&#43;&#40;0pt,40pt&#41;&#36;&#41; &#123;A &#36;\cup&#36; B&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <h2 id=a_cup_b_cup_c ><a href="#a_cup_b_cup_c" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∪</mo><mi>B</mi><mo>∪</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \cup B \cup C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a></h2> <img src="/assets/recipe/tikz/venn/venn-cup-triple-sets.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+  \usepackage&#123;tikz-network&#125;
+  \usetikzlibrary&#123;patterns&#125;
+
+
+  &#37; \usepackage&#123;xcolor&#125;
+  &#37; \pagecolor&#123;lightgray&#33;15&#125;
+
+
+  \def\firstcircle&#123; &#40;0.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\secondcircle&#123;&#40;2.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\thirdcircle&#123; &#40;1.0,-1.5&#41; circle &#40;1.5&#41;&#125;
+  \def\rectangle&#123; &#40;-1.5,-3.0&#41; rectangle &#40;3.5,1.0&#41; &#125;
+  \colorlet&#123;circle edge&#125;&#123;black&#125;
+  \colorlet&#123;circle area&#125;&#123;blue&#33;20&#125;
+  \tikzset&#123;filled/.style&#61;&#123;fill&#61;circle area, draw&#61;circle edge, thick&#125;,
+      outline/.style&#61;&#123;draw&#61;circle edge, thick&#125;&#125;
+  \setlength&#123;\parskip&#125;&#123;5mm&#125;
+
+
+  \def\radius&#123;1cm&#125;
+  \def\ratio&#123;0.8&#125;
+
+  \def\circleA&#123;&#40;90:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleB&#123;&#40;-150:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleC&#123;&#40;-30:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+
+  \tikzset&#123;set label/.style&#61;&#123;fill&#61;white,circle,inner sep&#61;.5mm&#125;&#125;
+
+  \def\drawLabels&#123;
+  \node&#91;set label&#93; at &#40;90:\radius&#43;\ratio*\radius&#41; &#123;A&#125;;
+  \node&#91;set label&#93; at &#40;-150:\radius&#43;\ratio*\radius&#41; &#123;B&#125;;
+  \node&#91;set label&#93; at &#40;-30:\radius&#43;\ratio*\radius&#41; &#123;C&#125;;
+  &#125;
+  \def\drawCaption#1&#123;\node at &#40;-90:2*\radius&#41; &#123;&#36;#1&#36;&#125;;&#125;
+
+  \def\drawVenn#1#2&#123;
+  \begin&#123;tikzpicture&#125;&#91;baseline&#61;0pt&#93;
+      \path&#91;use as bounding box&#93; &#40;0,0&#41; circle &#91;radius&#61;2.5*\radius&#93;;
+      \draw \circleA \circleB \circleC;
+      \begin&#123;scope&#125;&#91;pattern&#61;north west lines,pattern color&#61;blue&#93;
+      #2
+      \end&#123;scope&#125;
+      \drawLabels
+      \drawCaption&#123;#1&#125;
+  \end&#123;tikzpicture&#125;&#37;
+  &#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;scale&#61;0.5
+&#93;
+\begin&#123;scope&#125;
+        \clip \firstcircle \secondcircle \thirdcircle;
+        \fill&#91;filled&#93;  \firstcircle \secondcircle \thirdcircle;
+    \end&#123;scope&#125;
+    \draw&#91;outline&#93; \firstcircle  node&#91;left&#93;  &#123;&#36;A&#36;&#125;;
+    \draw&#91;outline&#93; \secondcircle node&#91;right&#93; &#123;&#36;B&#36;&#125;;
+    \draw&#91;outline&#93; \thirdcircle  node&#91;below&#93; &#123;&#36;C&#36;&#125;;
+    \node&#91;anchor&#61;north&#93; at &#40;current bounding box.south&#41; &#123;A &#36;\cup&#36; B &#36;\cup&#36; C&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <h2 id=a_cup_b_cap_c ><a href="#a_cup_b_cap_c" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy=false >(</mo><mi>A</mi><mo>∪</mo><mi>B</mi><mo stretchy=false >)</mo><mo>∩</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">(A \cup B) \cap C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mclose >)</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a></h2> <img src="/assets/recipe/tikz/venn/venn-cup-cap.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+  \usepackage&#123;tikz-network&#125;
+  \usetikzlibrary&#123;patterns&#125;
+
+
+  &#37; \usepackage&#123;xcolor&#125;
+  &#37; \pagecolor&#123;lightgray&#33;15&#125;
+
+
+  \def\firstcircle&#123; &#40;0.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\secondcircle&#123;&#40;2.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\thirdcircle&#123; &#40;1.0,-1.5&#41; circle &#40;1.5&#41;&#125;
+  \def\rectangle&#123; &#40;-1.5,-3.0&#41; rectangle &#40;3.5,1.0&#41; &#125;
+  \colorlet&#123;circle edge&#125;&#123;black&#125;
+  \colorlet&#123;circle area&#125;&#123;blue&#33;20&#125;
+  \tikzset&#123;filled/.style&#61;&#123;fill&#61;circle area, draw&#61;circle edge, thick&#125;,
+      outline/.style&#61;&#123;draw&#61;circle edge, thick&#125;&#125;
+  \setlength&#123;\parskip&#125;&#123;5mm&#125;
+
+
+  \def\radius&#123;1cm&#125;
+  \def\ratio&#123;0.8&#125;
+
+  \def\circleA&#123;&#40;90:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleB&#123;&#40;-150:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleC&#123;&#40;-30:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+
+  \tikzset&#123;set label/.style&#61;&#123;fill&#61;white,circle,inner sep&#61;.5mm&#125;&#125;
+
+  \def\drawLabels&#123;
+  \node&#91;set label&#93; at &#40;90:\radius&#43;\ratio*\radius&#41; &#123;A&#125;;
+  \node&#91;set label&#93; at &#40;-150:\radius&#43;\ratio*\radius&#41; &#123;B&#125;;
+  \node&#91;set label&#93; at &#40;-30:\radius&#43;\ratio*\radius&#41; &#123;C&#125;;
+  &#125;
+  \def\drawCaption#1&#123;\node at &#40;-90:2*\radius&#41; &#123;&#36;#1&#36;&#125;;&#125;
+
+  \def\drawVenn#1#2&#123;
+  \begin&#123;tikzpicture&#125;&#91;baseline&#61;0pt&#93;
+      \path&#91;use as bounding box&#93; &#40;0,0&#41; circle &#91;radius&#61;2.5*\radius&#93;;
+      \draw \circleA \circleB \circleC;
+      \begin&#123;scope&#125;&#91;pattern&#61;north west lines,pattern color&#61;blue&#93;
+      #2
+      \end&#123;scope&#125;
+      \drawLabels
+      \drawCaption&#123;#1&#125;
+  \end&#123;tikzpicture&#125;&#37;
+  &#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;scale&#61;0.5
+&#93;
+\begin&#123;scope&#125;
+        \clip \firstcircle \secondcircle;
+        \fill&#91;filled&#93; \thirdcircle;
+    \end&#123;scope&#125;
+    \draw&#91;outline&#93; \firstcircle  node&#91;left&#93;  &#123;&#36;A&#36;&#125;;
+    \draw&#91;outline&#93; \secondcircle node&#91;right&#93; &#123;&#36;B&#36;&#125;;
+    \draw&#91;outline&#93; \thirdcircle  node&#91;below&#93; &#123;&#36;C&#36;&#125;;
+    \node&#91;anchor&#61;north&#93; at &#40;current bounding box.south&#41;
+      &#123;&#40;A &#36;\cup&#36; B&#41; &#36;\cap&#36; C&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <h2 id=a_cup_b_cap_c__2 ><a href="#a_cup_b_cap_c__2" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy=false >(</mo><mi>A</mi><mo>∪</mo><mi>B</mi><mo stretchy=false >)</mo><mo>∩</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">(A \cup B) \cap C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∪</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mclose >)</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a></h2> <img src="/assets/recipe/tikz/venn/venn-cup-cap02.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+  \usepackage&#123;tikz-network&#125;
+  \usetikzlibrary&#123;patterns&#125;
+
+
+  &#37; \usepackage&#123;xcolor&#125;
+  &#37; \pagecolor&#123;lightgray&#33;15&#125;
+
+
+  \def\firstcircle&#123; &#40;0.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\secondcircle&#123;&#40;2.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\thirdcircle&#123; &#40;1.0,-1.5&#41; circle &#40;1.5&#41;&#125;
+  \def\rectangle&#123; &#40;-1.5,-3.0&#41; rectangle &#40;3.5,1.0&#41; &#125;
+  \colorlet&#123;circle edge&#125;&#123;black&#125;
+  \colorlet&#123;circle area&#125;&#123;blue&#33;20&#125;
+  \tikzset&#123;filled/.style&#61;&#123;fill&#61;circle area, draw&#61;circle edge, thick&#125;,
+      outline/.style&#61;&#123;draw&#61;circle edge, thick&#125;&#125;
+  \setlength&#123;\parskip&#125;&#123;5mm&#125;
+
+
+  \def\radius&#123;1cm&#125;
+  \def\ratio&#123;0.8&#125;
+
+  \def\circleA&#123;&#40;90:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleB&#123;&#40;-150:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleC&#123;&#40;-30:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+
+  \tikzset&#123;set label/.style&#61;&#123;fill&#61;white,circle,inner sep&#61;.5mm&#125;&#125;
+
+  \def\drawLabels&#123;
+  \node&#91;set label&#93; at &#40;90:\radius&#43;\ratio*\radius&#41; &#123;A&#125;;
+  \node&#91;set label&#93; at &#40;-150:\radius&#43;\ratio*\radius&#41; &#123;B&#125;;
+  \node&#91;set label&#93; at &#40;-30:\radius&#43;\ratio*\radius&#41; &#123;C&#125;;
+  &#125;
+  \def\drawCaption#1&#123;\node at &#40;-90:2*\radius&#41; &#123;&#36;#1&#36;&#125;;&#125;
+
+  \def\drawVenn#1#2&#123;
+  \begin&#123;tikzpicture&#125;&#91;baseline&#61;0pt&#93;
+      \path&#91;use as bounding box&#93; &#40;0,0&#41; circle &#91;radius&#61;2.5*\radius&#93;;
+      \draw \circleA \circleB \circleC;
+      \begin&#123;scope&#125;&#91;pattern&#61;north west lines,pattern color&#61;blue&#93;
+      #2
+      \end&#123;scope&#125;
+      \drawLabels
+      \drawCaption&#123;#1&#125;
+  \end&#123;tikzpicture&#125;&#37;
+  &#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;scale&#61;0.5
+&#93;
+\begin&#123;scope&#125;
+        \clip \secondcircle;
+        \fill&#91;filled&#93; \thirdcircle;
+    \end&#123;scope&#125;
+    \fill&#91;filled&#93;  \firstcircle;
+    \draw&#91;outline&#93; \firstcircle  node&#91;left&#93;  &#123;&#36;A&#36;&#125;;
+    \draw&#91;outline&#93; \secondcircle node&#91;right&#93; &#123;&#36;B&#36;&#125;;
+    \draw&#91;outline&#93; \thirdcircle  node&#91;below&#93; &#123;&#36;C&#36;&#125;;
+    \node&#91;anchor&#61;north&#93; at &#40;current bounding box.south&#41;
+      &#123;A &#36;\cup&#36; &#40;B &#36;\cap&#36; C&#41;&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <h2 id=a_cap_b_cap_c__2 ><a href="#a_cap_b_cap_c__2" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∩</mo><mi>B</mi><mo>∩</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \cap B \cap C</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></a></h2> <img src="/assets/recipe/tikz/venn/venn-cap-cap-complementary.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+  \usepackage&#123;tikz-network&#125;
+  \usetikzlibrary&#123;patterns&#125;
+
+
+  &#37; \usepackage&#123;xcolor&#125;
+  &#37; \pagecolor&#123;lightgray&#33;15&#125;
+
+
+  \def\firstcircle&#123; &#40;0.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\secondcircle&#123;&#40;2.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\thirdcircle&#123; &#40;1.0,-1.5&#41; circle &#40;1.5&#41;&#125;
+  \def\rectangle&#123; &#40;-1.5,-3.0&#41; rectangle &#40;3.5,1.0&#41; &#125;
+  \colorlet&#123;circle edge&#125;&#123;black&#125;
+  \colorlet&#123;circle area&#125;&#123;blue&#33;20&#125;
+  \tikzset&#123;filled/.style&#61;&#123;fill&#61;circle area, draw&#61;circle edge, thick&#125;,
+      outline/.style&#61;&#123;draw&#61;circle edge, thick&#125;&#125;
+  \setlength&#123;\parskip&#125;&#123;5mm&#125;
+
+
+  \def\radius&#123;1cm&#125;
+  \def\ratio&#123;0.8&#125;
+
+  \def\circleA&#123;&#40;90:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleB&#123;&#40;-150:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleC&#123;&#40;-30:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+
+  \tikzset&#123;set label/.style&#61;&#123;fill&#61;white,circle,inner sep&#61;.5mm&#125;&#125;
+
+  \def\drawLabels&#123;
+  \node&#91;set label&#93; at &#40;90:\radius&#43;\ratio*\radius&#41; &#123;A&#125;;
+  \node&#91;set label&#93; at &#40;-150:\radius&#43;\ratio*\radius&#41; &#123;B&#125;;
+  \node&#91;set label&#93; at &#40;-30:\radius&#43;\ratio*\radius&#41; &#123;C&#125;;
+  &#125;
+  \def\drawCaption#1&#123;\node at &#40;-90:2*\radius&#41; &#123;&#36;#1&#36;&#125;;&#125;
+
+  \def\drawVenn#1#2&#123;
+  \begin&#123;tikzpicture&#125;&#91;baseline&#61;0pt&#93;
+      \path&#91;use as bounding box&#93; &#40;0,0&#41; circle &#91;radius&#61;2.5*\radius&#93;;
+      \draw \circleA \circleB \circleC;
+      \begin&#123;scope&#125;&#91;pattern&#61;north west lines,pattern color&#61;blue&#93;
+      #2
+      \end&#123;scope&#125;
+      \drawLabels
+      \drawCaption&#123;#1&#125;
+  \end&#123;tikzpicture&#125;&#37;
+  &#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;scale&#61;0.5
+&#93;
+\begin&#123;scope&#125;
+        \fill&#91;filled&#93; \thirdcircle;
+        \fill&#91;white&#93;  \firstcircle;
+        \fill&#91;white&#93;  \secondcircle;
+    \end&#123;scope&#125;
+    \draw&#91;outline&#93; \firstcircle  node&#91;left&#93;  &#123;&#36;A&#36;&#125;;
+    \draw&#91;outline&#93; \secondcircle node&#91;right&#93; &#123;&#36;B&#36;&#125;;
+    \draw&#91;outline&#93; \thirdcircle  node&#91;below&#93; &#123;&#36;C&#36;&#125;;
+    \node&#91;anchor&#61;north&#93; at &#40;current bounding box.south&#41;
+      &#123;&#40;A&#39; &#36;\cap&#36; B&#39; &#36;\cap&#36; C&#41;&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <h2 id=a_cap_b_a_cap_b_cap_c_a_cap_b_cap_c ><a href="#a_cap_b_a_cap_b_cap_c_a_cap_b_cap_c" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∩</mo><mi>B</mi><mo>=</mo><mo stretchy=false >(</mo><mi>A</mi><mo>∩</mo><mi>B</mi><mo>∩</mo><mi>C</mi><mo stretchy=false >)</mo><mo>+</mo><mo stretchy=false >(</mo><mi>A</mi><mo>∩</mo><mi>B</mi><mo>∩</mo><msup><mi>C</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mo stretchy=false >)</mo></mrow><annotation encoding="application/x-tex">A \cap B = (A \cap B \cap C) + (A \cap B \cap C&#x27;)</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class=mclose >)</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >+</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal">A</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >∩</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1.001892em;vertical-align:-0.25em;"></span><span class=mord ><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class=mclose >)</span></span></span></span></a></h2> <img src="/assets/recipe/tikz/venn/venn-cap-decomposition.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+  \usepackage&#123;tikz-network&#125;
+  \usetikzlibrary&#123;patterns&#125;
+
+
+  &#37; \usepackage&#123;xcolor&#125;
+  &#37; \pagecolor&#123;lightgray&#33;15&#125;
+
+
+  \def\firstcircle&#123; &#40;0.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\secondcircle&#123;&#40;2.0, 0.0&#41; circle &#40;1.5&#41;&#125;
+  \def\thirdcircle&#123; &#40;1.0,-1.5&#41; circle &#40;1.5&#41;&#125;
+  \def\rectangle&#123; &#40;-1.5,-3.0&#41; rectangle &#40;3.5,1.0&#41; &#125;
+  \colorlet&#123;circle edge&#125;&#123;black&#125;
+  \colorlet&#123;circle area&#125;&#123;blue&#33;20&#125;
+  \tikzset&#123;filled/.style&#61;&#123;fill&#61;circle area, draw&#61;circle edge, thick&#125;,
+      outline/.style&#61;&#123;draw&#61;circle edge, thick&#125;&#125;
+  \setlength&#123;\parskip&#125;&#123;5mm&#125;
+
+
+  \def\radius&#123;1cm&#125;
+  \def\ratio&#123;0.8&#125;
+
+  \def\circleA&#123;&#40;90:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleB&#123;&#40;-150:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+  \def\circleC&#123;&#40;-30:\ratio*\radius&#41; circle &#91;radius&#61;\radius&#93;&#125;
+
+  \tikzset&#123;set label/.style&#61;&#123;fill&#61;white,circle,inner sep&#61;.5mm&#125;&#125;
+
+  \def\drawLabels&#123;
+  \node&#91;set label&#93; at &#40;90:\radius&#43;\ratio*\radius&#41; &#123;A&#125;;
+  \node&#91;set label&#93; at &#40;-150:\radius&#43;\ratio*\radius&#41; &#123;B&#125;;
+  \node&#91;set label&#93; at &#40;-30:\radius&#43;\ratio*\radius&#41; &#123;C&#125;;
+  &#125;
+  \def\drawCaption#1&#123;\node at &#40;-90:2*\radius&#41; &#123;&#36;#1&#36;&#125;;&#125;
+
+  \def\drawVenn#1#2&#123;
+  \begin&#123;tikzpicture&#125;&#91;baseline&#61;0pt&#93;
+      \path&#91;use as bounding box&#93; &#40;0,0&#41; circle &#91;radius&#61;2.5*\radius&#93;;
+      \draw \circleA \circleB \circleC;
+      \begin&#123;scope&#125;&#91;pattern&#61;north west lines,pattern color&#61;blue&#93;
+      #2
+      \end&#123;scope&#125;
+      \drawLabels
+      \drawCaption&#123;#1&#125;
+  \end&#123;tikzpicture&#125;&#37;
+  &#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;scale&#61;0.5
+&#93;
+\begin&#123;scope&#125;
+        \clip \firstcircle;
+        \fill&#91;filled&#93; \secondcircle;
+    \end&#123;scope&#125;
+    \draw&#91;outline&#93; \firstcircle  node&#91;left&#93;  &#123;&#36;A&#36;&#125;;
+    \draw&#91;outline&#93; \secondcircle node&#91;right&#93; &#123;&#36;B&#36;&#125;;
+    \draw&#91;outline&#93; \thirdcircle  node&#91;below&#93; &#123;&#36;C&#36;&#125;;
+    \node&#91;anchor&#61;north,align&#61;center&#93; at &#40;current bounding box.south&#41;
+      &#123;&#40;A &#36;\cap&#36; B&#41;&#61;\\&#40;A &#36;\cap&#36; B &#36;\cap&#36; C&#41; &#43; &#40;A &#36;\cap&#36; B &#36;\cap&#36; C&#39;&#41;&#125;;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> renderMathInElement(document.body) </script>

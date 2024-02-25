@@ -1,0 +1,335 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | 数据库</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <p>不同类型的数据库有各自的优势和缺陷, 对中小型程序来说, 它们的性能区别不大. 这里以 <a href="http://pythonhosted.org/Flask-SQLAlchemy/">flask-sqlalchemy</a> 扩展为例, 它对数据库<strong>框架</strong> <a href="http://www.sqlalchemy.org/">SQLAlchemy</a> 进行包装, <strong>支持多种数据库后台</strong>, 比如 MySQL, Postgres, SQLite. 这些数据库<strong>引擎</strong>的 URL 格式是不同的.</p> <blockquote> <p>&#40;virEnv&#41; conda/pip install flask-sqlalchemy</p> </blockquote> <pre><code class="julia hljs">MySQL               mysql://username:password<span class=hljs-meta >@hostname</span>/database
+Postgres            postgresql://username:password<span class=hljs-meta >@hostname</span>/database
+SQLite(Univ)        sqlite:///absolute/path/to/database
+SQLite(Windows)     sqlite:///c:/absolute/path/to/database</code></pre> <p>这些 URL 中, MySQL 和 Postgres 里面的 <code>hostname</code> 是数据库所在的主机名&#40;可以是本地主机 <code>localhost</code> 或远程服务器&#41;. 由于主机上可以<strong>托管多个数据库</strong>, 所以 <code>database</code> 是要用的数据库名字. <code>username</code> 和 <code>password</code> 是数据库的用户名和密码.</p> <p>&lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;<code>SQLite</code> 是 python 自带的一个小型开源数据库引擎, 不需要使用服务器, 所以不需要指定 <code>hostname</code> 和 <code>password</code>, URL 里面的 <code>database</code> 是硬盘上的数据库文件名.&lt;/emph&gt;</p> <p>程序使用的数据库的 URL <strong>必须</strong>保存到 flask 的配置对象的 <code>SQLALCHEMY_DATABASE_URI</code> 键中&#40;最后是 <code>URI</code> 不是 <code>URL</code>&#41;. 另外, 还有一个配置选项 <code>SQLALCHEMY_COMMIT_ON_TEARDOWN</code>, 将其设为 <code>True</code> 时, 每次请求结束后都回自动提交数据库中大的变量. 其他配置选项可参考 <code>flask-sqlalchemy</code> 的文档.</p> <p><code>flask-sqlalchemy</code> 的实例化和配置如下</p> <pre><code class="julia hljs"><span class=hljs-comment ># hello.py</span>
+from flask <span class=hljs-keyword >import</span> Flask
+from flask_sqlalchemy <span class=hljs-keyword >import</span> SQLAlchemy
+
+baseDir = os.path.abspath(os.path.dirname(__name__))
+
+app = Flask(__name__)
+
+app.config[&#x27;SQLALCHEMY_DATABASE_URI&#x27;] = \
+    <span class=hljs-string >`sqllite:///`</span> + os.path.join(basiDir, &#x27;data.sqlite&#x27;)
+app.config[&#x27;SQLALCHEMY_COMMIT_ON_TEARDOWN&#x27;] = True
+
+db = SQLAlchemy(app)</code></pre> <p>实例化对象 <code>db</code> 表示程序使用的数据库, &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;它有 flask-sqlalchemy 提供的所有功能&lt;/emph&gt;.</p> <h2 id="flask-sqlalchemy_的用法"><a href="#flask-sqlalchemy_的用法" class=header-anchor >flask-sqlalchemy 的用法</a></h2> <p>数据库的每个表都对应一个继承自 <code>db.Model</code> 的 python 类. 表与表之间的联结关系也定义在表类中&#40;既可通过外键联结, 也可通过反向引用添加更好用的功能&#41;.</p> <p>在 shell 中创建数据库表之后, 对数据库的操作通常是定义在视图函数中&#40;添加, 修改, 删除, 查询&#41;, 在 html 模板中可以通过更友好的方式跟用户进行交互.</p> <p>数据表的更新是不方便的, 需要用 <code>flask-migrate</code> 实现迁移功能.</p> <h2 id="定义表格类"><a href="#定义表格类" class=header-anchor >定义表格类</a></h2> <p>假设有两个数据表 <code>roles</code> 和 <code>users</code>, 各自有自己的 <code>id</code> 和 <code>roleName/userName</code>, 每个 <code>user</code> 都有一个 <code>role</code> 属性.</p> <pre><code class="julia hljs"><span class=hljs-comment ># hello.py</span>
+class Role(db.Model):
+    __tablename__ = &#x27;roles&#x27;
+    id = db.Column(db.<span class=hljs-built_in >Integer</span>, primary_key=True)
+    roleName = db.Column(db.<span class=hljs-built_in >String</span>(<span class=hljs-number >64</span>), unique=True)
+
+    def __repr__(self):
+        <span class=hljs-keyword >return</span> &#x27;&lt;Role {<span class=hljs-number >0</span>}&gt;&#x27;.format(self.name)
+
+class User(db.Model):
+    __tablename__ = &#x27;users&#x27;
+    id = db.Column(db.<span class=hljs-built_in >Integer</span>, primary_key=True)
+    userName = db.Column(db.<span class=hljs-built_in >String</span>(<span class=hljs-number >64</span>), unique=True, index=True)</code></pre> <ul> <li><p><code>__tablename__</code> 是表名, 如果没有指定, 程序会自动生成一个名字&#40;但是没有复数&#41;.</p> <li><p>由于每个表都要定义一个<strong>主键</strong>, 通常命名为 <code>id</code>. 在利用表类进行实例化的时候, 新建对象的 <code>id</code> 不需要显式指定, 因为主键是由 flask-sqlalchemy 自动管理的.</p> <li><p><code>db.Column</code> 类的构造函数的第一个参数是这一类的数据属性类型, 这些类型比 python 的类型更加细致. 下面是数据库的属性类型与 python 数据类型的对应关系. </p> </ul> <pre><code class="julia hljs"><span class=hljs-built_in >Integer</span>       int                 整数(<span class=hljs-number >32</span>位)
+  SmallInteger  int                 整数(<span class=hljs-number >16</span>位)
+  BigInteger    int/long            整数(不限精度)
+  Float         float               浮点数
+  Numeric       decimal.Decimal     定点数
+  <span class=hljs-built_in >String</span>        str                 变长字符串
+  <span class=hljs-built_in >Text</span>          str                 变长字符串(优化了长字符串)
+  Unicode       unicode             变长unicode字符串
+  UnicodeText   unicode             变长unicode字符串(优化了长串)
+  Boolean       bool                布尔
+  Date          datetime.date       日期
+  Time          datetime.time       时间
+  DateTime      datetime.datetime   日期和时间
+  Interval      datetime.timedelta  时间间隔
+  <span class=hljs-built_in >Enum</span>          str                 一组字符串
+  PickleType    任意 py 对象        自动使用 pickle 序列化
+  LargeBinary   str                 二进制文件</code></pre> <ul> <li><p><code>db.Column</code> 有一些配置选项, 如下</p> </ul> <pre><code class="julia hljs">primary_key   主键列设为True
+  unique        不允许重复值要设为True
+  index         创建索引可以提升查询效率(True)
+  nullable      允许使用空值(True)
+  default       定义默认值</code></pre> <ul> <li><p><code>__repr__&#40;&#41;</code> 方法定义了 <code>print</code> 数据时的显示内容.</p> </ul> <h2 id="关系"><a href="#关系" class=header-anchor >关系</a></h2> <p>表单类的联结关系也是在表单类里面定义的.</p> <pre><code class="julia hljs"><span class=hljs-comment ># hello.py</span>
+class Role(db.Model):
+    <span class=hljs-comment >#...</span>
+    users = db.relationship(&#x27;User&#x27;, backref=&#x27;role&#x27;)
+
+class User(db.Model):
+    <span class=hljs-comment >#...</span>
+    roleId = db.Column(db.<span class=hljs-built_in >Integer</span>, db.ForeignKey(&#x27;role.id&#x27;))</code></pre> <ul> <li><p><code>roleId</code> 被定义为外键, 参数 <code>role.id</code> 表明这一列的取值是 <code>roles</code> 表格中的 <code>id</code> 的值, 不是具体的 <code>roleName</code>.</p> <li><p><code>db.relationship</code> 对每个 <code>Role</code> 对象都添加了一个<strong>属性变量</strong>, 它可以返回与这个 <code>Role</code> 对象相关联的所有用户组成的<strong>列表</strong>. &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;第一个参数表示联结的是哪个模型&lt;/emph&gt;. 参数 <code>backref</code> 会在联结的模型 <code>User</code> 中额外添加一个 <code>role</code> 属性&#40;添加到 <code>User</code> 中&#41;, 可以代替 <code>roleId</code> 访问 <code>Role</code> 模型, 对应的是整个 <code>Role</code> 对象, <code>roleId</code> 只对应外键的值.</p> <li><p><code>db.relationship</code> 可以自行找到关系中的外键, 但是如果 <code>User</code> 中用了 <code>Role</code> 的两列分别定义了外键, 就需要认位设置想要作为关系的外键. <code>db.relationship</code> 有一些常用的配置选项如下.</p> </ul> <pre><code class="julia hljs">backref       在关系的另一个模型中添加反向引用
+  primaryjoin   明确指明联结条件(模棱两可的关系中使用)
+  lazy          如何加载相关的记录(select/immediate/joined/subquery/noload/dynamic)
+  uselist       设为False不使用列表, 使用标量值
+  order_by      指定排序方式
+  secondary     多对多关系中的关系表的名字
+  secondaryjoin 多对多关系的二级联结条件</code></pre> <p>上面的例子是<code>一对多</code>关系. 在<code>一对一</code>关系中, 要将 <code>uselist</code> 设为 <code>False</code>. <code>多对一</code>只需要将外键和<code>db.relationship</code>都放在<code>多</code>这一侧就可以了. <code>多对多</code>中要用到第三张表&#40;<code>关系表</code>&#41;.</p> <h2 id="数据库操作"><a href="#数据库操作" class=header-anchor >数据库操作</a></h2> <p>数据库表类的操作对象是表的每一行&#40;对应一条记录&#41;, 包括创建数据表, 对行进行<strong>添加/修改/删除/查询</strong>. &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;在创建数据表之后, 对记录的 <code>添加/修改/删除</code> 都与 git 版本控制的操作类似, <code>添加/修改</code> 都需要先 <code>add</code> 再 <code>commit</code>, <code>删除</code> 需要 <code>commit</code>.&lt;/emph&gt;</p> <ul> <li><p>创建表</p> </ul> <pre><code class="bash hljs">(virEnv)$ python hello.py shell
+&gt;&gt;&gt; from hello import db
+&gt;&gt;&gt; db.create_all()    <span class=hljs-comment ># 创建数据库表</span>
+&gt;&gt;&gt; db.drop_all()      <span class=hljs-comment ># 删除数据库表</span></code></pre> <p>创建数据表之后, 会在前面设置的 URL 路径下生成一个 sqlite 文件, 文件名就是在配置中指定的. 如果数据表已经在数据库中存在了, 那么 <code>db.create_all&#40;&#41;</code> 不会重新创建或者更新这个表. </p> <ul> <li><p>添加记录</p> </ul> <pre><code class="bash hljs">&gt;&gt;&gt; from hello import Role, User
+&gt;&gt;&gt; adminRole = Role(roleName=<span class=hljs-string >&#x27;Admin&#x27;</span>)   <span class=hljs-comment ># role 1</span>
+&gt;&gt;&gt; modRole = Role(roleName=<span class=hljs-string >&#x27;Moderator&#x27;</span>)  <span class=hljs-comment ># role 2</span>
+&gt;&gt;&gt; userRole = Role(roleName=<span class=hljs-string >&#x27;User&#x27;</span>)     <span class=hljs-comment ># role 3</span>
+&gt;&gt;&gt; userJohn = User(userName=<span class=hljs-string >&#x27;john&#x27;</span>, role=adminRole)  <span class=hljs-comment ># user 1</span>
+&gt;&gt;&gt; userSusan = Usser(userName=<span class=hljs-string >&#x27;susan&#x27;</span>, role=userRole)  <span class=hljs-comment ># user 2</span>
+&gt;&gt;&gt; userDavid = User(username=<span class=hljs-string >&#x27;david&#x27;</span>, role=userRole)  <span class=hljs-comment ># user 3</span></code></pre> <p>但是此时只是在 python shell 中创建了对象, 还没有将其写入数据库中, 所以 <code>print</code> 它们的时候是没有显示的.</p> <pre><code class="bash hljs">&gt;&gt;&gt; <span class=hljs-built_in >print</span>(adminRole.<span class=hljs-built_in >id</span>)   <span class=hljs-comment ># None</span></code></pre>
+<p>上面创建的记录需要通过数据库 <code>会话</code> 添加到数据库中, flask-sqlalchemy 的会话通过 <code>db.session</code> 控制. 改动操作如下</p>
+<pre><code class="bash hljs">&gt;&gt;&gt; db.session.add(adminRole)
+&gt;&gt;&gt; db.session.add(modRole)
+&gt;&gt;&gt; db.session.add(userRole)
+&gt;&gt;&gt; db.session.add(userJohn)
+&gt;&gt;&gt; db.session.add(userSusan)
+&gt;&gt;&gt; db.session.add(userDavid)</code></pre>
+<p>可以将这些添加对象的操作一次性完成, 如下. 此时如果发生了错误, 整个添加操作都会失效, 不会发生只改动了一部分的情况, 这可以避免数据库更新的不一致性.</p>
+<blockquote>
+<code>&gt;&gt;&gt; db.session.add_all&#40;&#91;adminRole, modRole, userRole, userJohn, userSusan, userDavid&#93;&#41;</code>
+</blockquote>
+<p>然后将添加的对象 <code>提交</code> 到会话</p>
+<blockquote>
+<code>&gt;&gt;&gt; db.session.commit&#40;&#41;</code>
+</blockquote>
+<p>此时就可以 <code>print</code> 记录的 <code>id</code> 属性了</p>
+<blockquote>
+<p><code>&gt;&gt;&gt; print&#40;adminRole.id&#41;</code>   # 1</p>
+</blockquote>
+<p>另外, 数据库也可以 <code>回滚</code></p>
+<blockquote>
+<code>&gt;&gt;&gt; db.session.rollback&#40;&#41;</code>
+</blockquote>
+<ul>
+<li><p>修改记录 对记录进行修改之后, 也需要重新 <code>add</code> 和 <code>commit</code>.</p>
+<blockquote>
+<code>&gt;&gt;&gt; adminRole.roleName &#61; Administrator</code>
+</blockquote>
+
+</ul>
+<blockquote>
+<code>&gt;&gt;&gt; db.session.add&#40;adminRole&#41;</code>
+</blockquote>
+<blockquote>
+<code>&gt;&gt;&gt; db.session.commit&#40;&#41;</code>
+</blockquote>
+<ul>
+<li><p>删除记录 对某个记录删除之后, 也要 <code>commit</code>.</p>
+<blockquote>
+<code>&gt;&gt;&gt; db.session.delete&#40;modRole&#41;</code>
+</blockquote>
+
+</ul>
+<blockquote>
+<code>&gt;&gt;&gt; db.session.commit&#40;&#41;</code>
+</blockquote>
+<ul>
+<li><p>查询记录 这是数据库最常用的操作. <code>查询</code> 操作是直接&lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;用表单类调用 <code>query</code> 函数完成的&lt;/emph&gt;.</p>
+<blockquote>
+<p><code>&gt;&gt;&gt; Role.query.all&#40;&#41;</code>   # 用 Role 类</p>
+</blockquote>
+
+</ul>
+<blockquote>
+<code>&gt;&gt;&gt; User.query.all&#40;&#41;</code>
+</blockquote>
+<p>使用 <code>过滤器</code> 可以精确查找满足某些条件的记录.</p>
+<blockquote>
+<code>&gt;&gt;&gt; User.query.filter_by&#40;role&#61;userRole&#41;.all&#40;&#41;</code>
+</blockquote>
+<p>&lt;emph style&#61;&#39;border:1px dashed red&#39;&gt;补充一句: 这样的 <code>query</code> 语句可以导出成原生的 SQL 查询语句&lt;/emph&gt;</p>
+<blockquote>
+<code>&gt;&gt;&gt; str&#40;User.query.filter_by&#40;role&#61;userRole&#41;&#41;</code>
+</blockquote>
+<p>另外, <code>User.query.filter_by&#40;&#41;.all&#40;&#41;</code> 里面, 对 <code>filter_by&#40;&#41;</code> 和 <code>all&#40;&#41;</code> 详细说明如下. </p>
+<ul>
+<li><p><code>User.query</code> 和 <code>User.query.filte_by&#40;&#41;</code> 都是得到一个 <code>查询</code>, 它不包括查询得到的记录.</p>
+
+<li><p><code>all&#40;&#41;</code> 才会 <code>执行查询</code>,将 <code>查询记录</code> 用列表格式返回, 这才得到了想要的结果.</p>
+
+</ul>
+<p><code>过滤器</code> 和 <code>执行查询</code> 的相关方法如下</p>
+<pre><code class="julia hljs"><span class=hljs-comment ># 过滤器</span>
+  filter()          原查询上添加过滤器, 返回新查询
+  filter_by()       原查询上添加等值过滤器, 返回新查询
+  limit()           限制原查询的返回结果数量, 返回新查询
+  offset()          偏移原查询的结果, 返回新查询
+  order_by()        根据指定条件对原查询排序, 返回新查询
+  group_by()        根据指定条件对原查询分组, 返回新查询</code></pre>
+<p>由于添加过滤器之后仍然返回查询, 所以这些过滤器应该是可以链式使用的.</p>
+<pre><code class="julia hljs"><span class=hljs-comment ># 执行查询</span>
+  all()             返回所有查询结果, 【列表】格式
+  first()           返回查询第一个结果. 没有结果则返回 None
+  first_or_404()    返回查询第一个结果. 没有结果则返回 <span class=hljs-number >404</span> 
+  get()             返回主键对应的行. 没有则返回 None
+  get_or_404()      返回主键对应的行. 没有则返回 <span class=hljs-number >404</span>
+  count()           返回查询结果的数量
+  paginate()        返回 paginate 对象, 包含指定范围的结果</code></pre>
+<p>上面利用 <code>role</code> 作为过滤器的结果, 跟通过 <code>关系</code> 的到的结果是一样的, 而且使用 <code>关系</code> 的操作更加简洁.</p>
+<blockquote>
+<code>&gt;&gt;&gt; users &#61; userRole.users</code>
+</blockquote>
+<blockquote>
+<p><code>&gt;&gt;&gt; users</code>   # 打印所有 role&#61;userRole 的 user</p>
+</blockquote>
+<p>这里的一个问题是, 使用 <code>关系</code> 的时候不能使用过滤器, 因为 <code>userRole.users</code> 会隐含地调用 <code>all&#40;&#41;</code> 返回一个用户列表, <code>query</code> 对象是隐藏的, 所以无法指定精确的查询过滤器. 以上面这个为例, 更友好的方式是将用户列表按照字母顺序排列. 为了使用过滤器 <code>order_by</code>, 我们可以在表单类 <code>Role</code> 中的关系添加一个参数 <code>lazy&#61;&#39;dynamic&#39;</code>, 这会禁止自动执行查询.</p>
+<pre><code class="julia hljs">class Role(db.Model):
+    <span class=hljs-comment >#...</span>
+    users = db.relationship(&#x27;User&#x27;, backref=&#x27;role&#x27;, lazy=&#x27;dynamic&#x27;)
+    <span class=hljs-comment >#...</span></code></pre>
+<p>这样配置了 <code>关系</code> 之后, <code>userRole.users</code> 会返回<strong>未执行的查询</strong>, 所以可以对用过滤器.</p>
+<blockquote>
+<p><code>&gt;&gt;&gt; userRole.users.order_by&#40;User.userName&#41;.all&#40;&#41;</code> <code>&gt;&gt;&gt; userRole.users.count&#40;&#41;</code></p>
+</blockquote>
+<h2 id="在视图函数和_html_模板中操作数据库"><a href="#在视图函数和_html_模板中操作数据库" class=header-anchor >在视图函数和 html 模板中操作数据库</a></h2>
+<p>视图函数和 html 模板的操作是共同进行的, 视图函数执行相关的数据计算, 将得到的结果渲染到 html 模板中进行展示. 另外, 视图函数也可以接收用户用户在 html 中提交的数据, 在视图中处理后存储到数据库中. 下面是一个例子.</p>
+<pre><code class="julia hljs"><span class=hljs-comment ># 视图函数 hello.py</span>
+<span class=hljs-meta >@app</span>.route(<span class=hljs-string >&#x27;/&#x27;</span>, methods=[&#x27;GET&#x27;, &#x27;POST&#x27;])
+def index():
+    form = NameForm()
+    <span class=hljs-keyword >if</span> form.validate_on_submit():
+        user = User.query.filter_by(userName=form.name.data).first()
+        <span class=hljs-keyword >if</span> user is None:
+            user = User(userName=form.name.data)
+            db.session.add(user)
+            session[&#x27;known&#x27;] = False
+        <span class=hljs-keyword >else</span>:
+            session[&#x27;known&#x27;] = True
+
+        session[&#x27;name&#x27;] = form.name.data
+        form.name.data = &#x27;&#x27;
+        <span class=hljs-keyword >return</span> redirect(url_for(&#x27;index&#x27;))
+
+    <span class=hljs-keyword >return</span> render_template(&#x27;index.html&#x27;, form=form, name=session.get(&#x27;name&#x27;), known=session.get(&#x27;known&#x27;))
+
+<span class=hljs-comment ># 模板 templates/index.html</span>
+{% extends &#x27;base.html&#x27; %}
+{% <span class=hljs-keyword >import</span> &#x27;bootstrap/wtf.html&#x27; as wtf %}
+
+{% block title %}xu-zc{% endblock %}
+
+{% block page_content %}
+&lt;div class=&#x27;pate-header&#x27;&gt;
+    &lt;h1&gt;Hello, {% <span class=hljs-keyword >if</span> name %}{{ name }}{% <span class=hljs-keyword >else</span> %}Stranger{% endif %}!&lt;/h1&gt;
+    {% <span class=hljs-keyword >if</span> not known %}
+        &lt;p&gt;Pleased to meet you!&lt;/p&gt;
+    {% <span class=hljs-keyword >else</span> %}
+        &lt;p&gt;Happy to see you again!&lt;/p&gt;
+    {% endif %}
+&lt;/div&gt;
+{{ wtf.quick_form(form) %}}
+{% endblock %}</code></pre>
+<p>&lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;注意, 想要运行上面的视图函数, 需要现在 python shell 中创建数据表&#33;&lt;/emph&gt;</p>
+<h2 id="在_python_shell_中自动导入数据库实例"><a href="#在_python_shell_中自动导入数据库实例" class=header-anchor >在 python shell 中自动导入数据库实例</a></h2>
+<p>上面的视图函数在运行前需要先导入数据库实例和模型, 这无疑增加了操作步骤, 而且这个步骤每次都是完全相同的, 所以考虑在 flask-script 的 shell 命令自动导入特定的对象. 这只需要为 shell 命令注册一个 <code>回调函数</code> 即可. &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;更直白地, 就是在上面的视图函数 <code>hello.py</code> 里面增加一个命令, 使得每次运行这个视图函数的时候都会自动引入表单类等内容.&lt;/emph&gt;</p>
+<pre><code class="julia hljs"><span class=hljs-comment ># 在 hello.py 中给 shell 添加一个上下文</span>
+from flask_script <span class=hljs-keyword >import</span> shell
+
+def make_shell_context():
+    <span class=hljs-keyword >return</span> dict(app=app, db=db, User=User, Role=Role)
+manager.add_command(&#x27;shell&#x27;, Shell(make_context=make_shel_context)</code></pre>
+<p>此时如果重新执行 <code>python hello.py shell</code>, <code>程序, 数据库实例, 模型</code> 都直接导入到了 shell 中, 可以直接进行操作, 下面的几个对象都会直接显示.</p>
+<blockquote>
+<code>python hello.py shell</code>
+</blockquote>
+<blockquote>
+<code>&gt;&gt;&gt; app</code>
+</blockquote>
+<blockquote>
+<code>&gt;&gt;&gt; db</code>
+</blockquote>
+<blockquote>
+<code>&gt;&gt;&gt; User</code>
+</blockquote>
+<p>关于上述添加 <code>make_shell_context&#40;&#41;</code> 所起到的作用, 理解如下:&lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;对 <code>manager</code> 添加了这个执行函数为启动参数, 并将其取名为 <code>shell</code>, 这样在启动时用上这个参数就会自动执行这个函数, 导入与数据库相关的对象.&lt;/emph&gt;</p>
+<h2 id="数据库迁移"><a href="#数据库迁移" class=header-anchor >数据库迁移</a></h2>
+<p>如果需要对数据库表单类进行修改, 然后再对数据库应用更新, 这些功能数据库本身是不提供的. 较好的解决方案是使用 <code>数据库迁移框架</code>. &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;数据库迁移框架能跟踪数据库模式的变化, 然后 &lt;emph style&#61;&#39;border:1px dashed red&#39;&gt;增量式&lt;/emph&gt;地把变化应用到数据库上.&lt;/emph&gt;</p>
+<p><code>SQLAlchemy</code> 地开发人员编写了一个名为 <a href="https://alembic.readthedocs.org/en/latest/index.html">Alembic</a> 地迁移框架. 在 flask 中可以直接使用 &#40;flask-migrate&#93;&#91;http://flask-migrate.readthedocs.org/en/latest&#93;, 它对 Alembic 做了轻量包装, 并&lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;集成到了 flask-script 中, 所有迁移操作都通过 flask-script 命令完成, 也就是需要将迁移地命令导出到 flask-script 的命令.&lt;/emph&gt;</p>
+<blockquote>
+<p>&#40;virEnv&#41; conda/pip install flask-migrate</p>
+</blockquote>
+<p>将 flask-migrate 配置到 flask-script 的操作如下.</p>
+<pre><code class="julia hljs"><span class=hljs-comment ># hello.py 配置 flask-migrate</span>
+from flask_migrate <span class=hljs-keyword >import</span> Migrate, MigrateCommand
+<span class=hljs-comment >#...</span>
+migrate = Migrate(app, db)
+manager.add_command(&#x27;db&#x27;, MigrateCommand)</code></pre>
+<h2 id="创建迁移仓库"><a href="#创建迁移仓库" class=header-anchor >创建迁移仓库</a></h2>
+<p>在维护数据库迁移之前, 要使用 <code>init</code> 命令创建迁移仓库</p>
+<blockquote>
+<p>&#40;virEnv&#41; python hello.py db init</p>
+</blockquote>
+<p>这回创建 <code>migrations</code> 文件夹, 所有的迁移脚本都放在其中. 另外, 迁移仓库的文件要和其他程序文件一起纳入版本控制.</p>
+<h2 id="创建迁移脚本"><a href="#创建迁移脚本" class=header-anchor >创建迁移脚本</a></h2>
+<p>还不太懂这个东西。。。</p>
+<h2 id="更新数据库"><a href="#更新数据库" class=header-anchor >更新数据库</a></h2>
+<blockquote>
+<p>&#40;virEnv&#41; python hello.py db upgrade</p>
+</blockquote>
+<div class=page-foot >
+  <div class=copyright >
+    
+    
+    &copy; 许曾超. Last touched: September 01, 2022.
+    
+  </div>
+</div>
+</div>
+    </div>  
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>

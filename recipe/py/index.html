@@ -1,0 +1,99 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | Py</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> <div class=toc-sidebar > <div class=franklin-toc ><ol><li><a href="#笔记">笔记</a><li><a href="#ecosystem_modules">Ecosystem / Modules</a><li><a href="#tips">Tips</a></ol></div> </div> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=py ><a href="#py" class=header-anchor >Py</a></h1> <h2 id="笔记"><a href="#笔记" class=header-anchor >笔记</a></h2> <p><a class=href  href=" mooc"> MOOC </a> / <a class=href  href=" flask"> Flask </a> / <a class=href  href=" request-bs4"> request &#43; bs4 </a></p> <h2 id=ecosystem_modules ><a href="#ecosystem_modules" class=header-anchor >Ecosystem / Modules</a></h2> <ul> <li><p><a class=href  href=" https://docs.python.org/3/library/calendar.html"> calendar </a>: 简洁处理年份、月份、日期、星期等.</p> </ul> <ul> <li><p><a class=href  href=" enum"> enum </a>: 管理常量和多分支都很有用.</p> </ul> <ul> <li><p><a href="">pdfplumber</a>: 按页处理 pdf, 获取页面文字, 提取表格等操作.</p> <li><p><a href="">pypdf2</a>: 纯 Python 库, 可以读取文档信息&#40;标题/作者等&#41;、写入、分割、合并PDF文档. 它还可以对pdf文档进行添加水印、加密解密等.</p> <li><p><a href="">cutecharts</a>: 绘制<em>手绘风格</em>的统计图形.</p> </ul> <ul> <li><p><a href="">moviepy</a>: 视频编辑 &#40;剪辑/文本添加/合并/格式转换/基本特效&#41;</p> </ul> <h2 id=tips ><a href="#tips" class=header-anchor >Tips</a></h2> <ul> <p><li class=blank > &#91;2022-11-28&#93;</p> <ul> <li><p>Ubuntu 上安装 anaconda 时, <strong>务必初始化</strong>, 否则重装吧. </p> <li><p>可以通过设置 <code>conda config --set auto_activate_base false</code> 禁止启动终端时自动进入 <code>base</code> 环境. 如果这个设置不生效, 那就是 <code>.bashrc</code> 里有 <code>conda activate base</code>, 把它删掉. </p> </ul> <li class=blank > &#91;2021-05-17&#93; 在服务器上用 <code>anaconda3/miniconda3</code> 创建虚拟环境后, <code>conda init bash</code> 初始化之后, 想要 <code>conda install -c conda-forge r-base</code> 的时候抛出如下错误:</p> <pre><code class="plaintext hljs">Solving environment: failed with initial frozen solve. Retrying with flexible solve</code></pre>
+<p>一个<a class=href  href=" https://stackoverflow.com/questions/60300787/errors-such-as-solving-environment-failed-with-initial-frozen-solve-retrying">  解决方式 </a>是 <code>conda config --set channel_priority false</code> 之后, 重新执行安装命令 &#40;可能需要重启/更换更快的镜像&#41;. 
+<p><li class=blank >  &#91;2020-09-04&#93;      参考 <a class=href  href=" https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#sharing-an-environment"> <code>conda</code> 管理虚拟环境 </a></p>
+<ul>
+<li><p><code>conda</code> 的虚拟环境如果包含了 <code>pip</code> 安装的内容, 使用 <code>conda env list export &gt; pkgs.yml</code>. 在其他设备上用 <code>conda env create -f pkgs.yml</code> 将会自动区分两种方式的安装内容, 分别安装.</p>
+
+<li><p>如果要跨平台, 那需要 <code>conda env list export --from-history &gt; pkgs.yml</code> 导出通过 <code>conda</code> 安装的包, 相关的依赖不会写入这个文件, 而是在不同的平台下自行编译安装. </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2020-08-04&#93;     python 在本地开启网络服务, 用其他设备接入局域网后, 能访问文件而且速度很快.</p>
+<pre><code class="plaintext hljs">python -m http.server 8000</code></pre>
+<p>其中 <code>8000</code> 作为端口号可以自行设置. 可以添加参数如 <code>--bind 127.0.0.1</code> 设置 <code>ip</code>.</p>
+<ul>
+<li><p>命令行用 <code>ipconfig</code> 查看电脑的 <code>ipv4</code> 地址. 可能会打印多个, 其中包括 <code>WLAN</code> 的地址和 <code>本地连接</code> 的地址. 在其他设备上使用共同网络的地址.</p>
+
+<li><p>设备都连上学校的 <code>SJTU</code> 网络, 按上述启动本地服务器后, 手机刷不出来共享的文件夹&#40;可能 <code>SJTU</code> 不是一般的路由器或者不是局域网？&#41;. </p>
+
+<li><p>想了个黑技巧, 在电脑上打开热点让手机连上, 使用 <code>ipconfig</code> 输出的 <code>无线局域网适配器 - 本地连接</code> 里的 <code>ipv4</code> 地址, 顺利连接上. 所以不是网络和文件夹共享权限的设置上有问题. </p>
+
+</ul>
+
+</ul>
+<div class=page-foot >
+  <div class=copyright >
+    
+    
+    &copy; 许曾超. Last touched: September 01, 2022.
+    
+  </div>
+</div>
+</div>
+    </div>  
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>

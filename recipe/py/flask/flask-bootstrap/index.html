@@ -1,0 +1,68 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | flask-bootstrap</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <p><a href="http://getbootstrap.com">Bootstrap</a> 是 Twitter 开发的开源框架, 能创建整洁且富有吸引力的网页, 兼容所有现代浏览器. 扩展 Flask-Bootstrap 将这个框架的几个模板集成到了 Flask, 易于使用. 这个扩展提供了 Bootstrap 所有的 CSS 和 JavaScript 文件. Bootstrap 的官网提供了很多可以直接复制粘贴的示例. &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;如果要自己使用其他模板, 可能需要对模板进行必要的改动.&lt;/emph&gt;</p> <blockquote> <p>&#40;virEnv&#41; conda/pip install flask-bootstrap</p> </blockquote> <p>习惯上, Flask 扩展在创建 Flask 对象时就进行实例化. </p> <pre><code class="julia hljs">from Flask <span class=hljs-keyword >import</span> Flask
+from falsk_bootstrap <span class=hljs-keyword >import</span> Bootstrap
+
+app = Flask(__name__)
+bootstrap = Bootstrap(app)</code></pre> <h2 id="从_bootstrapbasehtml_继承自己的emph_styleborder-bottom1px_dashed_red基模板"><a href="#从_bootstrapbasehtml_继承自己的emph_styleborder-bottom1px_dashed_red基模板" class=header-anchor >从 bootstrap/base.html 继承自己的&lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;基模板&lt;/emph&gt;</a></h2> <pre><code class="julia hljs"><span class=hljs-comment ># templates/base.html --------------------</span>
+{% extends <span class=hljs-string >&quot;bootstrap/base.html&quot;</span> %}
+
+{% block title %}xu-zc{% endblock %}
+{% block navbar %}
+    &lt;div class=&#x27;navbar navbar-inverse&#x27; role=&#x27;navigation&#x27;&gt;
+        &lt;div class=&#x27;navbar-header&#x27;&gt;
+            &lt;button type=&#x27;button&#x27; class=&#x27;navbar-toggle&#x27; data-toggle=&#x27;collapse&#x27; data-target=&#x27;.navbar-collapse&#x27;&gt;
+                &lt;span class=&#x27;sr-only&#x27;&gt;Toggle navigation&lt;/span&gt;
+                &lt;span class=&#x27;icon-bar&#x27;&gt;&lt;/span&gt;
+                &lt;span class=&#x27;icon-bar&#x27;&gt;&lt;/span&gt;
+                &lt;span class=&#x27;icon-bar&#x27;&gt;&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;a class=&#x27;navbar-brand&#x27; href=<span class=hljs-string >&#x27;/&#x27;</span>&gt;Z.C.&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;div class=&#x27;navbar-collapse collapse&#x27;&gt;
+            &lt;ul class=&#x27;nav navbar-nav&#x27;&gt;
+                &lt;li&gt;&lt;a href=<span class=hljs-string >&#x27;/&#x27;</span>&gt;Home&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+{% endblock %}
+
+{% block content %}
+    &lt;div class=&#x27;container&#x27;&gt;
+        {% block page_conteng %} {% endblock %}
+    &lt;/div&gt;
+{% endblock %}</code></pre> <p>这个扩展模板中, <code>navbar</code> 块使用 &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;Bootstrap 的组件&lt;/emph&gt; 定义了一个简洁的导航条. </p> <p><code>bootstrap/base.html</code> 定义了许多其他的块, 都可以根据需要继承. 要注意的是, 有些块是 flask-bootstrap 自用的, 在继承时需要先使用 Jinja2 提供的 <code>super&#40;&#41;</code> 继承已有内容&#40;不是所有块都这样&#41;, 然后才能添加新内容&#40;如 <code>scripts</code> 和 <code>styles</code> 块&#41;. <code>bootstrap/base.html</code> 定义的块如下:</p> <pre><code class="julia hljs">doc              整个 html 文档
+html_attribs     &lt;html&gt; 属性
+html             &lt;html&gt; 内容
+head             &lt;head&gt; 内容
+title            &lt;title&gt; 内容
+metas            一组 meta 标签
+styles           层叠样式表定义
+body_attribs     &lt;body&gt; 属性
+body             &lt;body&gt; 内容
+navbar           用户定义的导航条
+content          用户定义的内容
+scripts          文档底部的 JavaScripts 声明</code></pre> <pre><code class="julia hljs">{% block scripts %}
+    {{ super() }}
+    &lt;script type=&#x27;text/javascript&#x27; src=&#x27;my-script.js&gt; &lt;/script&gt;
+{% endblock %}</code></pre> <h2 id="自定义错误页面"><a href="#自定义错误页面" class=header-anchor >自定义错误页面</a></h2> <p>如果使用了上面继承得到的 <code>base.html</code> 模板, 有必要用这个模板重定义错误页面. 因为默认的错误页面太简单平庸, 而且和自定义的模板差距太大.</p> <p>最常见的错误码由 404&#40;请求页面或路由是未知的&#41; 和 500&#40;有未处理的异常&#41;, 对它们指定的处理方式如下:</p> <pre><code class="julia hljs"><span class=hljs-meta >@app</span>.errorhandler(<span class=hljs-number >404</span>)
+def page_not_found(e):
+    <span class=hljs-keyword >return</span> render_template(&#x27;<span class=hljs-number >404.</span>html&#x27;), <span class=hljs-number >404</span>
+
+<span class=hljs-meta >@app</span>.errorhandler(<span class=hljs-number >500</span>)
+def page_not_found(e):
+    <span class=hljs-keyword >return</span> render_template(&#x27;<span class=hljs-number >500.</span>html&#x27;), <span class=hljs-number >500</span></code></pre> <p>为了保持错误处理的页面与常规页面有相同布局, 可以直接从上面的 <code>templates/base.html</code> 继承 404 和 500 错误页面. 示例如下:</p> <pre><code class="julia hljs"><span class=hljs-comment ># tempaltes/404.html</span>
+{% extends &#x27;base.html&#x27; %}
+
+{% block title %}xu-zc - Page Not Found{% endblock %}
+{% block page_conteng %}
+    &lt;div class=&#x27;page-header&#x27;&gt;
+        &lt;h1&gt;Nor Found.&lt;/h1&gt;
+    &lt;/div&gt;
+{% endblock %}</code></pre> <p>类似的继承方式可以用于其他使用 <code>templates/base.html</code> 格式的页面, 比如</p> <pre><code class="julia hljs"><span class=hljs-comment ># tempaltes/user.html</span>
+{% extends &#x27;base.html&#x27; %}
+
+{% block title %}xu-zc{% endblock %}
+{% block page_conteng %}
+    &lt;div class=&#x27;page-header&#x27;&gt;
+        &lt;h1&gt;Hello, {{ user }}.&lt;/h1&gt;
+    &lt;/div&gt;
+{% endblock %}</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

@@ -1,0 +1,52 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>xu-zc | listings</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <p><a class=href  href=" https://www.ctan.org/pkg/listings"> listings </a> 提供了丰富清晰的源码打印方式, 包括独立文件、代码环境和自定义命令片段.</p> <pre><code class="latex hljs"><span class=hljs-keyword >\usepackage</span>{listings}
+
+<span class=hljs-keyword >\lstloadlanguages</span>{R, [LaTeX]TeX}
+
+<span class=hljs-keyword >\lstdefinestyle</span>{R-code}{
+    basicstyle = {<span class=hljs-keyword >\footnotesize</span><span class=hljs-keyword >\ttfamily</span>},
+    stringstyle  = <span class=hljs-keyword >\ttfamily</span>,
+    commentstyle = <span class=hljs-keyword >\color</span>{red!50!green!50!blue!50}, <span class=hljs-comment >% light gray</span>
+    keywordstyle = <span class=hljs-keyword >\color</span>{blue!90}, <span class=hljs-comment >% blue with bold</span>
+    fontadjust,
+    breaklines = true, 
+    <span class=hljs-comment >%% caption</span>
+    captionpos = t,
+    abovecaptionskip = -9pt,
+    belowcaptionskip = 9pt,
+    <span class=hljs-comment >%% frame</span>
+    frame = leftline, <span class=hljs-comment >% shadowbox</span>
+    rulesepcolor = <span class=hljs-keyword >\color</span>{red!20!green!20!blue!20},
+    framextopmargin = 2pt,
+    framexbottommargin = 2pt,
+    <span class=hljs-comment >%% line number</span>
+    numbers = left,
+    stepnumber = 1,
+    numberstyle = <span class=hljs-keyword >\tiny</span>,
+    numbersep  = 5pt,
+    <span class=hljs-comment >%% space and tabulator</span>
+    showstringspaces = false, <span class=hljs-comment >% show space ?</span>
+    keepspaces   = true, 
+    breakindent  = 4em, 
+    breakatwhitespace = false,
+    showspaces      = false,
+    keepspaces = true,
+    showstringspaces= false,
+    showtabs = false,
+    tabsize  = 2,
+    <span class=hljs-comment >%% margin    </span>
+    aboveskip    = 1em,
+    xleftmargin = 4em,
+    xrightmargin = 4em,
+    <span class=hljs-comment >%% fixed and flexible columns</span>
+    flexiblecolumns = true, 
+    columns = flexible,
+    <span class=hljs-comment >%% misc</span>
+    extendedchars = false,
+    mathescape = false,
+    literate = {&quot;}{<span class=hljs-keyword >\textquotedbl</span>}1,
+    upquote = true
+}
+
+<span class=hljs-keyword >\lstset</span>{style=R-code}
+
+<span class=hljs-keyword >\renewcommand</span>*{<span class=hljs-keyword >\lstlistingname</span>}{代码}</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

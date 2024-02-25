@@ -1,0 +1,69 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | enum</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> <div class=toc-sidebar > <div class=franklin-toc ><ol><li><a href="#当方法非常庞大_而且需要处理大量条件时_enum_就很好用">当方法非常庞大, 而且需要处理大量条件时, <code>enum</code> 就很好用</a><li><a href="#enum_模块提供了一系列处理枚举的工具函数"><code>enum</code> 模块提供了一系列处理枚举的工具函数</a></ol></div> </div> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=enum ><a href="#enum" class=header-anchor >enum</a></h1> <p><a class=href  href=" https://docs.python.org/3/library/enum.html"> enum </a> 是内置的数据类型模块, 对常量处理非常有用.</p> <h2 id="当方法非常庞大_而且需要处理大量条件时_enum_就很好用"><a href="#当方法非常庞大_而且需要处理大量条件时_enum_就很好用" class=header-anchor >当方法非常庞大, 而且需要处理大量条件时, <code>enum</code> 就很好用</a></h2> <pre><code class="python hljs">OPEN = <span class=hljs-number >1</span>
+IN_PROGRESS = <span class=hljs-number >2</span>
+CLOSED = <span class=hljs-number >3</span>
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">handle_open_status</span>():
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;Handling openstatus&#x27;</span>)
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">handle_in_progress_status</span>():
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;Handling inprogress status&#x27;</span>)
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">handle_closed_status</span>():
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;Handling closedstatus&#x27;</span>)
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">handle_status_change</span>(<span class=hljs-params >status</span>):
+    <span class=hljs-keyword >if</span> status == OPEN:
+        handle_open_status()
+    <span class=hljs-keyword >elif</span> status == IN_PROGRESS:
+        handle_in_progress_status()
+    <span class=hljs-keyword >elif</span> status == CLOSED:
+        handle_closed_status()
+
+handle_status_change(<span class=hljs-number >1</span>)  <span class=hljs-comment ># Handling open status</span>
+handle_status_change(<span class=hljs-number >2</span>)  <span class=hljs-comment ># Handling in progress status</span>
+handle_status_change(<span class=hljs-number >3</span>)  <span class=hljs-comment ># Handling closed status</span></code></pre> <pre><code class="python hljs"><span class=hljs-keyword >from</span> enum <span class=hljs-keyword >import</span> IntEnum
+
+<span class=hljs-keyword >class</span> <span class="hljs-title class_">StatusE</span>(<span class="hljs-title class_ inherited__">IntEnum</span>):
+    OPEN = <span class=hljs-number >1</span>
+    IN_PROGRESS = <span class=hljs-number >2</span>
+    CLOSED = <span class=hljs-number >3</span>
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">handle_open_status</span>():
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;Handling openstatus&#x27;</span>)
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">handle_in_progress_status</span>():
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;Handling inprogress status&#x27;</span>)
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">handle_closed_status</span>():
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;Handling closedstatus&#x27;</span>)
+
+handlers = {
+    StatusE.OPEN.value: handle_open_status,
+    StatusE.IN_PROGRESS.value: handle_in_progress_status,
+    StatusE.CLOSED.value: handle_closed_status
+}
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">handle_status_change</span>(<span class=hljs-params >status</span>):
+    <span class=hljs-keyword >if</span> status <span class=hljs-keyword >not</span> inhandlers:
+        raiseException(<span class=hljs-string >f&#x27;No handler found for status: <span class=hljs-subst >{status}</span>&#x27;</span>)
+    handler =handlers[status]
+    handler()
+
+handle_status_change(StatusE.OPEN.value)  <span class=hljs-comment ># Handling open status</span>
+handle_status_change(StatusE.IN_PROGRESS.value)  <span class=hljs-comment ># Handling in progress status</span>
+handle_status_change(StatusE.CLOSED.value)  <span class=hljs-comment ># Handling closed status</span>
+handle_status_change(<span class=hljs-number >4</span>)  <span class=hljs-comment ># Will raise the exception</span></code></pre> <h2 id="enum_模块提供了一系列处理枚举的工具函数"><a href="#enum_模块提供了一系列处理枚举的工具函数" class=header-anchor ><code>enum</code> 模块提供了一系列处理枚举的工具函数</a></h2> <pre><code class="python hljs"><span class=hljs-keyword >from</span> enum <span class=hljs-keyword >import</span> Enum, IntEnum, Flag, IntFlag
+
+<span class=hljs-keyword >class</span> <span class="hljs-title class_">MyEnum</span>(<span class="hljs-title class_ inherited__">Enum</span>):
+    FIRST = <span class=hljs-string >&quot;first&quot;</span>
+    SECOND = <span class=hljs-string >&quot;second&quot;</span>
+    THIRD = <span class=hljs-string >&quot;third&quot;</span>
+
+<span class=hljs-keyword >class</span> <span class="hljs-title class_">MyIntEnum</span>(<span class="hljs-title class_ inherited__">IntEnum</span>):
+    ONE = <span class=hljs-number >1</span>
+    TWO = <span class=hljs-number >2</span>
+    THREE = <span class=hljs-number >3</span>
+<span class=hljs-comment ># Now we can do things like:</span>
+MyEnum.FIRST  <span class=hljs-comment >#&lt;MyEnum.FIRST: &#x27;first&#x27;&gt;</span>
+<span class=hljs-comment ># it has value and name attributes, which are handy:</span>
+MyEnum.FIRST.value  <span class=hljs-comment >#&#x27;first&#x27;</span>
+MyEnum.FIRST.name  <span class=hljs-comment >#&#x27;FIRST&#x27;</span>
+<span class=hljs-comment ># additionally we can do things like:</span>
+MyEnum(<span class=hljs-string >&#x27;first&#x27;</span>)  <span class=hljs-comment >#&lt;MyEnum.FIRST: &#x27;first&#x27;&gt;, get enum by value</span>
+MyEnum[<span class=hljs-string >&#x27;FIRST&#x27;</span>]  <span class=hljs-comment >#&lt;MyEnum.FIRST: &#x27;first&#x27;&gt;, get enum by name</span></code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

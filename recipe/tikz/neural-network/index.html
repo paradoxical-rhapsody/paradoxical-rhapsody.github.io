@@ -1,0 +1,67 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>xu-zc | Neural Network</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <img src="/assets/recipe/tikz/neural-network/neural-network.svg" alt=""> </p> <h1></h1> <p><pre><code class=language-tex >\documentclass&#91;tikz&#93;&#123;standalone&#125;
+\usepackage&#123;tikz&#125;
+\usepackage&#123;tikz-3dplot&#125;
+\usetikzlibrary&#123;3d&#125;
+\definecolor&#123;dgreen&#125;&#123;RGB&#125;&#123;63,127,0&#125;
+\definecolor&#123;dred&#125;&#123;RGB&#125;&#123;144,14,3&#125;
+
+\tdplotsetmaincoords&#123;60&#125;&#123;50&#125;
+
+\begin&#123;document&#125;
+\begin&#123;tikzpicture&#125;&#91;tdplot_main_coords,line join&#61;miter,font&#61;\sffamily
+&#93;
+\path&#91;tdplot_screen_coords&#93; &#40;-2,0&#41;;
+\pgfmathsetmacro&#123;\xstretch&#125;&#123;4&#125;
+\edef\Cols&#123;red,dgreen,purple,yellow,orange&#125;
+\edef\LstCols&#123;&#123;&quot;red&quot;,&quot;dgreen&quot;,&quot;purple&quot;,&quot;yellow&quot;,&quot;orange&quot;&#125;&#125;
+
+\foreach \XX in &#123;1,2&#125; &#123;
+    \begin&#123;scope&#125;&#91;canvas is yz plane at x&#61;-0.8&#43;0.4*\XX&#93;
+        \pgfmathtruncatemacro&#123;\fullness&#125;&#123;120-20*\XX&#125;
+        \draw&#91;fill&#61;dred&#33;\fullness&#33;red&#93; &#40;-1,-1&#41; rectangle &#40;1,1&#41;;
+    \end&#123;scope&#125;
+&#125;
+
+\foreach \Col &#91;count&#61;\X starting from 0,remember&#61;\X as \LastX&#93; in \Cols &#123;
+    \foreach \XX in &#123;1,2,3,4&#125; &#123;
+        \draw&#91;thick,\Col&#93; &#40;\xstretch*\X&#43;0.4*\XX-0.4,0,0&#41; -- &#40;\xstretch*\X&#43;0.4*\XX,0,0&#41;;
+        \begin&#123;scope&#125;&#91;canvas is yz plane at x&#61;\xstretch*\X&#43;0.4*\XX&#93;
+            \pgfmathtruncatemacro&#123;\fullness&#125;&#123;120-20*\XX&#125;
+            \draw&#91;fill&#61;\Col&#33;\fullness&#93; &#40;-1,-1&#41; rectangle &#40;1,1&#41;;
+        \end&#123;scope&#125;
+    &#125;
+
+    \node&#91;anchor&#61;west&#93; at &#40;\xstretch*\X,1,1&#41;&#123;&#36;x_\X&#36;&#125;;
+    \draw&#91;thick,\Col&#93; &#40;\xstretch*\X&#43;0.4*4,0,0&#41; coordinate&#40;front-\X&#41; -- &#40;\xstretch*\X&#43;1&#43;0.4*4,0,0&#41; coordinate&#40;back-\X&#41;;
+    
+    \begin&#123;scope&#125;&#91;canvas is xy plane at z&#61;0&#93;
+        \ifnum\X&gt;0
+            \foreach \Z in &#123;0,...,\LastX&#125; &#123;
+                \pgfmathsetmacro&#123;\mycol&#125;&#123;\LstCols&#91;\Z&#93;&#125;
+            \draw&#91;thick,\mycol,overlay&#93; &#40;front-\Z&#41; to&#91;out&#61;-90,in&#61;-90,looseness&#61;1.5&#93; &#40;back-\X&#41;;&#125;
+        \fi
+    \end&#123;scope&#125;
+
+    \begin&#123;scope&#125;&#91;canvas is yz plane at x&#61;\xstretch*\X&#43;1&#43;0.4*4,transform shape&#93;
+        \ifnum\X&#61;4
+            \node&#91;draw,fill&#61;white&#93; &#40;BN-\X&#41; at &#40;0,0&#41; &#123;Transition layer&#125;;
+        \else
+            \node&#91;draw,fill&#61;white&#93; &#40;BN-\X&#41; at &#40;0,0&#41; &#123;BN--RelU--Conv&#125;;
+        \fi
+    \end&#123;scope&#125;
+    
+    \pgfmathtruncatemacro&#123;\NextX&#125;&#123;\X&#43;1&#125;
+    
+    \ifnum\X&lt;4
+        \node&#91;anchor&#61;south west&#93; at &#40;BN-\X.north east&#41; &#123;&#36;H_\NextX&#36;&#125;;
+        \pgfmathsetmacro&#123;\NextCol&#125;&#123;\LstCols&#91;\NextX&#93;&#125;
+    \else
+        \pgfmathsetmacro&#123;\NextCol&#125;&#123;&quot;black&quot;&#125;
+    \fi
+    
+    \draw&#91;thick,\NextCol&#93; &#40;\xstretch*\X&#43;1&#43;0.4*4,0,0&#41; -- &#40;&#123;\xstretch*&#40;\X&#43;1&#41;&#43;0.4*4&#125;,0,0&#41;;
+&#125;
+\end&#123;tikzpicture&#125;
+
+\end&#123;document&#125;
+</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div>

@@ -1,0 +1,122 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | 函数</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id="函数"><a href="#函数" class=header-anchor >函数</a></h1> <ul> <li><p>包括<code>常规函数</code>, <code>lambda 函数</code>, <code>递归函数</code>.</p> <li><p>函数使用 <code>def</code> 声明, 使用 <code>return</code> 得到返回值. </p> <li><p>函数可以当作人为定义的 <code>输入 -&gt; 处理 -&gt; 输出</code> 的过程, 这个过程能够完成我们特定的目的. </p> <li><p>函数定义中, python 要求 <code>可选参数</code> 必须放在 <code>必选参数</code> 之后&#40;可选参数在定义时, 人为设定了默认值&#41;</p> <li><p>函数可以定义成 <code>可变数量的参数</code>:</p> </ul> <pre><code class="julia hljs">def f(x, *b):
+        <span class=hljs-comment ># ...</span>
+        <span class=hljs-keyword >return</span> result</code></pre> <ul> <li><p>一个可变参数的例子如下:</p> </ul> <pre><code class="julia hljs">def fact(n, *b):
+        result = <span class=hljs-number >1</span>
+        <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> range(<span class=hljs-number >1</span>, n+<span class=hljs-number >1</span>):
+            result *= i
+        <span class=hljs-keyword >for</span> item <span class=hljs-keyword >in</span> b:
+            result *= item
+        <span class=hljs-keyword >return</span> result</code></pre> <ul> <li><p>除非特别公共使用的函数, 养成使用名称传递的方式调用函数&#40;尽量避免位置传递&#41;.</p> <li><p>函数内部定义和使用的变量是局部变量, 包括函数参数和函数内部定义的. 局部变量即便与全局变量同名, 但仍然是不同的. 函数调用结束后, 局部变量被释放.</p> <li><p>可以使用 <code>global</code> 保留字在函数内部定义全局变量.</p> <li><p>在函数内部想要使用外部的全局变量, 需要使用 global 修饰和声明.</p> <li><p>函数内部使用了一个 <code>组合类型</code>&#40;列表等&#41;的变量, 并且没有在函数内部创建, 则等同于全局变量. 如果在函数内部被创建了, 那么它就是局部变量.</p> </ul> <h1 id="lambda_函数"><a href="#lambda_函数" class=header-anchor >lambda 函数:</a></h1> <pre><code class="julia hljs">f = lambda x,y : x+y
+f(<span class=hljs-number >10</span>, <span class=hljs-number >15</span>)</code></pre> <p>建议使用 <code>def</code> 定义普通函数, lambda 函数作为其他函数参数.</p> <h3 id="七段数码管绘制"><a href="#七段数码管绘制" class=header-anchor >七段数码管绘制</a></h3> <p>下面这个形状可以表示 <code>0-9</code> 和 <code>A-F</code>&#40;其中b, c, d 是小写&#41;.</p> <pre><code class="julia hljs"><span class=hljs-number >6</span>
+  -----
+ |     |
+<span class=hljs-number >5</span>|  <span class=hljs-number >1</span>  |<span class=hljs-number >7</span>
+  -----
+ |     |
+<span class=hljs-number >4</span>|     |<span class=hljs-number >2</span>
+  -----   .
+    <span class=hljs-number >3</span>      dp</code></pre> <ul> <li><p>Step1: 绘制单个数字.</p> <li><p>Step2: 绘制一串数字.</p> <li><p>Step3: 获得当前时间, 绘制.</p> </ul> <pre><code class="julia hljs"><span class=hljs-keyword >import</span> turtle as tt
+<span class=hljs-keyword >import</span> time
+def draw_gap():
+    tt.penup()
+    tt.fd(<span class=hljs-number >5</span>)
+def draw_line(draw):            <span class=hljs-comment ># 绘制单段数码管</span>
+    draw_gap()
+    tt.pendown() <span class=hljs-keyword >if</span> draw <span class=hljs-keyword >else</span> tt.penup() <span class=hljs-comment ># exp1 if cond else exp2 很好用</span>
+    tt.fd(<span class=hljs-number >40</span>)
+    draw_gap()
+    tt.right(<span class=hljs-number >90</span>)
+def draw_digit(digit):          <span class=hljs-comment ># 绘制数字的七段管</span>
+    draw_line(True) <span class=hljs-keyword >if</span> digit <span class=hljs-keyword >in</span> [<span class=hljs-number >2</span>, <span class=hljs-number >3</span>, <span class=hljs-number >4</span>, <span class=hljs-number >5</span>, <span class=hljs-number >6</span>, <span class=hljs-number >8</span>, <span class=hljs-number >9</span>] <span class=hljs-keyword >else</span> draw_line(False)
+    draw_line(True) <span class=hljs-keyword >if</span> digit <span class=hljs-keyword >in</span> [<span class=hljs-number >0</span>, <span class=hljs-number >1</span>, <span class=hljs-number >3</span>, <span class=hljs-number >4</span>, <span class=hljs-number >5</span>, <span class=hljs-number >6</span>, <span class=hljs-number >7</span>, <span class=hljs-number >8</span>, <span class=hljs-number >9</span>] <span class=hljs-keyword >else</span> draw_line(False)
+    draw_line(True) <span class=hljs-keyword >if</span> digit <span class=hljs-keyword >in</span> [<span class=hljs-number >0</span>, <span class=hljs-number >2</span>, <span class=hljs-number >3</span>, <span class=hljs-number >5</span>, <span class=hljs-number >6</span>, <span class=hljs-number >8</span>, <span class=hljs-number >9</span>] <span class=hljs-keyword >else</span> draw_line(False)
+    draw_line(True) <span class=hljs-keyword >if</span> digit <span class=hljs-keyword >in</span> [<span class=hljs-number >0</span>, <span class=hljs-number >2</span>, <span class=hljs-number >6</span>, <span class=hljs-number >8</span>] <span class=hljs-keyword >else</span> draw_line(False)
+    tt.left(<span class=hljs-number >90</span>)
+    draw_line(True) <span class=hljs-keyword >if</span> digit <span class=hljs-keyword >in</span> [<span class=hljs-number >0</span>, <span class=hljs-number >4</span>, <span class=hljs-number >6</span>, <span class=hljs-number >6</span>, <span class=hljs-number >8</span>, <span class=hljs-number >9</span>] <span class=hljs-keyword >else</span> draw_line(False)
+    draw_line(True) <span class=hljs-keyword >if</span> digit <span class=hljs-keyword >in</span> [<span class=hljs-number >0</span>, <span class=hljs-number >2</span>, <span class=hljs-number >3</span>, <span class=hljs-number >5</span>, <span class=hljs-number >6</span>, <span class=hljs-number >7</span>, <span class=hljs-number >8</span>, <span class=hljs-number >9</span>] <span class=hljs-keyword >else</span> draw_line(False)
+    draw_line(True) <span class=hljs-keyword >if</span> digit <span class=hljs-keyword >in</span> [<span class=hljs-number >0</span>, <span class=hljs-number >1</span>, <span class=hljs-number >2</span>, <span class=hljs-number >3</span>, <span class=hljs-number >4</span>, <span class=hljs-number >7</span>, <span class=hljs-number >8</span>, <span class=hljs-number >9</span>] <span class=hljs-keyword >else</span> draw_line(False)
+    tt.left(<span class=hljs-number >180</span>)
+    tt.penup()
+    tt.fd(<span class=hljs-number >20</span>)
+def draw_date(date):   <span class=hljs-comment ># 设date格式为 %Y-%m=%d+</span>
+    tt.pencolor(&#x27;red&#x27;)
+    <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> date:
+        <span class=hljs-keyword >if</span> i == <span class=hljs-string >&#x27;-&#x27;</span>:
+            tt.write(<span class=hljs-string >&#x27;年&#x27;</span>, font=(&#x27;Arial&#x27;, <span class=hljs-number >18</span>, &#x27;normal&#x27;))
+            tt.pencolor(&#x27;green&#x27;)
+            tt.fd(<span class=hljs-number >40</span>)
+        elif i == <span class=hljs-string >&#x27;=&#x27;</span>:
+            tt.write(<span class=hljs-string >&#x27;月&#x27;</span>, font=(&#x27;Arial&#x27;, <span class=hljs-number >18</span>, &#x27;normal&#x27;))
+            tt.pencolor(&#x27;blue&#x27;)
+            tt.fd(<span class=hljs-number >40</span>)
+        elif i == <span class=hljs-string >&#x27;+&#x27;</span>:
+            tt.write(<span class=hljs-string >&#x27;日&#x27;</span>, font=(&#x27;Arial&#x27;, <span class=hljs-number >18</span>, &#x27;normal&#x27;))
+        <span class=hljs-keyword >else</span>:
+            draw_digit(eval(i))  <span class=hljs-comment ># eval 不要忘了, 这样draw_digit()不用引号</span>
+def main():
+    tt.setup(<span class=hljs-number >800</span>, <span class=hljs-number >350</span>, <span class=hljs-number >200</span>, <span class=hljs-number >200</span>)
+    tt.speed(<span class=hljs-number >10</span>)
+    tt.penup()
+    tt.fd(-<span class=hljs-number >300</span>)
+    tt.pensize(<span class=hljs-number >5</span>)
+    draw_date(time.strftime(&#x27;%Y-%m=%d+&#x27;, time.gmtime()))    
+    tt.hideturtle()
+    tt.done()  
+main()</code></pre> <h1 id="递归法反转字符串"><a href="#递归法反转字符串" class=header-anchor >递归法反转字符串</a></h1> <pre><code class="julia hljs">def rvs(s):
+    <span class=hljs-keyword >if</span> s == <span class=hljs-string >&quot;&quot;</span>:
+        <span class=hljs-keyword >return</span> s
+    <span class=hljs-keyword >else</span> :
+        <span class=hljs-keyword >return</span> rvs(s[<span class=hljs-number >1</span>:]) + s[<span class=hljs-number >0</span>]</code></pre> <h1 id=fibonoci_number_sequence ><a href="#fibonoci_number_sequence" class=header-anchor >Fibonoci number sequence</a></h1> <pre><code class="julia hljs">def fib(n):
+    <span class=hljs-keyword >if</span> n <span class=hljs-keyword >in</span> [<span class=hljs-number >1</span>, <span class=hljs-number >2</span>]:
+        <span class=hljs-keyword >return</span> <span class=hljs-number >1</span>
+    <span class=hljs-keyword >else</span> :
+        <span class=hljs-keyword >return</span> fib(n-<span class=hljs-number >1</span>) + fib(n-<span class=hljs-number >2</span>)</code></pre> <h1 id="汉诺塔问题"><a href="#汉诺塔问题" class=header-anchor >汉诺塔问题</a></h1> <pre><code class="julia hljs">count = <span class=hljs-number >0</span>
+def hanoi(n, src=<span class=hljs-string >&#x27;A&#x27;</span>, dst=<span class=hljs-string >&#x27;B&#x27;</span>, mid=<span class=hljs-string >&#x27;C&#x27;</span>):
+    &#x27;src(source), dst(destination), mid(midnate)&#x27;
+    &#x27;n 代表第 n 个小圆盘(从上向下数)&#x27;
+    <span class=hljs-keyword >global</span> count
+    <span class=hljs-keyword >if</span> n == <span class=hljs-number >1</span> :
+        print(&#x27;{}: {}-&gt;{}&#x27;.format(<span class=hljs-number >1</span>, src, dst))
+        count += <span class=hljs-number >1</span>
+    <span class=hljs-keyword >else</span> :
+        hanoi(n-<span class=hljs-number >1</span>, src, mid, dst)
+        print(&#x27;{}: {}-&gt;{}&#x27;.format(n, src, dst))
+        count += <span class=hljs-number >1</span>
+        hanoi(n-<span class=hljs-number >1</span>, mid, dst, src)
+def main():
+    hanoi(<span class=hljs-number >5</span>)
+    print(<span class=hljs-string >&quot;移动总次数为{}&quot;</span>.format(count))</code></pre> <h1 id=koch_curve ><a href="#koch_curve" class=header-anchor >Koch curve</a></h1> <pre><code class="julia hljs"><span class=hljs-keyword >import</span> turtle as tt
+def koch(size, n):
+    <span class=hljs-keyword >if</span> n == <span class=hljs-number >0</span>:
+        tt.fd(size)
+    <span class=hljs-keyword >else</span> :
+        <span class=hljs-keyword >for</span> angle <span class=hljs-keyword >in</span> [<span class=hljs-number >0</span>, <span class=hljs-number >60</span>, -<span class=hljs-number >120</span>, <span class=hljs-number >60</span>]:
+            tt.left(angle)
+            koch(size/<span class=hljs-number >3</span>, n-<span class=hljs-number >1</span>)
+
+def main1():  <span class=hljs-comment ># Koch curve </span>
+    tt.setup(<span class=hljs-number >800</span>, <span class=hljs-number >400</span>)
+    tt.speed(<span class=hljs-number >0</span>)
+    tt.penup()
+    tt.goto(-<span class=hljs-number >300</span>, -<span class=hljs-number >50</span>)
+    tt.pendown()
+    tt.pensize(<span class=hljs-number >2</span>)
+    koch(<span class=hljs-number >600</span>, <span class=hljs-number >3</span>)        <span class=hljs-comment ># 3 阶 koch 曲线</span>
+    tt.hideturtle()
+def main2():
+    tt.setup(<span class=hljs-number >600</span>, <span class=hljs-number >600</span>)
+    tt.speed(<span class=hljs-number >1000</span>)
+    tt.penup()
+    tt.goto(-<span class=hljs-number >200</span>, <span class=hljs-number >100</span>)
+    tt.pendown()
+    tt.pensize(<span class=hljs-number >2</span>)
+    level = <span class=hljs-number >4</span>
+    koch(<span class=hljs-number >400</span>, level)
+    tt.right(<span class=hljs-number >120</span>)
+    koch(<span class=hljs-number >400</span>, level)
+    tt.right(<span class=hljs-number >120</span>)
+    koch(<span class=hljs-number >400</span>, level)
+    tt.hideturtle()
+    tt.done()
+
+main2()</code></pre> <p></p> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

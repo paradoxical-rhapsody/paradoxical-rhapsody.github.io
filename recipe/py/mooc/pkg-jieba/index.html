@@ -1,0 +1,98 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | jieba</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=jieba ><a href="#jieba" class=header-anchor >jieba</a></h1> <p><code>jieba</code> 分词依靠中文词库, 确定汉字之间的关联概率, 汉字间概率大的形成词组. 用户可以自定义词组, 用于特定领域. jieba 分词三种模式：</p> <ul> <li><p>精确模式: 文本精确切分开, 不存在冗余单词&#40;最常用&#41;.</p> <li><p>全模式: 将所有可能的词语都扫描出来, 存在冗余.</p> <li><p>搜索引擎模式: 在精确模式基础上, 对长词再次切分&#40;适用特定场景&#41;.</p> </ul> <p>分词函数:</p> <ul> <li><p>jieba.lcut&#40;s&#41; 精确模式, 返回&#91;列表&#93;</p> <li><p>jieba.lcut&#40;s, cut_all&#61;TRUE&#41; 全模式&#91;列表&#93;</p> <li><p>jieba.lcut<em>for</em>search&#40;s&#41; 搜索引擎模式&#91;列表&#93;</p> <li><p>jieba.add_word&#40;w&#41; 向分词词典添加新词</p> </ul> <h2 id=hamlet ><a href="#hamlet" class=header-anchor >Hamlet</a></h2> <p>文件 <a class=href  href=" eg-Hamlet.txt"> eg-Hamlet.txt </a></p> <pre><code class="python hljs"><span class=hljs-keyword >import</span> jieba
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">get_text</span>():
+    txt = <span class=hljs-built_in >open</span>(<span class=hljs-string >&quot;eg-Hamlet.txt&quot;</span>, <span class=hljs-string >&quot;r&quot;</span>).read()
+    txt = txt.lower()
+    <span class=hljs-keyword >for</span> ch <span class=hljs-keyword >in</span> <span class=hljs-string >&#x27;|&quot;#$%()*+,-./:;&lt;=&gt;?@[\\]^_{|}·~‘’&#x27;</span>:
+        txt = txt.replace(ch, <span class=hljs-string >&#x27; &#x27;</span>)
+    <span class=hljs-keyword >return</span> txt
+    
+hamlet = get_text()
+words = hamlet.split()          <span class=hljs-comment ># 默认空格分隔, 返回列表</span>
+counts = {}
+<span class=hljs-keyword >for</span> word <span class=hljs-keyword >in</span> words:
+    counts[word] = counts.get(word, <span class=hljs-number >0</span>) + <span class=hljs-number >1</span>   <span class=hljs-comment ># dict.get(k, default) 方法</span>
+items = <span class=hljs-built_in >list</span>(counts.items())
+items.sort(key=<span class=hljs-keyword >lambda</span> x:x[<span class=hljs-number >1</span>], reverse=<span class=hljs-literal >True</span>)  <span class=hljs-comment ># 对列表按照键值对的第二个元素由大到小排序</span>
+<span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(<span class=hljs-number >10</span>):
+    word, count = items[i]
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&quot;{0:&lt;10}{1:&gt;5}&quot;</span>.<span class=hljs-built_in >format</span>(word, count))</code></pre> <h2 id="三国演义_v1"><a href="#三国演义_v1" class=header-anchor >三国演义 V1</a></h2> <p>文件 <a class=href  href=" eg-Threekingdoms.txt"> eg-Threekingdoms.txt </a></p> <pre><code class="python hljs"><span class=hljs-keyword >import</span> jieba
+txt = <span class=hljs-built_in >open</span>(<span class=hljs-string >&#x27;eg-Threekingdoms.txt&#x27;</span>, <span class=hljs-string >&#x27;r&#x27;</span>, encoding=<span class=hljs-string >&#x27;utf-8&#x27;</span>).read()
+words = jieba.lcut(txt)
+counts = {}
+<span class=hljs-keyword >for</span> word <span class=hljs-keyword >in</span> words:
+    <span class=hljs-keyword >if</span> <span class=hljs-built_in >len</span>(word) == <span class=hljs-number >1</span>:
+        <span class=hljs-keyword >continue</span>
+    <span class=hljs-keyword >else</span>:
+        counts[word] = counts.get(word, <span class=hljs-number >0</span>) + <span class=hljs-number >1</span>
+items = <span class=hljs-built_in >list</span>(counts.items())
+items.sort(key=<span class=hljs-keyword >lambda</span> x:x[<span class=hljs-number >1</span>], reverse=<span class=hljs-literal >True</span>)
+<span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(<span class=hljs-number >15</span>):
+    word, count = items[i]
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;{0:&lt;10}{1:&gt;5}&#x27;</span>.<span class=hljs-built_in >format</span>(word, count))</code></pre> <h2 id="三国演义_v2"><a href="#三国演义_v2" class=header-anchor >三国演义 V2</a></h2> <pre><code class="python hljs"><span class=hljs-keyword >import</span> jieba
+txt = <span class=hljs-built_in >open</span>(<span class=hljs-string >&#x27;eg-Threekingdoms.txt&#x27;</span>, <span class=hljs-string >&#x27;r&#x27;</span>, encoding=<span class=hljs-string >&#x27;utf-8&#x27;</span>).read()
+excludes = {<span class=hljs-string >&quot;将军&quot;</span>, <span class=hljs-string >&quot;却说&quot;</span>, <span class=hljs-string >&quot;荆州&quot;</span>, <span class=hljs-string >&quot;二人&quot;</span>, <span class=hljs-string >&quot;不可&quot;</span>, <span class=hljs-string >&quot;不能&quot;</span>, <span class=hljs-string >&quot;如此&quot;</span>}
+words = jieba.lcut(txt)
+counts = {}
+<span class=hljs-keyword >for</span> word <span class=hljs-keyword >in</span> words:
+    <span class=hljs-keyword >if</span> <span class=hljs-built_in >len</span>(word) == <span class=hljs-number >1</span>:
+        <span class=hljs-keyword >continue</span>
+    <span class=hljs-keyword >elif</span> word == <span class=hljs-string >&quot;诸葛亮&quot;</span> <span class=hljs-keyword >or</span> word == <span class=hljs-string >&quot;孔明曰&quot;</span> :
+        reword = <span class=hljs-string >&quot;孔明&quot;</span>
+    <span class=hljs-keyword >elif</span> word == <span class=hljs-string >&quot;关公&quot;</span> <span class=hljs-keyword >or</span> word == <span class=hljs-string >&quot;云长&quot;</span> :
+        reword = <span class=hljs-string >&quot;关羽&quot;</span>
+    <span class=hljs-keyword >elif</span> word == <span class=hljs-string >&quot;玄德&quot;</span> <span class=hljs-keyword >or</span> word == <span class=hljs-string >&quot;玄德曰&quot;</span> :
+        reword = <span class=hljs-string >&quot;刘备&quot;</span>
+    <span class=hljs-keyword >elif</span> word == <span class=hljs-string >&quot;孟德&quot;</span> <span class=hljs-keyword >or</span> <span class=hljs-string >&quot;丞相&quot;</span> <span class=hljs-keyword >in</span> word :
+        reword = <span class=hljs-string >&quot;曹操&quot;</span>
+    <span class=hljs-keyword >else</span>:
+        reword = word  
+    counts[reword] = counts.get(reword, <span class=hljs-number >0</span>) + <span class=hljs-number >1</span>
+<span class=hljs-keyword >for</span> word <span class=hljs-keyword >in</span> excludes :
+    <span class=hljs-keyword >del</span> counts[word]
+items = <span class=hljs-built_in >list</span>(counts.items())
+items.sort(key=<span class=hljs-keyword >lambda</span> x:x[<span class=hljs-number >1</span>], reverse=<span class=hljs-literal >True</span>)
+<span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(<span class=hljs-number >10</span>):
+    word, count = items[i]
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;{0:&lt;10}{1:&gt;5}&#x27;</span>.<span class=hljs-built_in >format</span>(word, count))</code></pre> <h2 id="天龙八部"><a href="#天龙八部" class=header-anchor >天龙八部</a></h2> <p>文件 <a class=href  href=" eg-TianLongBaBu.txt"> eg-TianLongBaBu.txt </a></p> <pre><code class="python hljs"><span class=hljs-keyword >import</span> jieba
+txt = <span class=hljs-built_in >open</span>(<span class=hljs-string >&quot;eg-TianLongBaBu.txt&quot;</span>, <span class=hljs-string >&quot;r&quot;</span>, encoding=<span class=hljs-string >&#x27;utf-8&#x27;</span>).read()
+words = jieba.lcut(txt)
+counts = {}
+<span class=hljs-keyword >for</span> word <span class=hljs-keyword >in</span> words:
+    <span class=hljs-keyword >if</span> <span class=hljs-built_in >len</span>(word) == <span class=hljs-number >1</span>:
+        <span class=hljs-keyword >continue</span>
+    <span class=hljs-keyword >else</span>:
+        counts[word] = counts.get(word, <span class=hljs-number >0</span>) + <span class=hljs-number >1</span>
+
+excludes = {<span class=hljs-string >&quot;说道&quot;</span>, <span class=hljs-string >&quot;什么&quot;</span>, <span class=hljs-string >&quot;自己&quot;</span>, <span class=hljs-string >&quot;一个&quot;</span>, <span class=hljs-string >&quot;不是&quot;</span>, <span class=hljs-string >&quot;一声&quot;</span>, <span class=hljs-string >&quot;武功&quot;</span>, <span class=hljs-string >&quot;咱们&quot;</span>, <span class=hljs-string >&quot;师父&quot;</span>, <span class=hljs-string >&quot;不知&quot;</span>, <span class=hljs-string >&quot;心中&quot;</span>, <span class=hljs-string >&quot;知道&quot;</span>, <span class=hljs-string >&quot;出来&quot;</span>, <span class=hljs-string >&quot;姑娘&quot;</span>, <span class=hljs-string >&quot;如何&quot;</span>, <span class=hljs-string >&quot;便是&quot;</span>, <span class=hljs-string >&quot;突然&quot;</span>}
+<span class=hljs-keyword >for</span> word <span class=hljs-keyword >in</span> excludes:
+    <span class=hljs-keyword >try</span>:
+        <span class=hljs-keyword >del</span> counts[word]
+    <span class=hljs-keyword >except</span>:
+        <span class=hljs-keyword >continue</span>
+
+items = <span class=hljs-built_in >list</span>(counts.items())
+items.sort(key=<span class=hljs-keyword >lambda</span> x:x[<span class=hljs-number >1</span>], reverse=<span class=hljs-literal >True</span>)
+<span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(<span class=hljs-number >10</span>):
+    word, count = items[i]
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&quot;{:&lt;10}{:&gt;5}&quot;</span>.<span class=hljs-built_in >format</span>(word, count))</code></pre> <h2 id="倚天屠龙记"><a href="#倚天屠龙记" class=header-anchor >倚天屠龙记</a></h2> <p>文件 <a class=href  href=" eg-YiTianTuLongJi.txt"> eg-YiTianTuLongJi.txt </a></p> <pre><code class="python hljs"><span class=hljs-keyword >import</span> jieba
+txt = <span class=hljs-built_in >open</span>(<span class=hljs-string >&quot;eg-YiTianTuLongJi.txt&quot;</span>, <span class=hljs-string >&quot;r&quot;</span>, encoding=<span class=hljs-string >&#x27;utf-8&#x27;</span>).read()
+words = jieba.lcut(txt)
+counts = {}
+<span class=hljs-keyword >for</span> word <span class=hljs-keyword >in</span> words:
+    <span class=hljs-keyword >if</span> <span class=hljs-built_in >len</span>(word) == <span class=hljs-number >1</span>:
+        <span class=hljs-keyword >continue</span>
+    <span class=hljs-keyword >else</span>:
+        counts[word] = counts.get(word, <span class=hljs-number >0</span>) + <span class=hljs-number >1</span>
+
+excludes = {<span class=hljs-string >&quot;说道&quot;</span>, <span class=hljs-string >&quot;自己&quot;</span>, <span class=hljs-string >&quot;甚么&quot;</span>, <span class=hljs-string >&quot;一个&quot;</span>, <span class=hljs-string >&quot;武功&quot;</span>, <span class=hljs-string >&quot;咱们&quot;</span>, <span class=hljs-string >&quot;教主&quot;</span>, <span class=hljs-string >&quot;心中&quot;</span>, <span class=hljs-string >&quot;一声&quot;</span>, <span class=hljs-string >&quot;只见&quot;</span>, <span class=hljs-string >&quot;少林&quot;</span>, <span class=hljs-string >&#x27;弟子&#x27;</span>, <span class=hljs-string >&#x27;明教&#x27;</span>, <span class=hljs-string >&#x27;便是&#x27;</span>, <span class=hljs-string >&#x27;不是&#x27;</span>, <span class=hljs-string >&#x27;不知&#x27;</span>, <span class=hljs-string >&#x27;如此&#x27;</span>, <span class=hljs-string >&#x27;之中&#x27;</span>, <span class=hljs-string >&#x27;如何&#x27;</span>, <span class=hljs-string >&#x27;出来&#x27;</span>, <span class=hljs-string >&#x27;师父&#x27;</span>, <span class=hljs-string >&#x27;突然&#x27;</span>, <span class=hljs-string >&#x27;他们&#x27;</span>, <span class=hljs-string >&#x27;只是&#x27;</span>, <span class=hljs-string >&#x27;不能&#x27;</span>, <span class=hljs-string >&#x27;我们&#x27;</span>, <span class=hljs-string >&#x27;今日&#x27;</span>, <span class=hljs-string >&#x27;心想&#x27;</span>, <span class=hljs-string >&#x27;知道&#x27;</span>, <span class=hljs-string >&#x27;二人&#x27;</span>, <span class=hljs-string >&#x27;两人&#x27;</span>, <span class=hljs-string >&#x27;bugj&#x27;</span>}
+<span class=hljs-keyword >for</span> word <span class=hljs-keyword >in</span> excludes:
+    <span class=hljs-keyword >try</span>:
+        <span class=hljs-keyword >del</span> counts[word]
+    <span class=hljs-keyword >except</span>:
+        <span class=hljs-keyword >continue</span>
+    
+items = <span class=hljs-built_in >list</span>(counts.items())
+items.sort(key=<span class=hljs-keyword >lambda</span> x:x[<span class=hljs-number >1</span>], reverse=<span class=hljs-literal >True</span>)
+<span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(<span class=hljs-number >40</span>):
+    word, count = items[i]
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&quot;{:&lt;10}{:&gt;5}&quot;</span>.<span class=hljs-built_in >format</span>(word, count))</code></pre> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

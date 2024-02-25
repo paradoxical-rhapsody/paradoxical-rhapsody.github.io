@@ -1,0 +1,148 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | Crawler (requests + bs4)</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> <div class=toc-sidebar > <div class=franklin-toc ><ol><li><a href="#request">request</a><li><a href="#爬取大学排名">爬取大学排名</a><li><a href="#爬取搜索引擎的结果">爬取搜索引擎的结果</a><li><a href="#下载图片">下载图片</a><li><a href="#ip_地址查询">IP 地址查询</a></ol></div> </div> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=request_beautifulsoup4 ><a href="#request_beautifulsoup4" class=header-anchor >request &#43; BeautifulSoup4</a></h1> <h2 id=request ><a href="#request" class=header-anchor >request</a></h2> <pre><code class="python hljs"><span class=hljs-keyword >import</span> requests
+r = requests.get(<span class=hljs-string >&quot;http://www.baidu.com&quot;</span>)
+r.status_code
+r.encoding = <span class=hljs-string >&quot;utf-8&quot;</span></code></pre> <pre><code class="python hljs"><span class=hljs-keyword >import</span> requests
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">getHTMLText</span>(<span class=hljs-params >url</span>):
+    <span class=hljs-keyword >try</span>:
+        r = requests.get(url, timeout=<span class=hljs-number >30</span>)
+        r.raise_for_status()
+        r.encoding = r.apparent_encoding
+        <span class=hljs-keyword >return</span> r.text
+    <span class=hljs-keyword >except</span>:
+        <span class=hljs-keyword >return</span> <span class=hljs-string >&quot;产生异常&quot;</span>
+<span class=hljs-keyword >if</span> __name__ == <span class=hljs-string >&quot;__main__&quot;</span>:
+    url = <span class=hljs-string >&quot;http://www.baidu.com&quot;</span>
+    <span class=hljs-built_in >print</span>(getHTMLText(url))</code></pre> <h2 id="爬取大学排名"><a href="#爬取大学排名" class=header-anchor >爬取大学排名</a></h2> <pre><code class="python hljs"><span class=hljs-comment ># CrawUnivRankingA.py</span>
+<span class=hljs-keyword >import</span> requests
+<span class=hljs-keyword >from</span> bs4 <span class=hljs-keyword >import</span> BeautifulSoup
+<span class=hljs-keyword >import</span> bs4
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">getHTMLText</span>(<span class=hljs-params >url</span>):
+    <span class=hljs-keyword >try</span>:
+        r = requests.get(url, timeout=<span class=hljs-number >30</span>)
+        r.raise_for_status()
+        r.encoding = r.apparent_encoding
+        <span class=hljs-keyword >return</span> r.text
+    <span class=hljs-keyword >except</span>:
+        <span class=hljs-keyword >return</span> <span class=hljs-string >&#x27;&#x27;</span>
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">fillUnivList</span>(<span class=hljs-params >ulist, html</span>):
+    soup = BeautifulSoup(html, <span class=hljs-string >&#x27;html.parser&#x27;</span>)
+    <span class=hljs-keyword >for</span> tr <span class=hljs-keyword >in</span> soup.find(<span class=hljs-string >&#x27;tbody&#x27;</span>).children:
+        <span class=hljs-keyword >if</span> <span class=hljs-built_in >isinstance</span>(tr, bs4.element.Tag):
+            tds = tr(<span class=hljs-string >&#x27;td&#x27;</span>)
+            ulist.append([tds[<span class=hljs-number >0</span>].string, tds[<span class=hljs-number >1</span>].string, tds[<span class=hljs-number >3</span>].string])
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">printUnivList</span>(<span class=hljs-params >ulist, num=<span class=hljs-number >6</span></span>):
+    tplt = <span class=hljs-string >&quot;{:^10}\t{:^6}\t{:^10}&quot;</span>
+    <span class=hljs-built_in >print</span>(tplt.<span class=hljs-built_in >format</span>(<span class=hljs-string >&quot;排名&quot;</span>, <span class=hljs-string >&quot;学校名称&quot;</span>, <span class=hljs-string >&quot;总分&quot;</span>, <span class=hljs-built_in >chr</span>(<span class=hljs-number >12288</span>)))
+    <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(num):
+        u = ulist[i]
+        <span class=hljs-built_in >print</span>(tplt.<span class=hljs-built_in >format</span>(u[<span class=hljs-number >0</span>], u[<span class=hljs-number >1</span>], u[<span class=hljs-number >2</span>], <span class=hljs-built_in >chr</span>(<span class=hljs-number >12288</span>)))
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">main</span>():
+    uinfo = []
+    url = <span class=hljs-string >&#x27;http://www.zuihaodaxue.cn/zuihaodaxuepaiming2016.html&#x27;</span>
+    html = getHTMLText(url)
+    fillUnivList(uinfo, html)
+    printUnivList(uinfo)
+
+main()</code></pre> <pre><code class="python hljs"><span class=hljs-comment >#CrawUnivRankingB.py </span>
+<span class=hljs-keyword >import</span> requests
+<span class=hljs-keyword >from</span> bs4 <span class=hljs-keyword >import</span> BeautifulSoup 
+<span class=hljs-keyword >import</span> bs4 
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">getHTMLText</span>(<span class=hljs-params >url</span>):     
+    <span class=hljs-keyword >try</span>:         
+      r = requests.get(url, timeout=<span class=hljs-number >30</span>)         
+      r.raise_for_status()         
+      r.encoding = r.apparent_encoding         
+      <span class=hljs-keyword >return</span> r.text     
+    <span class=hljs-keyword >except</span>:         
+      <span class=hljs-keyword >return</span> <span class=hljs-string >&quot;&quot;</span> 
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">fillUnivList</span>(<span class=hljs-params >ulist, html</span>):     
+    soup = BeautifulSoup(html, <span class=hljs-string >&quot;html.parser&quot;</span>)     
+    <span class=hljs-keyword >for</span> tr <span class=hljs-keyword >in</span> soup.find(<span class=hljs-string >&#x27;tbody&#x27;</span>).children:         
+        <span class=hljs-keyword >if</span> <span class=hljs-built_in >isinstance</span>(tr, bs4.element.Tag):             
+            tds = tr(<span class=hljs-string >&#x27;td&#x27;</span>)             
+            ulist.append([tds[<span class=hljs-number >0</span>].string, tds[<span class=hljs-number >1</span>].string, tds[<span class=hljs-number >3</span>].string])
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">printUnivList</span>(<span class=hljs-params >ulist, num</span>):     
+    tplt = <span class=hljs-string >&quot;{0:^10}\t{1:{3}^10}\t{2:^10}&quot;</span>     
+    <span class=hljs-built_in >print</span>(tplt.<span class=hljs-built_in >format</span>(<span class=hljs-string >&quot;排名&quot;</span>,<span class=hljs-string >&quot;学校名称&quot;</span>,<span class=hljs-string >&quot;总分&quot;</span>,<span class=hljs-built_in >chr</span>(<span class=hljs-number >12288</span>)))     
+    <span class=hljs-keyword >for</span> i <span class=hljs-keyword >in</span> <span class=hljs-built_in >range</span>(num):         
+        u=ulist[i]         
+        <span class=hljs-built_in >print</span>(tplt.<span class=hljs-built_in >format</span>(u[<span class=hljs-number >0</span>],u[<span class=hljs-number >1</span>],u[<span class=hljs-number >2</span>],<span class=hljs-built_in >chr</span>(<span class=hljs-number >12288</span>)))      
+
+<span class=hljs-keyword >def</span> <span class="hljs-title function_">main</span>():     
+    uinfo = []     
+    url = <span class=hljs-string >&#x27;http://www.zuihaodaxue.cn/zuihaodaxuepaiming2016.html&#x27;</span>     
+    html = getHTMLText(url)     
+    fillUnivList(uinfo, html)     
+    printUnivList(uinfo, <span class=hljs-number >20</span>) <span class=hljs-comment ># 20 univs </span>
+
+main()</code></pre> <h2 id="爬取搜索引擎的结果"><a href="#爬取搜索引擎的结果" class=header-anchor >爬取搜索引擎的结果</a></h2> <pre><code class="python hljs"><span class=hljs-keyword >import</span> requests
+keyword = <span class=hljs-string >&#x27;Python&#x27;</span> <span class=hljs-comment ># 变量提前给定，这样才有泛化能力.</span>
+<span class=hljs-keyword >try</span>:
+  kv = {<span class=hljs-string >&#x27;wd&#x27;</span>: keyword}
+  r = requests.get(<span class=hljs-string >&#x27;http://www.baidu.com&#x27;</span>, params=v)
+  <span class=hljs-built_in >print</span>(r.request.url)
+  r.raise_for_status()
+  <span class=hljs-built_in >print</span>(<span class=hljs-built_in >len</span>(r.text))
+<span class=hljs-keyword >except</span>:
+  <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;爬取失败&#x27;</span>)</code></pre> <pre><code class="python hljs"><span class=hljs-keyword >import</span> requests
+url = <span class=hljs-string >&#x27;https://www.amazon.cn/gp/product/B01M8L5Z3Y&#x27;</span>
+<span class=hljs-keyword >try</span>:
+    kv = {<span class=hljs-string >&#x27;user-agent&#x27;</span>: <span class=hljs-string >&#x27;Mozilla/5.0&#x27;</span>}
+    r = requests.get(url, headers=kv)
+    r.raise_for_status()
+    r.encoding = r.apparent_encoding
+    <span class=hljs-built_in >print</span>(r.text[<span class=hljs-number >1000</span>:<span class=hljs-number >2000</span>])
+<span class=hljs-keyword >except</span>:
+     <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;Failure&#x27;</span>)</code></pre> <h2 id="下载图片"><a href="#下载图片" class=header-anchor >下载图片</a></h2> <pre><code class="python hljs"><span class=hljs-keyword >import</span> requests
+<span class=hljs-keyword >import</span> os
+url = <span class=hljs-string >&#x27;http://image.notionalgeographic.com.cn/2017/0211/20170211061910157.jpg&#x27;</span>
+root = <span class=hljs-string >&#x27;D://pics//&#x27;</span>
+path = root + url.split(<span class=hljs-string >&#x27;/&#x27;</span>)[-<span class=hljs-number >1</span>] <span class=hljs-comment ># 使用图片原名作为保存的名字</span>
+<span class=hljs-keyword >try</span>:
+  <span class=hljs-keyword >if</span> <span class=hljs-keyword >not</span> os.path.exists(root):
+    os.mkdir(root)
+  <span class=hljs-keyword >if</span> <span class=hljs-keyword >not</span> os.path.exists(path):
+    r = requests.get(url)
+    <span class=hljs-keyword >with</span> <span class=hljs-built_in >open</span>(path, <span class=hljs-string >&#x27;wb&#x27;</span>) <span class=hljs-keyword >as</span> f:
+      f.write(r.content)
+      f.close()
+      <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;文件保存成功&#x27;</span>)
+  <span class=hljs-keyword >else</span>:
+    <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;文件已存在&#x27;</span>)
+<span class=hljs-keyword >except</span>:
+  <span class=hljs-built_in >print</span>(<span class=hljs-string >&#x27;爬取失败&#x27;</span>)</code></pre> <p>##　BeautifulSoup4</p> <pre><code class="python hljs"><span class=hljs-keyword >from</span> bs4 <span class=hljs-keyword >import</span> BeautifulSoup
+soup = BeautifulSoup(demo, <span class=hljs-string >&quot;html.parser&quot;</span>) <span class=hljs-comment ># 把 demo 做成一锅汤</span>
+soup.title <span class=hljs-comment ># 查看网页的标题(显示在浏览器的标签页上)</span>
+soup.a.name <span class=hljs-comment ># 标签 a 的名字</span>
+soup.a.parent.name <span class=hljs-comment ># a 的上一层标签名</span>
+soup.a.parent.parent.name <span class=hljs-comment ># a的上两层标签名</span>
+
+tag = soup.a <span class=hljs-comment ># soup 中的标签 a(如果有多个 a 标签时，这样只返回第一个)</span>
+tag.attrs <span class=hljs-comment ># 查看标签 a 的属性</span>
+tag.attrs[<span class=hljs-string >&#x27;class&#x27;</span>] <span class=hljs-comment ># 查看属性 class 的值</span>
+tag.attrs[<span class=hljs-string >&#x27;href&#x27;</span>] <span class=hljs-comment ># 查看链接的值</span>
+<span class=hljs-built_in >type</span>(tag.attrs) <span class=hljs-comment ># 标签的属性封装方式为 dict</span>
+<span class=hljs-built_in >type</span>(tatg) <span class=hljs-comment ># tag 自身的类型是 bs4.element.Tag</span>
+
+soup.a <span class=hljs-comment ># 查看 a 标签的信息</span>
+soup.s.string <span class=hljs-comment ># a 标签的 string 信息</span>
+soup.p
+soup.p.string
+<span class=hljs-built_in >type</span>(soup.p.string)
+
+newsoup = BeautifulSoup(<span class=hljs-string >&#x27;&lt;b&gt;&lt;!--This is a comment--&gt;&lt;/b&gt;&lt;p&gt;This is not a commment&lt;/p&gt;&#x27;</span>, <span class=hljs-string >&#x27;html.parser&#x27;</span>) <span class=hljs-comment ># &lt;!...&gt; 表示注释 </span>
+newsoup.b.string <span class=hljs-comment ># 打印注释内容，输出是一个字符串</span>
+<span class=hljs-built_in >type</span>(newsoup.b.string) <span class=hljs-comment ># 类型为 bs4.element.Comment</span>
+newsoup.p.string <span class=hljs-comment ># 还是输出一个字符串</span>
+<span class=hljs-built_in >type</span>(newsoup.p.string) <span class=hljs-comment ># 类型为 bs4.element.NavigableString</span>
+ <span class=hljs-comment ># b标签和p标签分别引用 string 时，都得到一个字符串，并没有标明注释有任何差异，在实际分析中，如果需要辨别两种内容，需要调用各自string的 type信息进行判断.</span></code></pre> <h2 id="ip_地址查询"><a href="#ip_地址查询" class=header-anchor >IP 地址查询</a></h2> <pre><code class="python hljs"><span class=hljs-keyword >import</span> requests
+url = <span class=hljs-string >&#x27;http://m.ip138.com/ip.asp?ip=&#x27;</span>
+r = requests.get(url + <span class=hljs-string >&#x27;202.204.80.112&#x27;</span>)
+r.status_code
+r.text[-<span class=hljs-number >500</span>:]</code></pre> <p>查看返回文本的最后 500 字节；这是个小技巧：当 <code>r.text</code> 的内容很多时，会导致 IDLE 失效&#40;无响应&#41;，可以限制返回的长度来缓解.</p> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

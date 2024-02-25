@@ -1,0 +1,144 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | Overview</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id="大型程序的结构"><a href="#大型程序的结构" class=header-anchor >大型程序的结构</a></h1> <h3 id="这是返回来写在前面的话"><a href="#这是返回来写在前面的话" class=header-anchor >这是返回来写在前面的话</a></h3> <p>当项目结构复杂、功能强大的时候, 需要对程序进行分割, 便于更好地理解和维护. 只要能够使得参与者能够快速理解项目结构, 就是好的分割. </p> <p>这里通过模块来组织程序功能, 如下:</p> <pre><code class="julia hljs">|-xzcSite/
+  |-app/
+    |-__init__.py            <span class=hljs-comment ># 工厂函数</span>
+    |-templates/             <span class=hljs-comment ># html/email 模板文件</span>
+    |-static/
+    |-email.py               <span class=hljs-comment ># 邮件发送函数</span>
+    |-models.py              <span class=hljs-comment ># 数据库类</span>
+    |-main/
+      |-__init__.py          <span class=hljs-comment ># 主页蓝本</span>
+      |-forms.py             <span class=hljs-comment ># 主页的表单类</span>
+      |-errors.py            <span class=hljs-comment ># 错误处理的视图函数</span>
+      |-views.py             <span class=hljs-comment ># 路由+视图函数</span>
+    |-login/
+      |-__init__.py          <span class=hljs-comment ># 用户认证蓝本</span>
+      |-forms.py
+      |-errors.py
+      |-views.py
+  |-migrations/
+  |-tests/
+    |-__init__.py
+    |-test*.py
+  |-venv/
+  |-requirements.txt
+  |-config.py                <span class=hljs-comment ># 配置类</span>
+  |-manage.py                <span class=hljs-comment ># 项目的启动脚本与数据库迁移</span></code></pre> <p><code>main</code> 模块包含主页的相关功能, <code>login</code> 包含了用户认证的功能. 如果其他功能复杂到足够独立成模块, 可以在 <code>app</code> 下添加新的文件夹. 这里发送邮件的功能没有复杂到需要用模块, 所以只用了一个 <code>email.py</code> 文件.</p> <h2 id="配置不同的项目环境"><a href="#配置不同的项目环境" class=header-anchor >配置不同的项目环境</a></h2> <p>下面是一个相当清晰的 <code>config.py</code> 结构, 其中包含了通用配置类, 由此继承出的子类包含多种配置. 为了安全, 某些配置需要从环境变量中导入, 但是系统也添加了默认值, 防止环境中没有定义. &lt;emph style&#61;&#39;border-bottom:1px solid red&#39;&gt;通用配置类中定义了 <code>init_app&#40;&#41;</code> 静态方法, 可以对项目实例进行初始化&lt;/emph&gt;. &lt;emph style&#61;&#39;border-bottom:1px solid red&#39;&gt;<code>config.py</code> 的最后, 用一个字典 <code>config</code> 注册了不同的配置环境, 还注册了一个默认环境&#40;开发环境&#41;, 其中每个值是各个配置类&#40;class&#41;, 不是字符串&#33;&#33;&#33;&lt;/emph&gt;</p> <pre><code class="julia hljs"><span class=hljs-comment ># config.py</span>
+<span class=hljs-keyword >import</span> os
+baseDir = os.path.abspath(os.path.dirname(__file__))
+
+class Config:
+    SECRET_KEY = os.environ.get(&#x27;SECRET_KEY&#x27;) or &#x27;hard to guess string&#x27;
+    SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    FLASK_MAIL_SUBJECT_PREFIX = &#x27;[From xzc]&#x27;
+    FLASK_MAIL_SENDER = &#x27;xu-zc &lt;xzcdyx<span class=hljs-meta >@uuu</span>.cn&gt;&#x27;
+    FLASK_ADMIN = os.environ.get(&#x27;FLASK_ADMIN&#x27;)
+
+    <span class=hljs-meta >@staticmethod</span>
+    def init_app(app):
+        pass
+
+class DevelogmentConfig(Config):
+    DEBUG = True
+    MAIL_SERVER = &#x27;smtp.googlemail.com&#x27;
+    MAIL_PORT = <span class=hljs-number >587</span>
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get(&#x27;MAIL_USERNAME&#x27;)
+    MAIL_PASSWORD = os.environ.get(&#x27;MAIL_PASSWORD&#x27;)
+    SQLALCHEMY_DATABASE_URI = os.environ.get(&#x27;DEV_DATABASE_URL&#x27;) or \
+        &#x27;sqlite:///&#x27; + os.path.join(baseDir, &#x27;data-dev.sqlite)
+
+class TestingConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get(&#x27;TEST_DATABASE_URL&#x27;) or \
+        &#x27;sqlite:///&#x27; + os.path.join(baseDir, &#x27;data-test.sqlite&#x27;)
+
+class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get(&#x27;DATABASE_URL&#x27;) or \
+        &#x27;sqlite:///&#x27; + os.environ.get(baseDir, &#x27;data.sqlite&#x27;)
+    
+config = {
+    &#x27;development&#x27;: DevelopmentConfig,
+    &#x27;testing&#x27;: TestingConfig,
+    &#x27;production&#x27;: ProductionConfig,
+
+    &#x27;default&#x27;: DevelopmentConfig
+}</code></pre> <h2 id="application_factory工厂函数"><a href="#application_factory工厂函数" class=header-anchor >Application Factory&#40;工厂函数&#41;</a></h2> <p>如果不考虑使用结构化程序, 将所有的代码定义在一个文件中, 就要在程序最开始就对项目进行实例化, 然后将实例化的项目进行各种扩展的包装. 这时候由于项目是在全局作用域中被创建, 项目在程序运行时就被创建了, 所以不能再动态修改配置了.</p> <p>工厂函数给出了一种解决方案: 在 <code>app</code> 模块的构造文件 <code>__init__.py</code> 中将项目实例化过程定义成可显式调用的函数, 接受一个配置参数. 这种方式可以给按照配置进行实例化, 也能用来创建多个项目实例.</p> <p>工厂函数先导入用到的 flask-ext, 并创建 <strong>空的扩展对象</strong>. 在定义的项目实例化函数中, 利用 <strong>配置类</strong> 的静态方法来创建相应的项目实例, 然后利用这个项目实例对空的扩展对象进行初始化.</p> <pre><code class="julia hljs"><span class=hljs-comment ># app/__inti__.py</span>
+from flask <span class=hljs-keyword >import</span> Flask, render_template
+from falsk_bootstrap <span class=hljs-keyword >import</span> Bootstrap
+from flask_mail <span class=hljs-keyword >import</span> Mail
+from flask_moment <span class=hljs-keyword >import</span> Moment
+from flask_sqlalchemy <span class=hljs-keyword >import</span> SQLAlchemy
+from config <span class=hljs-keyword >import</span> config
+
+bootstrap = Bootstrap()
+mail = Mail()
+moment = Moment()
+db = SQLAlchemy()
+
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(config[config_name])
+    config[config_name].init_app(app)
+
+    boostrap.init_app(app)
+    mail.init_app(app)
+    moment.init_app(app)
+    db.init_app(app)
+
+    <span class=hljs-comment ># 导入和注册用到的蓝本(路由和错误处理)</span>
+
+    <span class=hljs-keyword >return</span> app</code></pre> <h2 id="蓝本blueprint"><a href="#蓝本blueprint" class=header-anchor >蓝本&#40;blueprint&#41;</a></h2> <p>单个文件中的路由和错误处理是直接通过全局作用域的项目实例的修饰器<code>app.route&#40;...&#41;</code> 和 <code>app.errorhandel&#40;...&#41;</code> 定义的. 当项目实例按照上述方式在调用实例化函数的时候才创建的话, 此时定义路由和错误处理就来不及了. </p> <p>解决方案是将路由和错误处理定义到蓝本中. 蓝本中的路由默认是休眠的, 只有将其注册到上面的工厂函数 <code>create_app&#40;...&#41;</code> 中, 蓝本上的路由才会和项目产生联系. 从蓝本的功能上看, 可以将其定义在单个文件中, 但是我们用模块来设计蓝本可以把项目组织的更清晰. </p> <p>&lt;emph style&#61;&#39;border-bottom:1px solid red&#39;&gt;更直观地说, 我们可以把整个项目分割成一些子功能, 每个子功能都对应一些视图函数、页面和一些逻辑函数, 我们可以把子功能写成一个模块, 在模块的构造文件 <code>__init__.py</code> 中定义和保存蓝本, 在视图函数中用这个蓝本来定义路由, 然后只需要将这个蓝本注册到工厂函数中, 蓝本对应的子功能就成为了项目的一部分.&lt;/emph&gt; 所以完整的蓝本模块就是一个完整的子功能框架.</p> <p><code>main</code> 模块定义了项目的主页的相关功能, 下面用这个模块来说明蓝本的相关细节.</p> <pre><code class="julia hljs"><span class=hljs-comment ># app/main/__init__.py</span>
+from flask <span class=hljs-keyword >import</span> Blueprint
+
+main = Blueprint(&#x27;main&#x27;, __name__)
+
+from . <span class=hljs-keyword >import</span> views, errors</code></pre> <p>第二行实例化了 <code>Blueprint</code> 类创建了蓝本对象. &lt;emph style&#61;&#39;border-bottom:1px solid red&#39;&gt;构造函数必须指定两个参数: 蓝本名字和蓝本所在的模块&lt;/emph&gt;. 蓝本的名字按自己的习惯命名即可, <strong>第二个参数使用 python 的 <code>__name__</code> 变量即可</strong>.</p> <p>第三行导入了 <code>app/main/views.py</code> 的路由和 <code>app/main/errors.py</code> 中的错误处理. &lt;emph style&#61;&#39;border:1px dashed red&#39;&gt;这一行是必要的, 导入这两个文件就能把路由和错误处理与蓝本关联起来&lt;/emph&gt;. 要注意的是, 这一行要放在 <code>app/main/__init__.py</code> 的末尾导入, 这是为了避免循环导入依赖, 在这个文件中定义的 <code>main</code> 不依赖 <code>views.py</code> 和 <code>errors.py</code> 的内容, 这两个文件倒是要依赖 <code>main</code> 对象, 所以在次序上需要先定义 <code>main</code>, 再引入这两个文件. <strong>导入这两个文件是为了把它们和蓝本关联起来.</strong></p> <p>下面是 <code>把蓝本注册到工厂函数</code>、<code>蓝本的视图函数</code>、<code>错误处理</code> 三项内容.</p> <pre><code class="julia hljs"><span class=hljs-comment ># app/__inti__.py</span>
+def create_app(config_name):
+    <span class=hljs-comment >#...</span>
+
+    from .main <span class=hljs-keyword >import</span> main as main_blueprint
+    app.register_blueprint(main_blueprint)
+
+    <span class=hljs-keyword >return</span> app</code></pre> <pre><code class="julia hljs"><span class=hljs-comment ># app/main/errors.py</span>
+from flask <span class=hljs-keyword >import</span> render_template
+from . <span class=hljs-keyword >import</span> main
+<span class=hljs-meta >@main</span>.app_errorhandle(<span class=hljs-number >404</span>)
+def page_not_found(e):
+    <span class=hljs-keyword >return</span> render_template(&#x27;<span class=hljs-number >404.</span>html&#x27;), <span class=hljs-number >404</span>
+
+<span class=hljs-meta >@main</span>.app_errorhandle(<span class=hljs-number >500</span>)
+def inter_server_error(e):
+    <span class=hljs-keyword >return</span> render_template(&#x27;<span class=hljs-number >500.</span>html&#x27;), <span class=hljs-number >500</span></code></pre> <pre><code class="julia hljs"><span class=hljs-comment ># app/main/views.py</span>
+from datetime <span class=hljs-keyword >import</span> datetime
+from flask <span class=hljs-keyword >import</span> render_template, session, redirect, url_for
+
+from . <span class=hljs-keyword >import</span> main
+from .forms mport NameForm
+from .. <span class=hljs-keyword >import</span> db
+from ..models <span class=hljs-keyword >import</span> User
+
+<span class=hljs-meta >@main</span>.route(<span class=hljs-string >&#x27;/&#x27;</span>, methods=[&#x27;GET&#x27;, &#x27;POST&#x27;])
+def index():
+    form = NameForm()
+    <span class=hljs-keyword >if</span> form.validate_on_submit():
+        <span class=hljs-comment >#...</span>
+        <span class=hljs-keyword >return</span> redirect(url_for(&#x27;.index&#x27;))
+    <span class=hljs-keyword >return</span> render_template(&#x27;index.html&#x27;,form=from, name=session.get(&#x27;name&#x27;), known=session.get(&#x27;known&#x27;, <span class=hljs-literal >false</span>), current_time=datetime.utcnow())</code></pre> <p>这里有三个细节需要说明:</p> <ul> <li><p><code>app/main/views.py</code> 中导入了当前模块对象、当前模块的文件中的对象、上一级模块对象, 注意这样的调用方式.</p> <li><p>路由的修饰器由蓝本提供, 所以这里是 <code>main.route&#40;...&#41;</code>.</p> <li><p><code>url_for&#40;...&#41;</code> 的第一个参数应该是视图函数名称. 在单文件项目中直接写视图函数就行, 在蓝本中不能这样. 项目会给蓝本的路由全部加上命名空间, 这样可以在不同的蓝本中使用相同的视图函数名称, 不会产生冲突. 命名空间就是蓝本的名字. 所以这里返回的就是 <code>url_for&#40;&#39;main.index&#39;&#41;</code>. 这里使用 <code>url_for&#40;&#39;.index&#39;&#41;</code> 是 <code>url_for&#40;&#41;</code> 提供的简写形式, 当前蓝本中可以省略蓝本名字. &lt;emph style&#61;&#39;border-bottom:1px solid red&#39;&gt;注意, 跨蓝本的重定向必须使用带蓝本名称的视图函数名&lt;/emph&gt;.</p> </ul> <h2 id="启动脚本_managepy"><a href="#启动脚本_managepy" class=header-anchor >启动脚本: <code>manage.py</code></a></h2> <p>顶级文件夹中的 <code>manage.py</code> 用于管理项目启动. 下面这段脚本先创建项目实例, 如果环境变量中定义了项目配置, 则从中读取配置名, 否则使用默认配置. 然后初始化 <code>flask-script</code>, <code>flask-migrate</code> 和 <code>python shell</code> 的上下文.</p> <pre><code class="julia hljs"><span class=hljs-comment ># manage.py</span>
+<span class=hljs-keyword >import</span> os
+from app <span class=hljs-keyword >import</span> create_app, db
+from app.models <span class=hljs-keyword >import</span> User, Role
+from flask_script <span class=hljs-keyword >import</span> Manage, Shell
+from flask_migrate <span class=hljs-keyword >import</span> Migrate, MigrateCommand
+
+app = create_app(os.getenv(&#x27;FLASK_CONFIG&#x27;) or &#x27;default&#x27;)
+manage = Manage(app)
+migrte = Migrate(app, db)
+
+def make_shell_context():
+    <span class=hljs-keyword >return</span> dict(app=app, db=db, User=User, Role=Role)
+
+manager.add_command(&#x27;shell&#x27;, Shell(make_context=make_shell_context))
+manager.add_command(&#x27;db&#x27;, MigrateCommand)
+
+<span class=hljs-keyword >if</span> __name__ == &#x27;__main__&#x27;:
+    manager.run()</code></pre> <h2 id=requirementstxt ><a href="#requirementstxt" class=header-anchor >requirements.txt</a></h2> <blockquote> <p>&#40;virEnv&#41; pip freeze &gt; requirements.txt</p> </blockquote> <blockquote> <p>&#40;virEnv&#41; pip install -r -requirements.txt</p> </blockquote> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

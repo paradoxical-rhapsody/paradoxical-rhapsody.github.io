@@ -1,0 +1,74 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | flask-mail</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <p>在特定事件发生时, 如果希望对用户进行提醒, 可以在程序中添加提示信息&#40;<a href=06-flask-wtf >flask消息</a>&#41;, 也可以发送电子邮件. Python 提供了 <code>smtplib 标准库</code> 可以发送电子邮件, 但是这个库对 flask 不那么友好, 这里使用 &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;包装了 <code>smtplib</code> 的 flask 扩展 <code>flask-mail</code>&lt;/emph&gt;.</p> <blockquote> <p>&#40;virEnv&#41; conda/pip install flask-mail</p> </blockquote> <p><code>flask-mail</code> 连接到 <strong>简单邮件传输协议&#40;Simple Mail Transfer Protocol, SMTP&#41;</strong> 服务器, 将邮件提交给这个服务器进行发送. <code>flask-mail</code> 默认使用 <code>localhost:25</code> 端口, 无需验证即可发送邮件. 为了使用 <strong>外部 smtp 服务器</strong> 发送邮件, 需要对 <code>smtp 服务器</code> 添加配置参数.</p> <pre><code class="julia hljs">配置            默认值       说明
+MAIL_SERVER     localhost   服务器主机名/ip地址
+MAIL_PORT       <span class=hljs-number >25</span>          邮件服务器端口
+MAIL_USE_TLS    False       启用传输层安全(Transport Layer Security, TLS)协议
+MAIL_USE_SSL    False       启用安全套接层(Secure Sockets Layer, SSL)协议
+MAIL_USENAME    None        邮件账户用户名
+MAIL_PASSWORD   None        邮件账户密码</code></pre> <p>下面是 &lt;emph style&#61;&#39;border:1px dashed red&#39;&gt;配置&lt;/emph&gt; google gmail 账户的一个例子.</p> <pre><code class="julia hljs"><span class=hljs-comment ># hello.py</span>
+<span class=hljs-keyword >import</span> os
+
+app.config[&#x27;MAIL_SERVER&#x27;]   = &#x27;smtp.googlemail.com&#x27;
+app.config[&#x27;MAIL_PORT&#x27;]     = <span class=hljs-number >587</span>
+app.config[&#x27;MAIL_USE_TLS&#x27;]  = True
+app.config[&#x27;MAIL_USERNAME&#x27;] = os.environ.get(&#x27;MAIL_USERNAME&#x27;)
+app.config[&#x27;MAIL_PASSWORD&#x27;] = os.environ.get(&#x27;MAIL_PASSWORD&#x27;)</code></pre> <p>最后两行是从系统环境中导入账户信息, 这是一个必要的习惯: 不能将敏感信息直接写入脚本中.</p> <ul> <li><p>Linux/Max OS 中写入账户信息</p> <blockquote> <p>&#40;virEnv&#41; export MAIL_USERNAME &#61; \&lt;Gmail username&gt;</p> </blockquote> </ul> <blockquote> <p>&#40;virEnv&#41; export MAIL_PASSWORD &#61; \&lt;Gmail password&gt;</p> </blockquote> <ul> <li><p>Win 中写入账户信息</p> <blockquote> <p>&#40;virEnv&#41; set MAIL_USERNAME &#61; \&lt;Gmail username&gt;</p> </blockquote> </ul> <blockquote> <p>&#40;virEnv&#41; set MAIL_PASSWORD &#61; \&lt;Gmail password&gt;</p> </blockquote> <p>下面是 <code>flask-mail</code> &lt;emph style&#61;&#39;border:1px dashed red&#39;&gt;初始化&lt;/emph&gt; 的例子.</p> <pre><code class="julia hljs">from flask <span class=hljs-keyword >import</span> Flask
+from flask_mail <span class=hljs-keyword >import</span> Mail
+
+app = Flask(__name__)
+mail = Mail(app)</code></pre> <p>下面在 <code>python-Shell</code> 中&lt;emph style&#61;&#39;border:1px dashed red&#39;&gt;测试&lt;/emph&gt;邮件发送功能.</p> <pre><code class="julia hljs">(virEnv)$ python hello.py shell
+&gt;&gt;&gt; from hello <span class=hljs-keyword >import</span> mail
+&gt;&gt;&gt; from flask_email <span class=hljs-keyword >import</span> Message
+&gt;&gt;&gt; msg = Message(&#x27;test subject&#x27;, sender=&#x27;you<span class=hljs-meta >@example</span>.com&#x27;,
+                  recipients = [&#x27;you<span class=hljs-meta >@example</span>.com&#x27;])
+&gt;&gt;&gt; msg.body = &#x27;test body&#x27;
+&gt;&gt;&gt; msg.html = &#x27;&lt;b&gt;<span class=hljs-built_in >HTML</span>&lt;/b&gt; body&#x27;
+&gt;&gt;&gt; with app.app_context():
+        mail.send(msg)      <span class=hljs-comment ># mail.send 用了 current_app, 所以在程序上下文中执行</span></code></pre> <p>下面在 <code>flask 项目中</code> &lt;emph style&#61;&#39;border:1px dashed red&#39;&gt;添加&lt;/emph&gt; 邮件功能. 特定事件的提醒邮件的格式通常都是固定的, 所以更有条理的方式就是把邮件功能的<strong>通用部分</strong>封装到独立的函数中. 独立封装还有一个好处, 可以使用 <code>jinja2</code> 对 <code>msg</code> 的正文内容和通用模板进行渲染.</p> <p>由于系统自动发送的邮件会有固定的模板, 较好的习惯是把这些模板抽象出来, 在<code>邮件发送函数</code>中调用特定模板进行渲染. &lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;通常将邮件模板放在 <code>templates/mail/</code> 下面. 每个邮件模板要同名双份, 分别是 html 和 txt 格式, 用来渲染 <code>富文本正文</code> 和 <code>纯文本正文</code>.&lt;/emph&gt; 另外, 由于不同邮件模板会对应不同的渲染参数, 在 <code>邮件发送函数</code> 中使用 <code>**kwargs</code> 作为<code>通配符参数</code> 来动态捕捉这些参数, 所以能够正常工作的 <code>邮件发送函数</code> 要求模板和传入通配符参数的内容相匹配.</p> <p>下面是一个基本的 <code>邮件发送函数</code> 的定义</p> <pre><code class="julia hljs"><span class=hljs-comment ># hello.py</span>
+from flask_mail <span class=hljs-keyword >import</span> Message
+
+app.config[&#x27;FLASK_MAIL_SUBJECT_PREFIX&#x27;] = &#x27;[Flasky]&#x27;
+app.config[&#x27;FLASK_MAIL_SENDER&#x27;]         = &#x27;Flasky Admin &lt;flask<span class=hljs-meta >@example</span>.com&gt;&#x27;
+
+def send_mail(to, subject, template, **kwargs):
+    msg = Message(app.config[&#x27;FLASK_MAIL_SUBJECT_PREFIX&#x27;] + subject,
+    sender=app.config[&#x27;FLASK_MAIL_SENDER&#x27;],
+    recipients = [to])
+    msg.body = render_template(template + &#x27;.txt&#x27;, **kwargs)
+    msg.html = render_template(template + &#x27;.html&#x27;, **kwargs)
+    mail.send(msg)</code></pre> <p><code>构造函数 Message&#40;...&#41; 的参数是邮件的头部, 包括邮件名, 发件人和收件人</code>. 这里面的 <code>msg.body</code> 和 <code>msg.html</code> 里的模板是没有扩展名, 所以建议邮件模板的纯文本和富文本文件有相同的文件名. 下面只需要在视图函数中合适的位置添加<code>条件判断和配置邮件</code>即可.</p> <pre><code class="julia hljs"><span class=hljs-comment ># hello.py</span>
+app.config[&#x27;FLASK_ADMIN&#x27;] = os.environ.get(&#x27;FLASK_ADMIN&#x27;)
+
+<span class=hljs-comment ># def send_mail(...)</span>
+
+def index():
+    from = NameForm()
+    <span class=hljs-keyword >if</span> form.validate_on_submit():
+        user = User.query.filter_by(username=form.name.data).first()
+        <span class=hljs-keyword >if</span> user is None:
+            db.session.add(user)
+            session[&#x27;known&#x27;] = False
+            <span class=hljs-keyword >if</span> app.config[&#x27;FLASK_ADMIN&#x27;]:
+                <span class=hljs-comment ># **kwargs 传入俩 user</span>
+                sender_mail(app.config[&#x27;FLASK_ADMIN&#x27;], &#x27;New User&#x27;, &#x27;mail/new_user&#x27;, user=user)
+            <span class=hljs-keyword >else</span>:
+                session[&#x27;known&#x27;] = True
+        session[&#x27;name&#x27;] = form.name.data
+        form.name.data = &#x27;&#x27;
+        <span class=hljs-keyword >return</span> redirect(url_for(&#x27;index&#x27;))
+    <span class=hljs-keyword >return</span> render_template(&#x27;index.html&#x27;, form=form, name=session.get(&#x27;name&#x27;), known=session.get(&#x27;known&#x27;))</code></pre> <p>这里先判断了是否存在一个接收信息通知的邮箱地址 <code>FLASKY_ADMIN</code>, 这个和发件箱不必要相同. 因为可能需要对一般的观光用户发送邮件, 所以将系统的发件箱和收件箱的地址分开, 大概是一个不错的选择. </p> <blockquote> <p>&#40;virEnv&#41; set FLASK_ADMIN &#61; \&lt;email-address&gt; # win</p> </blockquote> <blockquote> <p>&#40;vieEnv&#41; export FLASK_ADMIN &#61; \&lt;email-address&gt; # linux/Mac os</p> </blockquote> <h1 id="提高邮件发送效率_异步发送邮件asynchronous"><a href="#提高邮件发送效率_异步发送邮件asynchronous" class=header-anchor >提高邮件发送效率: 异步发送邮件&#40;asynchronous&#41;</a></h1> <p><code>邮件发送函数 send_mail&#40;...&#41;</code> 在发送邮件的时候会停滞几秒, 大概就像浏览器突然无响应了一样. 为了避免这样的 <strong>延迟</strong>, 可以将 <code>send_mail&#40;...&#41;</code> 的最后一行 <code>mail.send&#40;msg&#41;</code> 移到后台线程中.</p> <pre><code class="julia hljs"><span class=hljs-comment ># hello.py</span>
+from threading <span class=hljs-keyword >import</span> Thread
+
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+def send_mail(to, subject, template, **kwargs):
+    msg = Message(app.config[&#x27;FLASK_MAIL_SUBJECT_PREFIX] + subject, 
+    sender=app.config[&#x27;FLASKY_MAIL_SENDER&#x27;],
+    recipients = [to])
+    msg.body = render_template(template + &#x27;.txt&#x27;, **kwargs)
+    msg.html = render_template(template + &#x27;.html&#x27;, **kwargs)
+
+    thr = Thread(target=send_async_email, args([app, msg]))
+    thr.start()
+    <span class=hljs-keyword >return</span> thr</code></pre> <p>这里定义的 <code>send_async_email&#40;...&#41;</code> 将 <code>mail.send&#40;...&#41;</code> 包装到了上下文中, 这是&lt;emph style&#61;&#39;border-bottom:1px dashed red&#39;&gt;因为很多 flask 扩展都假设已经存在激活的程序上下文和请求上下文, 异步发送邮件开启了新的县城, 所以要在其中引入 <code>app.app_context</code>.&lt;/emph&gt;</p> <p>目前异步发送邮件的方式已经流畅多了, 但是项目如果要发送大量邮件时, 使用专门发送邮件的作业会比给每封邮件都新建一个线程要更合适. 比如, 可以把 <code>send_async_email&#40;...&#41;</code> 函数发给 <a href="http://www.celeryprojcct.org/">Celery</a> 任务队列.</p> <div class=page-foot > <div class=copyright > &copy; 许曾超. Last touched: September 01, 2022. </div> </div> </div> </div> <script> (function(){ // Get the elements. // - the 'pre' element. // - the 'div' with the 'paste-content' id. var pre = document.getElementsByTagName('pre'); // Add a copy button in the 'pre' element. // which only has the className of 'language-'. for (var i = 0; i < pre.length; i++) { var isLanguage = pre[i].children[0].className.indexOf('language-'); if ( isLanguage === 0 ) { var button = document.createElement('button'); button.className = 'copy-button'; button.textContent = 'Copy'; pre[i].appendChild(button); } }; // Run Clipboard var copyCode = new Clipboard('.copy-button', { target: function(trigger) { return trigger.previousElementSibling; } }); // On success: // - Change the "Copy" text to "Copied". // - Swap it to "Copy" in 2s. // - Lead user to the "contenteditable" area with Velocity scroll. copyCode.on('success', function(event) { event.clearSelection(); event.trigger.textContent = 'Copied'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 2000); }); // On error (Safari): // - Change the "Press Ctrl+C to copy" // - Swap it to "Copy" in 2s. copyCode.on('error', function(event) { event.trigger.textContent = 'Press "Ctrl + C" to copy'; window.setTimeout(function() { event.trigger.textContent = 'Copy'; }, 5000); }); })(); </script>

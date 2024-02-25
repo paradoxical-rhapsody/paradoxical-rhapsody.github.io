@@ -1,0 +1,163 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/python.svg"> <title>xu-zc | 部署到服务器</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id="要配置的三项内容"><a href="#要配置的三项内容" class=header-anchor >要配置的三项内容</a></h1> <ul> <li><p>Aliyun: Ubuntu 16 – 64 位</p> <li><p>WSGI: gunicorn</p> <li><p>进程监控: supervisor</p> </ul> <p>按照建议, 新建一个用户, 并搭建虚拟环境来管理 Flask 项目. 这里直接使用了管理员身份，但是建立了虚拟环境&#40;ubuntu 默认只有 python2.7&#41;.</p> <h2 id="配置步骤"><a href="#配置步骤" class=header-anchor >配置步骤</a></h2> <h3 id="提交_flask_项目文件"><a href="#提交_flask_项目文件" class=header-anchor >提交 Flask 项目文件</a></h3> <p>在 flask 自带的开发服务器上测试好项目之后, 将整个文件夹放在 Ubuntu 服务器上的合适位置. 这里假设放在 <code>/home/blog</code> 文件夹内. 在项目文件夹内新建日志文件夹:</p> <pre><code class="text hljs">mkdir /home/blog/logs</code></pre>
+<h3 id="配置_python_虚拟环境"><a href="#配置_python_虚拟环境" class=header-anchor >配置 python 虚拟环境</a></h3>
+<p>执行命令&#40;使用 conda 也可以完成全部相关配置&#41;. <strong>注意, <code>gunicorn</code> 是 python 模块, 要在虚拟环境安装.</strong></p>
+<pre><code class="text hljs">pip install virtualenv
+virtualenv -p /usr/bin/python3 venv
+source /home/venv/bin/activate
+pip install flask     # 可以使用依赖文件一次安装好用到的模块.
+pip install gunicorn</code></pre>
+<p>配置: 在 flask 项目文件夹中配置 gunicorn</p>
+<pre><code class="text hljs">cd /home/blog
+touch gunicorn.conf
+vim gunicorn.conf</code></pre>
+<p>输入如下内容</p>
+<pre><code class="text hljs"># 进程数位 3
+workers = 3
+
+# 监听开发服务器的端口
+bind = &#x27;127.0.0.1:5000&#x27;   #注意, 这个默认端口可以在 app.run()中修改</code></pre>
+<p>这个虚拟环境在下面一步的 supervisor 中被配置了。</p>
+<h3 id="安装和配置_supervisor"><a href="#安装和配置_supervisor" class=header-anchor >安装和配置 supervisor</a></h3>
+<pre><code class="text hljs">sudo apt-get install supervisor
+cd /etc/supervisor/conf.d/
+touch blog.conf
+vim blog.conf</code></pre>
+<p>在其中编写配置内容:</p>
+<pre><code class="text hljs"># 进程的名字，取一个以后自己一眼知道是什么的名字。
+[program:blog]
+
+# 定义命令。注意「hello:app」的run，是你网站应用的文件名。
+command=/home//venv/bin/gunicorn hello:app -c /home/blog/gunicorn.conf
+
+# 网站目录
+directory=/home/blog
+
+# 进程所属用户。之前为博客建立过一个小号www，你还记得？
+user=root   # 如果专门新建了用户, 可以在这里修改
+	
+# 自动重启设置。
+autostart=true
+autorestart=true
+	
+# 日志存放位置。
+stdout_logfile=/home/blog/logs/gunicorn_supervisor.log 
+	
+# 设置环境变量。这里这行的意思是：设置环境变量MODE的值为UAT。请根据自己的需要配置，如没有需要这行可以删除。(配置的时候添上了, 但是不知道有什么用)
+environment = MODE=&quot;UAT&quot;</code></pre>
+<p>加载并生效 supervisor:</p>
+<pre><code class="text hljs">sudo supervisorctl reread
+supervisorctl update
+sudo supervisorctl start blog</code></pre>
+<p>如果没有正常运行, 并且确认配置文件没错, 可以尝试重启:</p>
+<pre><code class="text hljs">sudo service supervisor stop
+sudo service supervisor start</code></pre>
+<h3 id="安装和配置_nginx"><a href="#安装和配置_nginx" class=header-anchor >安装和配置 nginx</a></h3>
+<pre><code class="text hljs">sudo apt-get install nginx
+cd /etc/nginx/sites-available/
+touch blog
+vim blog</code></pre>
+<p>配置:</p>
+<pre><code class="text hljs">server {  
+	listen     8585;   # 这个是自己在安全组中打算开启的端口
+	server_name www.xxx.com;  # 域名或者 ip
+	
+	root       /home/www/blog;
+	access_log /home/blog/logs/access.log;
+	error_log  /home/blog/logs/access.log;
+
+	location / {  
+		proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;  
+		proxy_set_header Host $http_host;  
+		proxy_redirect off;  
+		if (!-f $request_filename) {  
+			proxy_pass http://127.0.0.1:5000;   # 这里写 app.run() 的开发服务器的地址
+			break;  
+		}  
+	}  
+}</code></pre>
+<p>启动 nginx:</p>
+<pre><code class="text hljs">cd ..
+cd sites-enabled
+ln -s /etc/nginx/sites-available/blog  ./blog        	 # 建立配置文件的链接
+ls -l          # 查看 blog 的链接是否成功建立
+sudo service nginx restart    # 启动</code></pre>
+<p>这时候就可以访问 nginx 配置里的域名和端口进行访问.</p>
+<p><strong>Flask内容更新的时候，浏览器的内容不会自动更新，需要重启 supervisor 的服务</strong></p>
+<pre><code class="text hljs">sudo service supervisor stop
+sudo service supervisor start</code></pre>
+<div class=page-foot >
+  <div class=copyright >
+    
+    
+    &copy; 许曾超. Last touched: September 01, 2022.
+    
+  </div>
+</div>
+</div>
+    </div>  
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>
