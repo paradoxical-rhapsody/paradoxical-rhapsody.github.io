@@ -9,7 +9,7 @@ talkbib = "_assets/research/talks.bib"
 
 # CV
 
-\toc
+<!-- \toc -->
 
 <!-- 
     [ORCID](https://orcid.org/0000-0003-4182-2943)
