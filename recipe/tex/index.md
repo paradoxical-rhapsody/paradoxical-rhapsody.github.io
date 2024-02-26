@@ -66,6 +66,9 @@ toc_sidebar = true
 \list
 
 
+\item{ [2024-02-26] `enumitem` 的 `enumerate` 环境第一段充当小标题很好用, 第二段才当成正式内容。主要是注意 `label` 紧跟的段落是 `item`, 后续段落是 `item paragraph`, 是有点区别的.}
+
+
 \item{ [2023-11-29] 
 
 * 文档默认 `\title` 位置太靠下, 可以用 `\title{\vspace{-3em} This is Title}` 纵向上移. 如果不设置 `\author`, 使用 `\maketitle` 默认 `title` 和 `date` 之间的距离过大, 可以用 `\date{\vspace{-3em} \today}` 把日期上移. 
