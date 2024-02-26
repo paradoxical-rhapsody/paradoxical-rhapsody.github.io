@@ -66,7 +66,15 @@ toc_sidebar = true
 \list
 
 
-\item{ [2024-02-26] `enumitem` 的 `enumerate` 环境第一段充当小标题很好用, 第二段才当成正式内容。主要是注意 `label` 紧跟的段落是 `item`, 后续段落是 `item paragraph`, 是有点区别的.}
+\item{ [2024-02-26] `enumitem` 的 `enumerate` 环境第一段充当小标题很好用, 第二段才当成正式内容。主要是注意 `label` 紧跟的段落是 `item`, 后续段落是 `item paragraph`, 是有点区别的.
+```bash
+\begin{enumerate}[label=\textbf{(\Alph*)}, listparindent=\parindent, itemindent=2em, leftmargin=1ex]
+  \item 小标题
+
+  正文内容...
+\end{enumerate}
+```
+}
 
 
 \item{ [2023-11-29] 
