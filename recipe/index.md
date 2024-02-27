@@ -49,6 +49,12 @@ icon = "lightbulb-fill"
 
 \list
 
+\item{ [2024-02-27] git 推送抛出 `CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none`, 可临时关闭验证 ():
+```bash
+export GIT_SSL_NO_VERIFY=1
+```
+}
+
 \item{ [2023-11-30] win11 首次进入系统时默认要连接网络才能进入下一步, 可在该界面 `shift + F10` 激活命令行, 输入 `oobe\BypassNRO.cmd`, 系统会重启且提供跳过网络连接的选项. }
 
 \item{ [2023-02-17] Ubuntu 下双击安装字体, 会被安装在 `/home/zengchao/.local/share/fonts/` 下, 但是 $\TeX$ 中用 `\newCJKfontfamily \yozai {Yozai-Regular.ttf}` 引入字体时报错(没有字体). 解决方案:
