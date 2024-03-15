@@ -43,3 +43,29 @@ icon = "lightbulb-fill"
 \addbibresource{refs.bib}
 
 ```
+
+
+
+```plaintext
+\usepackage[style=authoryear,
+            backend=bibtex,
+            natbib,
+            maxcitenames=2, 
+            maxbibnames=99, 
+            alldates=year,
+            doi=false, 
+            url=false, 
+            eprint=false, 
+            isbn=false,
+            autopunct=false]{biblatex}
+
+% 将 \parencite 的圆括号改为方括号
+\DeclareCiteCommand{\parencite}
+    {\usebibmacro{prenote}}
+    {\usebibmacro{citeindex}\printtext[bibhyperref]{[\usebibmacro{cite}]}}{\multicitedelim}
+    {\usebibmacro{postnote}}
+
+\AtBeginBibliography{\scriptsize}
+
+```
+
