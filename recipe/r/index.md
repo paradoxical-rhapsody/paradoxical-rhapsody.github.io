@@ -26,7 +26,7 @@ base = "recipe/r"
 
 -----
 
-* [Task::WebTechnologies](https://cran.r-project.org/web/views/WebTechnologies.html) 有 `publications` 模块可直接调用各出版商和文献的元数据.
+\link{TaskViews::WebTechnologies}{https://cran.r-project.org/web/views/WebTechnologies.html} 有 `publications` 模块可直接调用各出版商和文献的元数据.
 
 
 
@@ -39,6 +39,25 @@ base = "recipe/r"
 ## Tips
 
 \list
+
+
+\item{ [2024-04-15] `knitr` 的全局选项设置：
+```R
+%% knitr options
+<<setup, include=FALSE>>=
+rm(list=ls())
+options(width=70)
+knitr::opts_chunk$set(
+    size="scriptsize",
+    fig.align = "center", 
+    fig.path = "figures/",
+    fig.width = 6, 
+    fit.height=6,
+    out.width = ".45\\linewidth"
+)
+@
+```
+}
 
 
 \item{ 

@@ -59,7 +59,7 @@ researchers = [
 
 
 struct student
-    year::String,
+    year::String
     major::String
     level::String
     name::String
