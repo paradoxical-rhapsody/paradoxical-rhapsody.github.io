@@ -178,8 +178,10 @@ inkscape --export-type=pdf --export-latex figure.svg
 }
 
 \item{ [2022-05-25] `vscode` 的 latex-workshop 拓展中, 对 `tex` 文件的右上角的绿色编译方式设置:
-* 在设置中搜索 `external build`, 搜索结果有两项关于 `Latex-workshop > Latex > External > Build`.
-* 在 `Args` 中添加 `-xelatex`, 在 `Command` 中添加 `latexmk` 即可. 另一种方式是仅在 `Command` 中添加 `latexmk -xelatex` (不过既然有使用 `Args` 的规范方式, 就不要偷懒了).
+* [240504] \delete{在设置中搜索 `external build`, 搜索结果有两项关于 `Latex-workshop > Latex > External > Build`.}
+* [240504] \delete{在 `Args` 中添加 `-xelatex`, 在 `Command` 中添加 `latexmk` 即可. 另一种方式是仅在 `Command` 中添加 `latexmk -xelatex` (不过既然有使用 `Args` 的规范方式, 就不要偷懒了).}
+
+[240504] 这个小图标是由 `Latex > Recipe:Default` 控制的. 那个 `external build` 相关的另有作用 (要读懂文档再操作).
 }
 
 \item{ [2022-05-05] 字体设置:

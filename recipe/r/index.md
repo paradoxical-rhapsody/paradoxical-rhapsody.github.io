@@ -41,6 +41,12 @@ base = "recipe/r"
 \list
 
 
+\item{ [2024-05-04] `latex-workshop` 编译 `Rnw` 文件时总是报 `Latexmk: No file name specified`, 现在确定是 `Latex > External > Build: Command` 里添加了 `latexmk` 这个多余的东西! (要理解配置说明啊)
+
+另外, 可以把 `tools` 中 `rnw2tex` 的 `knit` 改为 `knit2pdf`, 这样 `recipe` 里可以相应简化.
+}
+
+
 \item{ [2024-04-15] `knitr` 的全局选项设置：
 ```R
 %% knitr options
