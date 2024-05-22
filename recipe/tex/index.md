@@ -66,6 +66,9 @@ toc_sidebar = true
 \list
 
 
+\item{ [2025-05-22] 连续插入两个空白页 `\newpage \null \vfill \newpage` }
+
+
 \item{ [2024-02-26] `enumitem` 的 `enumerate` 环境第一段充当小标题很好用, 第二段才当成正式内容。主要是注意 `label` 紧跟的段落是 `item`, 后续段落是 `item paragraph`, 是有点区别的.
 ```bash
 \begin{enumerate}[label=\textbf{(\Alph*)}, listparindent=\parindent, itemindent=2em, leftmargin=1ex]
@@ -188,8 +191,6 @@ inkscape --export-type=pdf --export-latex figure.svg
 
 ```text
 \usepackage{ctex}
-\setCJKmainfont{SIMSUN.TTC}
-% \setCJKsansfont{SimSun}
 % \setCJKsansfont{LXGWWENKAI-REGULAR.TTF} % [BoldFont=LXGWWENKAI-BOLD.TTF]
 \newCJKfontfamily \yozai {YOZAI-REGULAR.TTF}
 ```
@@ -302,8 +303,10 @@ inkscape --export-type=pdf --export-latex figure.svg
 
 \item{ [2021-02-21] 导出已安装的字体: 管理员权限打开 `cmd`, 执行
 ```plaintext
-fc-list -f "%{family}\n" :lang=zh > zhfont.txt
+fc-list -f "%{family}\n" > fonts.txt
 ```
+
+注意：如果添加 `:lang=zh` 选项, 可能会漏掉一些中文字体.
 }
 
 \item{ 设置中文字体

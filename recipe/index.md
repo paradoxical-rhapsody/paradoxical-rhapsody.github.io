@@ -57,13 +57,17 @@ export GIT_SSL_NO_VERIFY=1
 
 \item{ [2023-11-30] win11 首次进入系统时默认要连接网络才能进入下一步, 可在该界面 `shift + F10` 激活命令行, 输入 `oobe\BypassNRO.cmd`, 系统会重启且提供跳过网络连接的选项. }
 
-\item{ [2023-02-17] Ubuntu 下双击安装字体, 会被安装在 `/home/zengchao/.local/share/fonts/` 下, 但是 $\TeX$ 中用 `\newCJKfontfamily \yozai {Yozai-Regular.ttf}` 引入字体时报错(没有字体). 解决方案:
+\item{ [2023-02-17] Ubuntu 下双击安装字体, \delete{会被安装在 `/home/zengchao/.local/share/fonts/` 下, 但是 $\TeX$ 中用 `\newCJKfontfamily \yozai {Yozai-Regular.ttf}` 引入字体时报错(没有字体). 解决方案:}
 
 1. 将字体复制到全局目录: `sudo cp * /usr/share/fonts/`
 2. 生成索引信息: `sudo mkfontscale ; sudo mkfontdir`
-3. 更新字体缓存: `sudo fc-cache`
+3. 更新字体缓存: `sudo fc-cache -r -v`
 
-此时 `\yozai` 命令可用. (不复制到全局该怎么用嘞???)
+[240506] \delete{此时 `\yozai` 命令可用. (不复制到全局该怎么用嘞???)} 
+
+[240506] 在 `TeX` 中定义新字体：
+* `sudo fc-list -f "%{family}\n" > fonts.txt` (加 `:lang=zh` 可能会漏掉部分中文字体)
+* 根据 `xeCJK` 设置新字体的说明: `\newCJKfamilyfont\yozai{Yozai}`, 指定字体名称就行, 似乎不必要定位到 `ttf` 文件.
 }
 
 

@@ -21,9 +21,8 @@ icon = "lightbulb-fill"
 %     }
 % }
 
-\setCJKsansfont{SimSun}
 % \setCJKsansfont{LXGWWENKAI-REGULAR.TTF} % [BoldFont=LXGWWENKAI-BOLD.TTF]
-% \newCJKfontfamily \yozai {YOZAI-REGULAR.TTF}
+% \newCJKfontfamily \yozai {Yozai}
 
 \usepackage{amsmath, bm}
 \usepackage{amsfonts}
