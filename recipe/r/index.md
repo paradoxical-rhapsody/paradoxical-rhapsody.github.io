@@ -40,6 +40,8 @@ base = "recipe/r"
 
 \list
 
+\item{ [2024-05-24] `sub` 的 `fixed=TRUE` 不使用通配符做匹配, 是很棒的参数. }
+
 
 \item{ [2024-05-04] `latex-workshop` 编译 `Rnw` 文件时总是报 `Latexmk: No file name specified`, 现在确定是 `Latex > External > Build: Command` 里添加了 `latexmk` 这个多余的东西! (要理解配置说明啊)
 
