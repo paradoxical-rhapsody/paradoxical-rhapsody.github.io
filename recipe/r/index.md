@@ -40,6 +40,15 @@ base = "recipe/r"
 
 \list
 
+\item{ [2024-06-21] `knitr` 处理 `Rnw` 时会在输出的 `tex` 文档中很快插入一段自定义环境, 过程很呆, 甚至不能识别 `\documentclass` 的多行结构还没有结束就插入新环境了. 
+
+[解决方案](https://stackoverflow.com/questions/57618641/how-to-stop-knitr-from-adding-tex-packages-based-on-documentclass): `knitr` 插入的头文件是通过 `knitr:::make_header_latex` 进行的, 把它屏蔽掉就好了 (这很适合添加在 `vscode` 的链式编译中).
+```bash
+assignInNamespace("make_header_latex", function(...) "", "knitr")
+```
+
+}
+
 \item{ [2024-05-24] `sub` 的 `fixed=TRUE` 不使用通配符做匹配, 是很棒的参数. }
 
 
