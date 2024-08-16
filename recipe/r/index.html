@@ -1,14 +1,50 @@
-<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/katex/katex.min.css"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/r-project.svg"> <title>xu-zc | R</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> <div class=toc-sidebar > <div class=franklin-toc ><ol><li><a href="#ecosystem_pkgs">Ecosystem / Pkgs</a><li><a href="#sources">Sources</a><li><a href="#tips">Tips</a></ol></div> </div> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <div class=log ><ul> <li><p>生态、社区和应用场景都相当成熟.</p> <li><p>即便用 <a class=href  href=" http://arma.sourceforge.net/"> Armadillo </a> 加速, 它在矩阵变量相关的计算中依旧效率不足.</p> </ul></div> <h1 id=r ><a href="#r" class=header-anchor >R</a></h1> <h2 id=ecosystem_pkgs ><a href="#ecosystem_pkgs" class=header-anchor >Ecosystem / Pkgs</a></h2> <p>&quot;data.table&quot;, &quot;glue&quot;, &quot;xtable&quot;, &quot;Rcpp&quot;, &quot;RcppArmadillo&quot;, &quot;knitr&quot;, &quot;devtools&quot;, </p> <p>&quot;tikzDevice&quot;, &quot;Cairo&quot;,</p> <p>&quot;glmnet&quot;, &quot;brglm2&quot;, &quot;betareg&quot;, </p> <p>&quot;PLFD&quot;, &quot;PPSFS&quot;,</p> <hr /> <ul> <li><p><a href="https://cran.r-project.org/web/views/WebTechnologies.html">Task::WebTechnologies</a> 有 <code>publications</code> 模块可直接调用各出版商和文献的元数据.</p> </ul> <h2 id=sources ><a href="#sources" class=header-anchor >Sources</a></h2> <p><ul> <li class=blank > <a class=href  href=" /recipe/r/family"> Family </a> <li class=blank > <a class=href  href=" /recipe/r/gui"> GUI / Progressbar </a> <li class=blank > <a class=href  href=" /recipe/r/plot-hypothesis-test"> Graph Hypothesis Test </a> <li class=blank > <a class=href  href=" /recipe/r/plot-heatmap"> Heatmap </a> <li class=blank > <a class=href  href=" /recipe/r/plot-lasso"> Lasso Graph &#40;3D&#41; </a> <li class=blank > <a class=href  href=" /recipe/r/model-matrix"> Model Matrix </a> <li class=blank > <a class=href  href=" /recipe/r/capitals-allaction"> capitals re-allaction </a> <li class=blank > <a class=href  href=" /recipe/r/reshape"> </a> <li class=blank > <a class=href  href=" /recipe/r/venn-diagram"> </a> </ul></p> <h2 id=tips ><a href="#tips" class=header-anchor >Tips</a></h2> <ul> <li class=blank > &#91;2023-10-04&#93; 从源文件编译安装 <code>R</code> 时的依赖可以快速解决:</p> <pre><code class="bash hljs">sudo sed -i.bak <span class=hljs-string >&quot;/^#.*deb-src.*universe$/s/^# //g&quot;</span> /etc/apt/sources.list
-sudo apt update
-sudo apt build-dep r-base</code></pre> <p>&#91;2023-10-03&#93; R-4.3.1 没有提供安装源, 目前用 rstudio 提供的 <code>deb</code> 文件或者源文件安装. 源文件配置和编译时遇到的依赖:</p> <pre><code class="bash hljs">sudo apt-get install build-essential
-sudo apt-get install fort77
-sudo apt-get install xorg-dev
-sudo apt-get install liblzma-dev  libblas-dev gfortran
-sudo apt-get install libbz2-dev
-sudo apt-get install gcc-multilib
-sudo apt-get install gobjc++
-sudo apt-get install aptitude
-sudo apt-get install libreadline-dev</code></pre> <p> <li class=blank > &#91;2023-09-03&#93; <code>split-by-combine</code></p> <pre><code class="bash hljs">set.seed(2023)
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/katex/katex.min.css"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/r-project.svg"> <title>xu-zc | R</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> <div class=toc-sidebar > <div class=franklin-toc ><ol><li><a href="#ecosystem_pkgs">Ecosystem / Pkgs</a><li><a href="#sources">Sources</a><li><a href="#tips">Tips</a></ol></div> </div> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <div class=log ><ul> <li><p>生态、社区和应用场景都相当成熟.</p> <li><p>即便用 <a class=href  href=" http://arma.sourceforge.net/"> Armadillo </a> 加速, 它在矩阵变量相关的计算中依旧效率不足.</p> </ul></div> <h1 id=r ><a href="#r" class=header-anchor >R</a></h1> <h2 id=ecosystem_pkgs ><a href="#ecosystem_pkgs" class=header-anchor >Ecosystem / Pkgs</a></h2> <p>&quot;data.table&quot;, &quot;glue&quot;, &quot;xtable&quot;, &quot;Rcpp&quot;, &quot;RcppArmadillo&quot;, &quot;knitr&quot;, &quot;devtools&quot;, </p> <p>&quot;tikzDevice&quot;, &quot;Cairo&quot;,</p> <p>&quot;glmnet&quot;, &quot;brglm2&quot;, &quot;betareg&quot;, </p> <p>&quot;PLFD&quot;, &quot;PPSFS&quot;,</p> <hr /> <p><a class=href  href=" https://cran.r-project.org/web/views/WebTechnologies.html"> TaskViews::WebTechnologies </a> 有 <code>publications</code> 模块可直接调用各出版商和文献的元数据.</p> <h2 id=sources ><a href="#sources" class=header-anchor >Sources</a></h2> <p><ul> <li class=blank > <a class=href  href=" /recipe/r/family"> Family </a> <li class=blank > <a class=href  href=" /recipe/r/gui"> GUI / Progressbar </a> <li class=blank > <a class=href  href=" /recipe/r/plot-hypothesis-test"> Graph Hypothesis Test </a> <li class=blank > <a class=href  href=" /recipe/r/plot-heatmap"> Heatmap </a> <li class=blank > <a class=href  href=" /recipe/r/plot-lasso"> Lasso Graph &#40;3D&#41; </a> <li class=blank > <a class=href  href=" /recipe/r/model-matrix"> Model Matrix </a> <li class=blank > <a class=href  href=" /recipe/r/capitals-allaction"> capitals re-allaction </a> <li class=blank > <a class=href  href=" /recipe/r/reshape"> </a> <li class=blank > <a class=href  href=" /recipe/r/venn-diagram"> </a> </ul></p> <h2 id=tips ><a href="#tips" class=header-anchor >Tips</a></h2> <ul> <li class=blank > &#91;2024-06-24&#93; <code>knitr</code> 输出代码块时有它私有的环境. 如果不想要这些环境, 只希望保留原样输出不添加额外修饰, 可在 <code>Rnw</code> 中添加: <code>knitr::knit_hooks&#36;set&#40;hooks_markdown&#40;fence_char&#61;&quot;&quot;&#41;&#41;</code> <li class=blank > &#91;2024-06-21&#93; <code>knitr</code> 处理 <code>Rnw</code> 时会在输出的 <code>tex</code> 文档中很快插入一段自定义环境, 过程很呆, 甚至不能识别 <code>\documentclass</code> 的多行结构还没有结束就插入新环境了. </p> <p><a href="https://stackoverflow.com/questions/57618641/how-to-stop-knitr-from-adding-tex-packages-based-on-documentclass">解决方案</a>: <code>knitr</code> 插入的头文件是通过 <code>knitr:::make_header_latex</code> 进行的, 把它屏蔽掉就好了.</p> <pre><code class="bash hljs">assignInNamespace(<span class=hljs-string >&quot;make_header_latex&quot;</span>, <span class=hljs-keyword >function</span>(...) <span class=hljs-string >&quot;&quot;</span>, <span class=hljs-string >&quot;knitr&quot;</span>)</code></pre>
+<p>这很适合添加在 <code>vscode</code> 的链式编译中:</p>
+<pre><code class="bash hljs">{
+    <span class=hljs-string >&quot;name&quot;</span>: <span class=hljs-string >&quot;rnw2tex&quot;</span>,
+    <span class=hljs-string >&quot;command&quot;</span>: <span class=hljs-string >&quot;Rscript&quot;</span>,
+    <span class=hljs-string >&quot;args&quot;</span>: [
+        <span class=hljs-string >&quot;-e&quot;</span>,
+        <span class=hljs-string >&quot;assignInNamespace(&#x27;make_header_latex&#x27;, function(...)&#x27;&#x27;, &#x27;knitr&#x27;); knitr::knit(&#x27;%DOCFILE_EXT%&#x27;)&quot;</span>
+    ],
+    <span class=hljs-string >&quot;env&quot;</span>: {}
+}</code></pre>
+<p>
+<li class=blank >  &#91;2024-05-24&#93; <code>sub</code> 的 <code>fixed&#61;TRUE</code> 不使用通配符做匹配, 是很棒的参数. 
+<li class=blank >  &#91;2024-05-04&#93; <code>latex-workshop</code> 编译 <code>Rnw</code> 文件时总是报 <code>Latexmk: No file name specified</code>, 现在确定是 <code>Latex &gt; External &gt; Build: Command</code> 里添加了 <code>latexmk</code> 这个多余的东西&#33; &#40;要理解配置说明啊&#41;</p>
+<p>另外, 可以把 <code>tools</code> 中 <code>rnw2tex</code> 的 <code>knit</code> 改为 <code>knit2pdf</code>, 这样 <code>recipe</code> 里可以相应简化. 
+<li class=blank >  &#91;2024-04-15&#93; <code>knitr</code> 的全局选项设置：</p>
+<pre><code class="R hljs"><span class=hljs-operator >%%</span> knitr options
+<span class=hljs-operator >&lt;</span><span class=hljs-operator >&lt;</span>setup<span class=hljs-punctuation >,</span> include<span class=hljs-operator >=</span><span class=hljs-literal >FALSE</span><span class=hljs-operator >&gt;</span><span class=hljs-operator >&gt;=</span>
+rm<span class=hljs-punctuation >(</span><span class=hljs-built_in >list</span><span class=hljs-operator >=</span>ls<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span>
+options<span class=hljs-punctuation >(</span>width<span class=hljs-operator >=</span><span class=hljs-number >70</span><span class=hljs-punctuation >)</span>
+knitr<span class=hljs-operator >::</span>opts_chunk<span class=hljs-operator >$</span>set<span class=hljs-punctuation >(</span>
+    size<span class=hljs-operator >=</span><span class=hljs-string >&quot;scriptsize&quot;</span><span class=hljs-punctuation >,</span>
+    fig.align <span class=hljs-operator >=</span> <span class=hljs-string >&quot;center&quot;</span><span class=hljs-punctuation >,</span> 
+    fig.path <span class=hljs-operator >=</span> <span class=hljs-string >&quot;figures/&quot;</span><span class=hljs-punctuation >,</span>
+    fig.width <span class=hljs-operator >=</span> <span class=hljs-number >6</span><span class=hljs-punctuation >,</span> 
+    fit.height<span class=hljs-operator >=</span><span class=hljs-number >6</span><span class=hljs-punctuation >,</span>
+    out.width <span class=hljs-operator >=</span> <span class=hljs-string >&quot;.45\\linewidth&quot;</span>
+<span class=hljs-punctuation >)</span>
+<span class=hljs-operator >@</span></code></pre>
+<p>
+<li class=blank >  &#91;2023-10-04&#93; 从源文件编译安装 <code>R</code> 时的依赖可以快速解决:</p>
+<pre><code class="bash hljs"><span class=hljs-built_in >sudo</span> sed -i.bak <span class=hljs-string >&quot;/^#.*deb-src.*universe$/s/^# //g&quot;</span> /etc/apt/sources.list
+<span class=hljs-built_in >sudo</span> apt update
+<span class=hljs-built_in >sudo</span> apt build-dep r-base</code></pre>
+<p>&#91;2023-10-03&#93; R-4.3.1 没有提供安装源, 目前用 rstudio 提供的 <code>deb</code> 文件或者源文件安装. 源文件配置和编译时遇到的依赖:</p>
+<pre><code class="bash hljs"><span class=hljs-built_in >sudo</span> apt-get install build-essential
+<span class=hljs-built_in >sudo</span> apt-get install fort77
+<span class=hljs-built_in >sudo</span> apt-get install xorg-dev
+<span class=hljs-built_in >sudo</span> apt-get install liblzma-dev  libblas-dev gfortran
+<span class=hljs-built_in >sudo</span> apt-get install libbz2-dev
+<span class=hljs-built_in >sudo</span> apt-get install gcc-multilib
+<span class=hljs-built_in >sudo</span> apt-get install gobjc++
+<span class=hljs-built_in >sudo</span> apt-get install aptitude
+<span class=hljs-built_in >sudo</span> apt-get install libreadline-dev</code></pre>
+<p>
+<li class=blank >  &#91;2023-09-03&#93; <code>split-by-combine</code></p>
+<pre><code class="bash hljs">set.seed(2023)
 library(data.table)
 library(microbenchmark)
 
@@ -21,7 +57,12 @@ microbenchmark(
     M2 = aggregate(DT[, -c(<span class=hljs-string >&quot;g&quot;</span>)], by=DT[, <span class=hljs-string >&quot;g&quot;</span>], <span class=hljs-string >&quot;mean&quot;</span>), 
     M3 = lapply(<span class=hljs-built_in >split</span>(DT[, -c(<span class=hljs-string >&quot;g&quot;</span>)], DT[, g]), colMeans),
     M4 = by(DT[, -c(<span class=hljs-string >&quot;g&quot;</span>)], DT[, g], colMeans)
-)</code></pre> <p> <li class=blank > &#91;2023-09-01&#93; 管道操作 <code>&#37;&gt;&#37;</code> 的链式对象是函数, 不是组合函数, 例如 <code>&quot;A&quot; &#37;&gt;&#37; rep&#40;c&#40;., &quot;B&quot;&#41;, 3&#41;</code> 是不奏效的, 准确形式是 <code>&quot;A&quot; &#37;&gt;&#37; c&#40;., &quot;B&quot;&#41; &#37;&gt;&#37; rep&#40;., 3&#41;</code> <li class=blank > &#91;2023-08-31&#93; <code>backsolve&#40;mat&#40;4, 4&#41;, vec&#40;6&#41;&#41;</code> 不报错&#33;&#33;&#33; 它根本不检查矩阵和向量的维数是否匹配... <li class=blank > &#91;2023-08-15&#93; </p> <pre><code class="plaintext hljs">set_f &lt;- function(n, p) {
+)</code></pre>
+<p>
+<li class=blank >  &#91;2023-09-01&#93; 管道操作 <code>&#37;&gt;&#37;</code> 的链式对象是函数, 不是组合函数, 例如 <code>&quot;A&quot; &#37;&gt;&#37; rep&#40;c&#40;., &quot;B&quot;&#41;, 3&#41;</code> 是不奏效的, 准确形式是 <code>&quot;A&quot; &#37;&gt;&#37; c&#40;., &quot;B&quot;&#41; &#37;&gt;&#37; rep&#40;., 3&#41;</code> 
+<li class=blank >  &#91;2023-08-31&#93; <code>backsolve&#40;mat&#40;4, 4&#41;, vec&#40;6&#41;&#41;</code> 不报错&#33;&#33;&#33; 它根本不检查矩阵和向量的维数是否匹配... 
+<li class=blank >  &#91;2023-08-15&#93; </p>
+<pre><code class="plaintext hljs">set_f &lt;- function(n, p) {
     A &lt;- .row(c(n, p))
     # f &lt;- function(x) x * get(&quot;A&quot;, envir=parent.frame())
     f &lt;- function(x) x * A
@@ -30,7 +71,44 @@ microbenchmark(
 }
 
 A &lt;- matrix(rnorm(3*5), 3)
-f &lt;- set_f(3, 4)</code></pre> <p> <li class=blank > &#91;2023-07-13&#93; 正则表达式: &#40;移除不是字母或数字的内容&#41; <code>gsub&#40;&quot;&#91;^&#91;:digit:&#93;&#91;:alpha:&#93;&#93;&quot;, &quot;&quot;, x&#41;</code> <p><li class=blank > &#91;2023-07-02&#93; 从 pdf 文件中提取内容 &#40;文字/表格&#41;</p> <ul> <li><p><code>tabulizer::extract_tables / extract_text / extract_areas / extract_metadata</code> is quite easy and flexible to extract the contents.</p> </ul> <ul> <li><p><code>pdftools::pdf_text</code> extracts the contents in all pages. For each page, the content splitted by <code>\n</code> can be anchored by the column positions, then it is rather easy to extract the column data using <code>substr</code> and regex &#40;<code>data.table</code> is helpful&#41;</p> </ul> <ul> <li><p><code>tesseract</code> is heavy but powerful for OCR &#40;maybe it is applicable to scanned files&#41; </p> </ul> <p><li class=blank > &#91;2023-05-02&#93; <code>Reduce</code> 能把二元函数 <code>f&#40;x, y&#41;</code> 通过序贯方式拓展到一般数量上.</p> <ul> <li><p>inner-join: <code>Reduce&#40;merge, list&#40;DTx, DTy, DTz&#41;&#41;</code>. </p> <li><p>full-join: <code>Reduce&#40;\&#40;...&#41; merge&#40;..., by, all&#41;, list&#40;DTx, DTy, DTz&#41;&#41;</code></p> <li><p>需要显示指定拼接键 <code>by</code> 才能避免它添加 <code>suffix</code> 前缀: <code>Reduce&#40;\&#40;...&#41; merge&#40;..., by&#61;intersect&#40;names&#40;..1&#41;, names&#40;..2&#41;&#41;&#41;, list&#40;DTx, DTy, DTz&#41;&#41;</code></p> <li><p><strong>注意:</strong> 如果拼接结构为 <code>merge&#40;x, rbind&#40;y1, y2&#41;&#41;</code>, 那就不能使用 <code>Reduce&#40;merge, list&#40;x, y1, y2&#41;&#41;</code>. 这是因为如果 <code>x</code> 中的某些样本在 <code>y2</code> 中时, 在 <code>merge&#40;x, y1, fill&#61;TRUE&#41;</code> 时会将这部分样本填充为 <code>NA</code>, 此时再对 <code>y2</code> 进行拼接时, 两者重复的样本由于取值差异, <code>y2</code> 中的样本会被重新分配列名.</p> </ul> <ul> <li><p>bind: <code>Reduce&#40;rbind, list&#40;matrix&#41;&#41;</code> </p> </ul> <li class=blank > &#91;2023-03-08&#93; <code>deparse</code> 将表达式逆向操作转为字符串 &#40;可以用来获取变量的名字&#41;. <li class=blank > &#91;2023-02-07&#93; <code>glmpath</code> 不能移除截距项, <code>glmnet</code> 就能. 而且 <code>glmpath</code> 适用的模型少多了. <li class=blank > &#91;2023-02-04&#93; 移除向量元素名: <code>c&#40;x, use.names&#61;FALSE&#41;</code> <li class=blank > &#91;2023-02-04&#93; RcppArmadillo 的 <code>uvec</code> 用法:</p> <pre><code class="bash hljs">//<span class=hljs-string >&#x27; @rdname center.samples
+f &lt;- set_f(3, 4)</code></pre>
+<p>
+<li class=blank >  &#91;2023-07-13&#93; 正则表达式: &#40;移除不是字母或数字的内容&#41; <code>gsub&#40;&quot;&#91;^&#91;:digit:&#93;&#91;:alpha:&#93;&#93;&quot;, &quot;&quot;, x&#41;</code> 
+<p><li class=blank >  &#91;2023-07-02&#93; 从 pdf 文件中提取内容 &#40;文字/表格&#41;</p>
+<ul>
+<li><p><code>tabulizer::extract_tables / extract_text / extract_areas / extract_metadata</code> is quite easy and flexible to extract the contents.</p>
+
+</ul>
+<ul>
+<li><p><code>pdftools::pdf_text</code> extracts the contents in all pages. For each page, the content splitted by <code>\n</code> can be anchored by the column positions, then it is rather easy to extract the column data using <code>substr</code> and regex &#40;<code>data.table</code> is helpful&#41;</p>
+
+</ul>
+<ul>
+<li><p><code>tesseract</code> is heavy but powerful for OCR &#40;maybe it is applicable to scanned files&#41; </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2023-05-02&#93; <code>Reduce</code> 能把二元函数 <code>f&#40;x, y&#41;</code> 通过序贯方式拓展到一般数量上.</p>
+<ul>
+<li><p>inner-join: <code>Reduce&#40;merge, list&#40;DTx, DTy, DTz&#41;&#41;</code>. </p>
+
+<li><p>full-join: <code>Reduce&#40;\&#40;...&#41; merge&#40;..., by, all&#41;, list&#40;DTx, DTy, DTz&#41;&#41;</code></p>
+
+<li><p>需要显示指定拼接键 <code>by</code> 才能避免它添加 <code>suffix</code> 前缀: <code>Reduce&#40;\&#40;...&#41; merge&#40;..., by&#61;intersect&#40;names&#40;..1&#41;, names&#40;..2&#41;&#41;&#41;, list&#40;DTx, DTy, DTz&#41;&#41;</code></p>
+
+<li><p><strong>注意:</strong> 如果拼接结构为 <code>merge&#40;x, rbind&#40;y1, y2&#41;&#41;</code>, 那就不能使用 <code>Reduce&#40;merge, list&#40;x, y1, y2&#41;&#41;</code>. 这是因为如果 <code>x</code> 中的某些样本在 <code>y2</code> 中时, 在 <code>merge&#40;x, y1, fill&#61;TRUE&#41;</code> 时会将这部分样本填充为 <code>NA</code>, 此时再对 <code>y2</code> 进行拼接时, 两者重复的样本由于取值差异, <code>y2</code> 中的样本会被重新分配列名.</p>
+
+</ul>
+<ul>
+<li><p>bind: <code>Reduce&#40;rbind, list&#40;matrix&#41;&#41;</code> </p>
+
+</ul>
+
+<li class=blank >  &#91;2023-03-08&#93; <code>deparse</code> 将表达式逆向操作转为字符串 &#40;可以用来获取变量的名字&#41;. 
+<li class=blank >  &#91;2023-02-07&#93; <code>glmpath</code> 不能移除截距项, <code>glmnet</code> 就能. 而且 <code>glmpath</code> 适用的模型少多了. 
+<li class=blank >  &#91;2023-02-04&#93; 移除向量元素名: <code>c&#40;x, use.names&#61;FALSE&#41;</code> 
+<li class=blank >  &#91;2023-02-04&#93; RcppArmadillo 的 <code>uvec</code> 用法:</p>
+<pre><code class="bash hljs">//<span class=hljs-string >&#x27; @rdname center.samples
 //&#x27;</span> @<span class=hljs-built_in >export</span>
 // [[Rcpp::<span class=hljs-built_in >export</span>]]
 arma::cube cxx_center_data (const arma::vec &amp; y, const arma::cube &amp; x) {
@@ -46,13 +124,19 @@ arma::cube cxx_center_data (const arma::vec &amp; y, const arma::cube &amp; x) {
             x0.slice(iN) = x.slice(iN) - m2 ;
     }
     <span class=hljs-built_in >return</span> x0 ;
-}</code></pre> <p> <li class=blank > &#91;2023-01-08&#93; 计算 <code>logLik</code> 时 &#40;AIC/BIC&#41;, 尽可能避免自己写公式, 务必优先使用内置函数.</p> <pre><code class="bash hljs">mu &lt;- drop(x %*% b.hat)
+}</code></pre>
+<p>
+<li class=blank >  &#91;2023-01-08&#93; 计算 <code>logLik</code> 时 &#40;AIC/BIC&#41;, 尽可能避免自己写公式, 务必优先使用内置函数.</p>
+<pre><code class="bash hljs">mu &lt;- drop(x %*% b.hat)
 nullmodel &lt;- lm(y ~ 0, offset=mu)
 bic &lt;- -2*logLik(nullmodel) + <span class=hljs-built_in >log</span>(N)*dof
-aic &lt;- -2*logLik(nullmodel) + 2*dof</code></pre> <p> <li class=blank > &#91;2022-12-20&#93; 在 Ubuntu 的 terminal 中打开帮助文档时, 如果直接打印在终端里, 可以对 <code>help</code> 添加 <code>help_type&#61;&quot;html&quot;</code> 参数, 在浏览器中打开. 在 <code>Rprofile.site</code> 中添加如下选项可更改全局设置:</p> <pre><code class="bash hljs">options(help_type=<span class=hljs-string >&quot;html&quot;</span>)</code></pre>
+aic &lt;- -2*logLik(nullmodel) + 2*dof</code></pre>
+<p>
+<li class=blank >  &#91;2022-12-20&#93; 在 Ubuntu 的 terminal 中打开帮助文档时, 如果直接打印在终端里, 可以对 <code>help</code> 添加 <code>help_type&#61;&quot;html&quot;</code> 参数, 在浏览器中打开. 在 <code>Rprofile.site</code> 中添加如下选项可更改全局设置:</p>
+<pre><code class="bash hljs">options(help_type=<span class=hljs-string >&quot;html&quot;</span>)</code></pre>
 <p>
 <li class=blank >  &#91;2022-11-26&#93; Ubuntu 下安装 <code>RcppArmadillo</code> 等 R 包时, 提示缺少 <code>-llapack</code> / <code>lblas</code> / <code>-lgfortran</code> 时, 或缺少一些系统文件:</p>
-<pre><code class="bash hljs">sudo apt-get install g++ gfortran libblas-dev liblapack-dev libssl-dev libxml2-dev libz-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev</code></pre>
+<pre><code class="bash hljs"><span class=hljs-built_in >sudo</span> apt-get install g++ gfortran libblas-dev liblapack-dev libssl-dev libxml2-dev libz-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev</code></pre>
 <p>
 <li class=blank >  &#91;2022-10-20&#93; <strong>服务器安装 Rstudio Server</strong>:</p>
 <ol>
