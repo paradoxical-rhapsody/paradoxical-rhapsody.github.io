@@ -66,7 +66,16 @@ toc_sidebar = true
 \list
 
 
-\item{ [2025-05-22] 连续插入两个空白页 `\newpage \null \vfill \newpage` }
+\item{ [2024-08-10] `ctex` 的 `\heiti` 加粗 (各种字体加粗应该都能用), 在文档类中添加 `AutoFakeBold=true` 选项 (各种文档类都可以: `article / ctexart` 等).}
+
+
+\item{ [2024-07-24] `xcolor` 定义颜色不能设置透明度, 可以用 `tikz` 实现:
+```bash
+This is a \tikz[baseline=(X.base)] \node[opacity=0.3, blue, inner sep=0pt] (X) {colored} ; text.
+```
+}
+
+\item{ [2024-05-22] 连续插入两个空白页 `\newpage \null \vfill \newpage` }
 
 
 \item{ [2024-02-26] `enumitem` 的 `enumerate` 环境第一段充当小标题很好用, 第二段才当成正式内容。主要是注意 `label` 紧跟的段落是 `item`, 后续段落是 `item paragraph`, 是有点区别的.
