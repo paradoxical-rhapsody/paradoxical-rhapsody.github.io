@@ -40,7 +40,16 @@ base = "recipe/r"
 
 \list
 
-\item{ [2024-06-24] `knitr` 输出代码块时有它私有的环境. 如果不想要这些环境, 只希望保留原样输出不添加额外修饰, 可在 `Rnw` 中添加: `knitr::knit_hooks$set(hooks_markdown(fence_char=""))`
+\item{ [2024-06-24] `knitr` 输出代码块时有它私有的环境. 如果不想要这些环境, 只希望**保留原样输出不添加额外修饰**, 可在 `Rnw` 中添加预设置: 
+```bash
+<<setup, include=FALSE>>=
+# options(width=105)
+knitr::knit_hooks$set(hooks_markdown(fence_char=""))
+knitr::opts_chunk$set(echo=FALSE, comment="")
+@
+```
+
+`opts_chunk$set` 中有很多值得注意的设置, 如 `fig.width / fig.height / size (="scriptsize")`.
 }
 
 \item{ [2024-06-21] `knitr` 处理 `Rnw` 时会在输出的 `tex` 文档中很快插入一段自定义环境, 过程很呆, 甚至不能识别 `\documentclass` 的多行结构还没有结束就插入新环境了. 
