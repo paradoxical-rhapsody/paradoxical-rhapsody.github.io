@@ -66,7 +66,7 @@ toc_sidebar = true
 \list
 
 
-\item{ [2024-08-10] `ctex` 的 `\heiti` 加粗 (各种字体加粗应该都能用), 在文档类中添加 `AutoFakeBold=true` 选项 (各种文档类都可以: `article / ctexart` 等).}
+\item{ [2024-08-10] `ctex` 下的字体加粗 (如 `\heiti`) 如果用 `\textbf` 没有效果, 可能是系统缺少字体 (可以把 win 的字体文件夹复制到 linux 下并刷新). 如果实在不能解决, 可以在文档类中添加 `AutoFakeBold=true` 选项 (各种文档类都可以: `article / ctexart` 等), 开启伪粗体模式. 类似还有默认关闭的伪斜体选项 `AutoFakeSlant` (汉字排版本来也没有斜体概念).}
 
 
 \item{ [2024-07-24] `xcolor` 定义颜色不能设置透明度, 可以用 `tikz` 实现:
