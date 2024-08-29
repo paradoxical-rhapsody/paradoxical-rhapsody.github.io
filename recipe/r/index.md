@@ -43,6 +43,9 @@ base = "recipe/r"
 \item{ [2024-06-24] `knitr` 输出代码块时有它私有的环境. 如果不想要这些环境, 只希望**保留原样输出不添加额外修饰**, 可在 `Rnw` 中添加预设置: 
 ```bash
 <<setup, include=FALSE>>=
+rm(list=ls())
+library(knitr)
+
 # options(width=105)
 knitr::knit_hooks$set(hooks_markdown(fence_char=""))
 knitr::opts_chunk$set(echo=FALSE, comment="")
