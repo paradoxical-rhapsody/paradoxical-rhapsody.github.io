@@ -66,6 +66,10 @@ toc_sidebar = true
 \list
 
 
+\item{ [2024-09-09] 重置页码: `\setcounter{page}{4}` }
+\item{ [2024-09-09] 重置章节号: `\setcounter{section}{2}` }
+
+
 \item{ [2024-09-02] `TikZ` 绘制光滑不规则封闭曲线: `\draw [smooth cycle] plot coordinates {(a) (b) (c)};`}
 
 
