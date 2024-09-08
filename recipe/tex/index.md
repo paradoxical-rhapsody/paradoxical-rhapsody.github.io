@@ -118,7 +118,7 @@ This is a \tikz[baseline=(X.base)] \node[opacity=0.3, blue, inner sep=0pt] (X) {
 
 
 \item{ [2023-05-29] 
-* `mdframed` 对内容添加边框.
+* `mdframed` 对内容添加边框 (参考 `24杨帆`), 这基本能实现各种细节控制了.
 
 * 对页面添加外边框
 ```bash
