@@ -49,6 +49,13 @@ icon = "lightbulb-fill"
 
 \list
 
+\item{ [2024-09-11] 用 `shntool` 根据 `cue` 文件分割 `wav/flac` 等格式的整张 CD:
+
+1. `cue` 文件是 `utf-8` 编码.
+1. `shntool split -f CD.cue -t '%n.%t' -o wav CD.wav`
+
+}
+
 \item{ [2024-02-27] git 推送抛出 `CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none`, 可临时关闭验证 ():
 ```bash
 export GIT_SSL_NO_VERIFY=1
