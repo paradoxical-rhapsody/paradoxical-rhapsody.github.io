@@ -66,6 +66,31 @@ toc_sidebar = true
 \list
 
 
+\item{ [2025-03-31] 使用 \LaTeX 在 2020 之后添加的新功能 `\AddToHook` 结合 TikZ 自定义前景和背景水印:
+```bash
+\AddToHook{shipout/background}{
+    \begin{tikzpicture}[remember picture, overlay]
+        % \ifodd\value{page}
+            \node[draw, fill=red!30, rotate=45, text=black!50, scale=8, opacity=0.2]
+                at (current page.center) {Odd \thepage};
+        % \else
+        %     \node[draw, fill=red!30, rotate=45, opacity=0.01, scale=3] 
+        %         at (current page.center) {Even \thepage};
+        % \fi
+    \end{tikzpicture}
+}
+
+\AddToHook{shipout/foreground}{
+    % \put(2cm, -3cm){Test} % absolute position
+    \put(\dimexpr\paperwidth-2cm, \dimexpr-\paperheight+1cm){Right Lower}
+}
+```
+}
+
+
+\item{ [2024-09-28] `tabularray` 内使用 `enumerate` 时需要添加 `measure=vbox`, 此时单元格内容设置居顶无效时 (内容的上下位置有额外空白), 按照文档说明需要添加参数 `stretch=-1`. }
+
+
 \item{ [2024-09-09] 重置页码: `\setcounter{page}{4}` }
 \item{ [2024-09-09] 重置章节号: `\setcounter{section}{2}` }
 

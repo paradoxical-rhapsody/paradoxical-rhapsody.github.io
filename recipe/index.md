@@ -64,7 +64,13 @@ export GIT_SSL_NO_VERIFY=1
 
 \item{ [2023-11-30] win11 首次进入系统时默认要连接网络才能进入下一步, 可在该界面 `shift + F10` 激活命令行, 输入 `oobe\BypassNRO.cmd`, 系统会重启且提供跳过网络连接的选项. }
 
-\item{ [2023-02-17] Ubuntu 下双击安装字体, \delete{会被安装在 `/home/zengchao/.local/share/fonts/` 下, 但是 $\TeX$ 中用 `\newCJKfontfamily \yozai {Yozai-Regular.ttf}` 引入字体时报错(没有字体). 解决方案:}
+\item{ 
+
+[2024-11-05] Ubuntu 下安装字体: 把 `TTF` 文件拷贝到三个目录之一: `/usr/share/fonts`, `usr/local/share/fonts/` 或 `~/.fonts`, 然后执行 `fc-cache` 刷新字体缓存即可.
+另外, 在 TeX 中可以只用字体的名称来定义新字体命令: 通过 `fc-list | grep LXGW` 可以查看安装的落霞孤鹜字体, 显示的 `LWGW WenKai` 就代表相应字体名称.
+
+    
+[2023-02-17] Ubuntu 下双击安装字体, \delete{会被安装在 `/home/zengchao/.local/share/fonts/` 下, 但是 $\TeX$ 中用 `\newCJKfontfamily \yozai {Yozai-Regular.ttf}` 引入字体时报错(没有字体). 解决方案:}
 
 1. 将字体复制到全局目录: `sudo cp * /usr/share/fonts/`
 2. 生成索引信息: `sudo mkfontscale ; sudo mkfontdir`

@@ -40,7 +40,64 @@ base = "recipe/r"
 
 \list
 
-\item{ [2024-06-24] `knitr` 输出代码块时有它私有的环境. 如果不想要这些环境, 只希望**保留原样输出不添加额外修饰**, 可在 `Rnw` 中添加预设置: 
+
+\list{ [2025-03-07] `knitr` 的 `child` 文件默认路径是自身所在位置处, 但是生成 `tex` 是在主文件的位置处. 如果其中涉及文件读取 (比如 `\includegraphics / \csvreader`), 就需要将 `child` 文件的生成的各种数据放在主文件可直接读取的路径下, 可在 `child` 文件开始加入设置:
+```bash
+<<include=FALSE>>=
+knitr::opts_knit$set(root.dir=dirname(getwd()))
+@
+```
+}
+
+
+\item{ [2025-03-05] `knitr` 设置代码块渲染时不额外添加环境 (保持原封不动输出)和头文件插入位点:
+
+```bash
+%% knitr settings
+
+<<setup, include=FALSE>>=
+rm(list=ls())
+# options(width=105)
+library(magrittr)
+library(data.table)
+library(MASS)
+library(knitr)
+
+knit_patterns$set(header.begin="%% knitr settings\n")
+opts_chunk$set(comment="", fig.path="tikzexternalization")
+
+opts_chunk$set(raw=FALSE)
+hook_chunk <- function(x, options) ifelse(options$raw, x, hooks_latex()$chunk(x, options))
+hook_output <- function(x, options) ifelse(options$raw, x, hooks_latex()$output(x, options))
+knit_hooks$set(chunk=hook_chunk)
+knit_hooks$set(output=hook_output)
+
+baseDir <- "tikzexternalization"
+@
+```
+}
+
+
+\item{ [2025-02-26] knitr 的代码块里中文显示为 <U+XXXX>, 需要在文档中设置 
+```bash
+Sys.setlocale("LC_ALL", "zh_CN.UTF-8")
+```
+此外可通过 `Sys.getlocale()` 查看当前环境的区域语言, 各操作系统的终端也支持 `locale` 直接查看.
+}
+
+
+\item{ [2024-12-23] 在 Win 下使用 `devtools::build(binary=TRUE)` 时抛出 `Rcmd.exe` 找不到的错误, 按照 `CRAN` 的文档推荐的 [build binary package](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Building-binary-packages) 的操作如下:
+```bash
+R CMD build pkg
+R CMD INSTALL --build pkg # `pkg` 可以为 tar.gz 或在源文件夹下
+```
+}
+
+
+\item{ \delete{[2024-11-10]}[2025-03-05 有更恰当的方案] `knitr` 的 `1.46 & 1.47` 版在执行带有 `knitr::knit_hooks$set(hooks_markdown(fence_char=""))` 的 `Rnw` 文件时会卡顿, 目前退回 `1.45` 没有问题.
+}
+
+\item{ \delete{[2024-06-24]}[2025-03-05 有更恰当的方案] `knitr` 输出代码块时有它私有的环境. 如果不想要这些环境, 只希望**保留原样输出不添加额外修饰**, 可在 `Rnw` 中添加预设置: 
 ```bash
 <<setup, include=FALSE>>=
 rm(list=ls())
@@ -55,7 +112,7 @@ knitr::opts_chunk$set(echo=FALSE, comment="")
 `opts_chunk$set` 中有很多值得注意的设置, 如 `fig.width / fig.height / size (="scriptsize")`.
 }
 
-\item{ [2024-06-21] `knitr` 处理 `Rnw` 时会在输出的 `tex` 文档中很快插入一段自定义环境, 过程很呆, 甚至不能识别 `\documentclass` 的多行结构还没有结束就插入新环境了. 
+\item{ \delete{[2024-06-21]}[2025-03-05 有更恰当的方案] `knitr` 处理 `Rnw` 时会在输出的 `tex` 文档中很快插入一段自定义环境, 过程很呆, 甚至不能识别 `\documentclass` 的多行结构还没有结束就插入新环境了. 
 
 [解决方案](https://stackoverflow.com/questions/57618641/how-to-stop-knitr-from-adding-tex-packages-based-on-documentclass): `knitr` 插入的头文件是通过 `knitr:::make_header_latex` 进行的, 把它屏蔽掉就好了.
 ```bash
@@ -161,14 +218,16 @@ knitr::opts_chunk$set(
 
 
 \item{ 
-[2023-10-04] 从源文件编译安装 `R` 时的依赖可以快速解决:
+[2023-10-04] 从**源文件**编译安装 `R` 时的依赖可以快速解决:
 ```bash
 sudo sed -i.bak "/^#.*deb-src.*universe$/s/^# //g" /etc/apt/sources.list
 sudo apt update
 sudo apt build-dep r-base
 ```  
   
-[2023-10-03] R-4.3.1 没有提供安装源, 目前用 rstudio 提供的 `deb` 文件或者源文件安装. 源文件配置和编译时遇到的依赖:
+[2023-10-03] R-4.3.1 没有提供安装源, 目前用 rstudio 提供的 `deb` 文件或者**源文件**安装. 
+
+**源文件配置/编译/安装**时遇到的依赖:
 ```bash
 sudo apt-get install build-essential
 sudo apt-get install fort77
