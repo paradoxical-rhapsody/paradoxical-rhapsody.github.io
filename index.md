@@ -1,4 +1,4 @@
-@def title = "Home"
+@def title = "SHNU" <!-- Home -->
 @def icon = "house-fill"
 
 
