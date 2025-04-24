@@ -66,6 +66,9 @@ toc_sidebar = true
 \list
 
 
+\item{ [2025-04-24] 安装了 TexLive 和 TinyTeX, 偶然发生 `Emergency stop` 并提示找不到载入的包 (每个包都找不到), `log` 文件显示编译调用了 TinyTeX (它里面安装包). 以后永远只安装一份 TeX 系统, 不然诡异的冲突太多了.}
+
+
 \item{ [2025-03-31] 使用 \LaTeX 在 2020 之后添加的新功能 `\AddToHook` 结合 TikZ 自定义前景和背景水印:
 ```bash
 \AddToHook{shipout/background}{
