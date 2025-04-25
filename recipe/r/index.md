@@ -41,7 +41,13 @@ base = "recipe/r"
 \list
 
 
-\list{ [2025-03-07] `knitr` 的 `child` 文件默认路径是自身所在位置处, 但是生成 `tex` 是在主文件的位置处. 如果其中涉及文件读取 (比如 `\includegraphics / \csvreader`), 就需要将 `child` 文件的生成的各种数据放在主文件可直接读取的路径下, 可在 `child` 文件开始加入设置:
+\item{ [2025-04-25] `rmarkdown` 依赖 `tinytex`, 即使不使用 `tinytex` 作为系统上的 TeX 编译环境, 也需要安装它.}
+
+
+\item{ [2025-04-25] Ubuntu 上在 Rstudio 和 Terminal R 中的 `Sys.getenv("PATH")` 结果不同. Rstudio 包含了从 `/etc/environment` 中读取的全局环境变量, 也从目前尚未确定的位置载入了一些环境变量.}
+
+
+\item{ [2025-03-07] `knitr` 的 `child` 文件默认路径是自身所在位置处, 但是生成 `tex` 是在主文件的位置处. 如果其中涉及文件读取 (比如 `\includegraphics / \csvreader`), 就需要将 `child` 文件的生成的各种数据放在主文件可直接读取的路径下, 可在 `child` 文件开始加入设置:
 ```bash
 <<include=FALSE>>=
 knitr::opts_knit$set(root.dir=dirname(getwd()))
