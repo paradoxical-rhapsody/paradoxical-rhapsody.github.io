@@ -1,0 +1,31 @@
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>Zengchao XU</h1>
+      <p class="lead">Heal the world :)</p>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="sidebar-nav-item {{ispage index.html}}active{{end}}" href="/">Home</a>
+      <a class="sidebar-nav-item {{ispage research/pubs/*}}active{{end}}" href="/research/pubs/">Publications</a>
+      <!--
+        <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a>
+        <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a>
+      -->
+    </nav>
+
+    {{ if toc_sidebar }}
+      <div class="toc-sidebar">
+        {{ toc 2 3 }}
+      </div>
+    {{ end }}
+  </div>
+
+  <div class="container sidebar-foot">
+  <!-- 
+    <p>&copy; {{fill author}}.</p>
+    <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a>
+  -->
+  </div>
+</div>
+
+<div class="content container">
