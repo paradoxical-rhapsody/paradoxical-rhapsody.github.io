@@ -1,0 +1,125 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/katex/katex.min.css"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>Zengchao XU | Recipe</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <div class=log ><ul> <li><p>用恰当的工具完成正确的事情.</p> <li><p>所有的文档一定要进行拼写检查 &#33;</p> <li><p>保持内容与格式分离. &#40;<code>csvsimple-l3 / tabularray</code> √&#41;</p> <li><p>简洁清晰记录原始结果. &#40;对 <code>target&#61;BIC</code> 或 <code>target&#61;MSE</code> 的结果按行合并再 <code>fwrite</code>, 对后续 <code>output</code> 操作很友好&#41;</p> </ul> <hr /> <ul> <li><p>每个 project/idea 都独立成文件夹, 用好 ReadMe 记录想法和进度.</p> <li><p>三位版本号是有必要的 &#40;v 0.4.0&#41;</p> <li><p>pkg 的 examples 设置为 &quot;large-n-small-p&quot;, 计算快且能检验效果.</p> <li><p>对 performance 的汇总, 建议定义 <code>predict.*</code>, 便于维持 <code>repFun</code> 结构清晰.</p> </ul> <hr /> <ul> <li><p>原型设计要多考虑完善的信息记录.</p> <li><p>设计初始原型时, 随时埋入主动防御测试 &#40;可以一直保留&#41;. 再如, <code>data.table</code> 在分析之初, 把用于 <code>groupby</code> 的变量转为因子, 明确指出它的 <code>levels</code>.</p> <li><p>避免小而多的文件传输同步&#33;&#33;&#33;&#33;&#33;&#33;&#33;&#33;&#33;&#33;&#33; &#40;讲的就是微信文件夹&#41;</p> </ul> <hr /> <ul> <li><p>使用者不是开发者. 除非现有的轮子不可靠或性能不佳, 或者自己清楚其中的原理并有不一样的思路, 否则不要过分相信自己. &#40;e.g., <code>logLik</code>&#41;</p> <li><p>团队效率的关键是规范和沟通, 不是技术.</p> <li><p>工程自动化构建对于日常提效的助力很大.</p> </ul></div> <br> <iframe allow="autoplay *; encrypted-media *;" frameborder=0  height=150  style="width:100%;max-width:660px;overflow:hidden;background:transparent;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/cn/album/heal-the-world/310505551?i=310505565"></iframe> <h1 id=recipe ><a href="#recipe" class=header-anchor >Recipe</a></h1> <ul> <p><li class=blank > &#91;2024-09-11&#93; 用 <code>shntool</code> 根据 <code>cue</code> 文件分割 <code>wav/flac</code> 等格式的整张 CD:</p> <ol> <li><p><code>cue</code> 文件是 <code>utf-8</code> 编码.</p> <li><p><code>shntool split -f CD.cue -t &#39;&#37;n.&#37;t&#39; -o wav CD.wav</code> </p> </ol> <li class=blank > &#91;2024-02-27&#93; git 推送抛出 <code>CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none</code>, 可临时关闭验证 &#40;&#41;:</p> <pre><code class="bash hljs"><span class=hljs-built_in >export</span> GIT_SSL_NO_VERIFY=1</code></pre>
+<p>
+<li class=blank >  &#91;2023-11-30&#93; win11 首次进入系统时默认要连接网络才能进入下一步, 可在该界面 <code>shift &#43; F10</code> 激活命令行, 输入 <code>oobe\BypassNRO.cmd</code>, 系统会重启且提供跳过网络连接的选项. 
+<p><li class=blank >  &#91;2024-11-05&#93; Ubuntu 下安装字体: 把 <code>TTF</code> 文件拷贝到三个目录之一: <code>/usr/share/fonts</code>, <code>usr/local/share/fonts/</code> 或 <code>~/.fonts</code>, 然后执行 <code>fc-cache</code> 刷新字体缓存即可. 另外, 在 TeX 中可以只用字体的名称来定义新字体命令: 通过 <code>fc-list | grep LXGW</code> 可以查看安装的落霞孤鹜字体, 显示的 <code>LWGW WenKai</code> 就代表相应字体名称.</p>
+<p>&#91;2023-02-17&#93; Ubuntu 下双击安装字体, <a class=delete >  会被安装在 <code>/home/zengchao/.local/share/fonts/</code> 下, 但是 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>TeX</mtext></mrow><annotation encoding="application/x-tex">\TeX</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.89883em;vertical-align:-0.2155em;"></span><span class="mord text"><span class="mord textrm">T</span><span class=mspace  style="margin-right:-0.1667em;"></span><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.46782999999999997em;"><span style="top:-2.7845em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class="mord textrm">E</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.2155em;"><span></span></span></span></span><span class=mspace  style="margin-right:-0.125em;"></span><span class="mord textrm">X</span></span></span></span></span> 中用 <code>\newCJKfontfamily \yozai &#123;Yozai-Regular.ttf&#125;</code> 引入字体时报错&#40;没有字体&#41;. 解决方案: </a></p>
+<ol>
+<li><p>将字体复制到全局目录: <code>sudo cp * /usr/share/fonts/</code></p>
+
+<li><p>生成索引信息: <code>sudo mkfontscale ; sudo mkfontdir</code></p>
+
+<li><p>更新字体缓存: <code>sudo fc-cache -r -v</code></p>
+
+</ol>
+<p>&#91;240506&#93; <a class=delete >  此时 <code>\yozai</code> 命令可用. &#40;不复制到全局该怎么用嘞???&#41; </a> </p>
+<p>&#91;240506&#93; 在 <code>TeX</code> 中定义新字体：</p>
+<ul>
+<li><p><code>sudo fc-list -f &quot;&#37;&#123;family&#125;\n&quot; &gt; fonts.txt</code> &#40;加 <code>:lang&#61;zh</code> 可能会漏掉部分中文字体&#41;</p>
+
+<li><p>根据 <code>xeCJK</code> 设置新字体的说明: <code>\newCJKfamilyfont\yozai&#123;Yozai&#125;</code>, 指定字体名称就行, 似乎不必要定位到 <code>ttf</code> 文件. </p>
+
+</ul>
+
+<li class=blank >  &#91;2022-12-10&#93; Remove security limitions from PDF documents using <code>ghostscript</code>:</p>
+<pre><code class="bash hljs">gswin32c -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sFONTPATH=%windir%/fonts;xfonts;. -sPDFPassword= -dPDFSETTINGS=/prepress -dPassThroughJPEGImages=<span class=hljs-literal >true</span> -sOutputFile=OUTPUT.pdf INPUT.pdf</code></pre>
+<p>
+<li class=blank >  &#91;2022-12-09&#93; Thunderbird 的日历同步依赖插件 <code>TbSync</code>, <code>Exchange ActiveSync</code>, <code>CalDAV &amp; CardDAV</code>. 其他好用的插件有 <code>Markdown</code>, <code>Minimize on Clos</code>. 
+<p><li class=blank >  &#91;2022-03-30&#93; <a class=href  href=" https://github.com/lxgw/LxgwWenKai">  LXGW WenKai </a>  / <a class=href  href=" https://github.com/lxgw/yozai-font">  Yozai </a></p>
+<p><li class=blank >  &#91;2022-03-18&#93; <strong>短路求值</strong></p>
+<p>在 <code>&amp;&amp;</code> 或 <code>||</code> 布尔链中只有最小数量的表达式被计算：</p>
+<ul>
+<li><p><code>a &amp;&amp; b</code> 的 <code>b</code> 仅当 <code>a</code> 为 <code>true</code> 时才被执行.</p>
+
+<li><p><code>a || b</code> 的 <code>b</code> 仅在 <code>a</code> 为 <code>false</code> 时才被执行. </p>
+
+</ul>
+
+<li class=blank >  <strong>集合</strong>通常是被精心设计的数据类型.</p>
+<pre><code class="julia hljs"><span class=hljs-comment ># take prohibited permissions</span>
+full_permission = {...}
+role_permission = {...}
+
+setdiff(full_permission, role_permission)</code></pre>
+<p>
+<li class=blank >  &#91;2021-07-19&#93; 微软账户下启用过的 bitlocker 密钥：<a class=href  href=" https://onedrive.live.com/RecoveryKey">  https://onedrive.live.com/RecoveryKey </a>. 
+</ul>
+<div class=page-foot >
+  <div class=copyright >
+    
+    &copy; Zengchao XU. Last touched: Sep 1st, 2022.
+  </div>
+</div>
+</div>
+    </div>  
+    
+        
+
+<script>
+    renderMathInElement(document.body)
+</script>
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>

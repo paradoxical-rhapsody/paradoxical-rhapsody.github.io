@@ -1,0 +1,309 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/katex/katex.min.css"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/lightbulb-fill.svg"> <title>Zengchao XU | LaTeX</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> <div class=toc-sidebar > <div class=franklin-toc ><ol><li><a href="#templates_pkgs">Templates / Pkgs</a><li><a href="#sources">Sources</a><li><a href="#tips">Tips</a></ol></div> </div> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=tex ><a href="#tex" class=header-anchor ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>TeX</mtext></mrow><annotation encoding="application/x-tex">\TeX</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.89883em;vertical-align:-0.2155em;"></span><span class="mord text"><span class="mord textrm">T</span><span class=mspace  style="margin-right:-0.1667em;"></span><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.46782999999999997em;"><span style="top:-2.7845em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class="mord textrm">E</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.2155em;"><span></span></span></span></span><span class=mspace  style="margin-right:-0.125em;"></span><span class="mord textrm">X</span></span></span></span></span></a></h1> <h2 id=templates_pkgs ><a href="#templates_pkgs" class=header-anchor >Templates / Pkgs</a></h2> <ul> <li><p><a class=href  href=" tex-usepackage"> usepkgs </a> / <a class=href  href=" tex-beamer"> beamer </a> / <a class=href  href=" tex-biblatex"> biblatex </a> / <a class=href  href=" preamble"> draft </a></p> </ul> <ul> <li><p><a class=href  href=" adjustbox-and-graphicx"> adjustbox / graphicx </a></p> <li><p><a class=href  href=" listings"> listings </a></p> </ul> <h2 id=sources ><a href="#sources" class=header-anchor >Sources</a></h2> <ul> <li><p><a class=href  href=" https://mp.weixin.qq.com/s/hnKGxkV07jSSjhdgJN6j1Q"> graphicx </a> 是 <code>graphics</code> 的扩展, 完全可用作 <code>graphicx</code> 的替代及补充. </p> <ul> <li><p>它提供了几个有用的操作: 旋转 &#40;<code>\rotatebox&#123;70&#125;&#123;斜倚&#125;</code>&#41;, 镜面反射 &#40;<code>\reflectbox&#123;鹦鹉&#125;</code>&#41;, 缩放 &#40;<code>\scalebox&#123;0.5&#125;&#91;1&#93;&#123;\makebox&#91;2em&#93;&#123;马\hskip-.1em录&#125;&#125;</code>&#41;.</p> <li><p><code>\adjustbox</code> 或 <code>\begin&#123;adjustbox&#125;</code> 的 <code>key-value</code> 顺序会影响效果. <code>&#123;scale&#61;1.5, center&#125;</code> 比 <code>&#123;center, scale&#61;1.5&#125;</code> 效果更好. </p> </ul> </ul> <ul> <li><p><a class=href  href=" "> fancyvrb </a>: <code>verbatim</code> 环境.</p> </ul> <ul> <li><p><a class=href  href=" "> pdfpages </a>: 对 pdf 页面操作&#40;合并、插入等&#41;, 能准确控制页码、空白页等.</p> <li><p><a class=href  href=" "> fontawesome5 </a>: <a class=href  href=" https://fontawesome.dashgame.com"> 图标字体库 </a>.</p> </ul> <ul> <li><p><a class=href  href=" "> curve </a>: <strong>Cur</strong>ricula <strong>V</strong>ita<strong>e</strong>.</p> </ul> <ul> <li><p><a class=href  href=" "> cleveref </a>: 交叉引用 <code>\Cref&#123;&#125;</code>.</p> </ul> <ul> <li><p><a class=href  href=" "> tasks </a>: 把列表 items 排成两列.</p> <li><p><a class=href  href=" "> nicematrix </a>: <code>amsmath</code> 提供的 <code>bmatrix/pmatrix/vmatrix</code> 太简单了, 这个包提供了更简洁且富有表现力的实现.</p> <li><p><a class=href  href=" "> callouts </a>: 在图片上添加标注.</p> </ul> <ul> <li><p><a class=href  href=" "> snotez </a>: 带有编号的边注.</p> <li><p><a class=href  href=" "> fancypar </a>：预定义了五种段落样式 &#40;穿孔活页笔记本、斑马条纹、段落左右标记、段落下划线&#41;.</p> </ul> <ul> <li><p><a class=href  href=" "> witharrows </a>: 展示公式演绎过程 &#40;在多行数学式的右侧添加箭头及说明文字&#41;.</p> </ul> <ul> <li><p><a class=href  href=" "> memoir </a>: 书籍/报告/论文等类型文档 &#40;页面布局如大小边距页眉页教 / 章节标题格式 / 完善的脚注支持 / 增强的表格功能 / 引用和文献支持 / 图像支持 / 多语言支持 / 文档结构和章节管理&#41;.</p> </ul> <ul> <li><p><a class=href  href=" "> joinbox </a>: 多个 box 垂直/水平拼接 &#40;自动等宽或等高&#41;.</p> <li><p><a class=href  href=" "> fitbox </a>: 自动将图片缩放到页面限制的尺寸内.</p> </ul> <hr /> <p><code>biblatex</code> 的一些设定: </p> <ul> <li><p>设置 <code>style&#61;authoryear</code> 并开启 <code>backend&#61;bibtex</code> 选项后, 引用效果为 <code>Li et al. 2010</code>, 默认 <code>biber</code> 效果为 <code>B. Li et al. 2010</code> &#40;好呆的&#41;. &#91;2024-01-18&#93;</p> <li><p>启用 <code>natbib</code> 选项后, 可无缝调用 <code>\citet</code> 和 <code>\citep</code>, 省心的是旧文档的命令不必修改了, e.g., <code>\citep&#91;see&#93;&#91;Chap. 2&#93;&#123;pan2019covariate-adjusted&#125;</code>. &#91;2024-01-15&#93;</p> <li><p>设置 <code>maxcitenames&#61;2</code> 可在引用中最多显示两位作者, <code>maxbibnames&#61;99</code> 可在 bibliography 中显示很多作者.</p> <li><p><code>bibstyle&#61;apa6</code>下, <code>maxnames/maxbibnames/maxcitenames</code> 不起作用, 此时改用 <code>apamaxprtauth&#61;99</code> 就能显示所有作者. &#91;<a class=href  href=" https://tex.stackexchange.com/questions/230452/biblatex-biber-maxbibnames-with-style-apa"> 参考 </a>&#93; &#91;2021-08-03&#93;</p> <li><p><code>\usepackage&#123;ulem&#125;</code> 会把默认的 <code>\em&#123;&#125;</code> 斜体效果覆盖为下划线, 导致文档出现莫名其妙的下划线内容 &#40;例如 <code>biblatex</code> 的 <code>style&#61;apa6</code> 时, journal 正常会被显示为斜体, 载入 <code>ulem</code> 后会被处理为下划线&#41;. 可通过 <code>\usepackage&#91;normalem&#93;&#123;ulem&#125;</code> 禁止此类现象. &#91;2023-06-17&#93;</p> </ul> <h2 id=tips ><a href="#tips" class=header-anchor >Tips</a></h2> <ul> <li class=blank > &#91;2025-04-24&#93; 安装了 TexLive 和 TinyTeX, 偶然发生 <code>Emergency stop</code> 并提示找不到载入的包 &#40;每个包都找不到&#41;, <code>log</code> 文件显示编译调用了 TinyTeX &#40;它里面安装包&#41;. <a class=delete > 以后永远只安装一份 TeX 系统, 不然诡异的冲突太多了. </a> <code>rmarkdown</code> 导入了 <code>tinytex</code>, 必须要安装它了... <li class=blank > &#91;2025-03-31&#93; 使用 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>LaTeX</mtext></mrow><annotation encoding="application/x-tex">\LaTeX</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.89883em;vertical-align:-0.2155em;"></span><span class="mord text"><span class="mord textrm">L</span><span class=mspace  style="margin-right:-0.36em;"></span><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.68333em;"><span style="top:-2.904999em;"><span class=pstrut  style="height:2.7em;"></span><span class=mord ><span class="mord textrm mtight sizing reset-size6 size3">A</span></span></span></span></span></span><span class=mspace  style="margin-right:-0.15em;"></span><span class="mord text"><span class="mord textrm">T</span><span class=mspace  style="margin-right:-0.1667em;"></span><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.46782999999999997em;"><span style="top:-2.7845em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class="mord textrm">E</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.2155em;"><span></span></span></span></span><span class=mspace  style="margin-right:-0.125em;"></span><span class="mord textrm">X</span></span></span></span></span></span> 在 2020 之后添加的新功能 <code>\AddToHook</code> 结合 TikZ 自定义前景和背景水印:</p> <pre><code class="bash hljs">\AddToHook{shipout/background}{
+    \begin{tikzpicture}[remember picture, overlay]
+        % \ifodd\value{page}
+            \node[draw, fill=red!30, rotate=45, text=black!50, scale=8, opacity=0.2]
+                at (current page.center) {Odd \thepage};
+        % \<span class=hljs-keyword >else</span>
+        %     \node[draw, fill=red!30, rotate=45, opacity=0.01, scale=3] 
+        %         at (current page.center) {Even \thepage};
+        % \<span class=hljs-keyword >fi</span>
+    \end{tikzpicture}
+}
+
+\AddToHook{shipout/foreground}{
+    % \put(2cm, -3cm){Test} % absolute position
+    \put(\dimexpr\paperwidth-2cm, \dimexpr-\paperheight+1cm){Right Lower}
+}</code></pre> <p> <li class=blank > &#91;2024-09-28&#93; <code>tabularray</code> 内使用 <code>enumerate</code> 时需要添加 <code>measure&#61;vbox</code>, 此时单元格内容设置居顶无效时 &#40;内容的上下位置有额外空白&#41;, 按照文档说明需要添加参数 <code>stretch&#61;-1</code>. <p><li class=blank > &#91;2024-09-09&#93; 重置页码: <code>\setcounter&#123;page&#125;&#123;4&#125;</code> <li class=blank > &#91;2024-09-09&#93; 重置章节号: <code>\setcounter&#123;section&#125;&#123;2&#125;</code> </p> <li class=blank > &#91;2024-09-02&#93; <code>TikZ</code> 绘制光滑不规则封闭曲线: <code>\draw &#91;smooth cycle&#93; plot coordinates &#123;&#40;a&#41; &#40;b&#41; &#40;c&#41;&#125;;</code> <li class=blank > &#91;2024-08-10&#93; <code>ctex</code> 下的字体加粗 &#40;如 <code>\heiti</code>&#41; 如果用 <code>\textbf</code> 没有效果, 可能是系统缺少字体 &#40;可以把 win 的字体文件夹复制到 linux 下并刷新&#41;. 如果实在不能解决, 可以在文档类中添加 <code>AutoFakeBold&#61;true</code> 选项 &#40;各种文档类都可以: <code>article / ctexart</code> 等&#41;, 开启伪粗体模式. 类似还有默认关闭的伪斜体选项 <code>AutoFakeSlant</code> &#40;汉字排版本来也没有斜体概念&#41;.</p> <p>参考: <a href="https://www.zhihu.com/question/58456658">xelatex编译加粗楷体为什么会失败？</a> <li class=blank > &#91;2024-07-24&#93; <code>xcolor</code> 定义颜色不能设置透明度, 可以用 <code>tikz</code> 实现:</p> <pre><code class="bash hljs">This is a \tikz[baseline=(X.base)] \node[opacity=0.3, blue, inner sep=0pt] (X) {colored} ; text.</code></pre>
+<p>
+<li class=blank >  &#91;2024-05-22&#93; 连续插入两个空白页 <code>\newpage \null \vfill \newpage</code> 
+<li class=blank >  &#91;2024-02-26&#93; <code>enumitem</code> 的 <code>enumerate</code> 环境第一段充当小标题很好用, 第二段才当成正式内容。主要是注意 <code>label</code> 紧跟的段落是 <code>item</code>, 后续段落是 <code>item paragraph</code>, 是有点区别的.</p>
+<pre><code class="bash hljs">\begin{enumerate}[label=\textbf{(\Alph*)}, listparindent=\parindent, itemindent=2em, leftmargin=1ex]
+  \item 小标题
+
+  正文内容...
+\end{enumerate}</code></pre>
+<p>
+<p><li class=blank >  &#91;2023-11-29&#93; </p>
+<ul>
+<li><p>文档默认 <code>\title</code> 位置太靠下, 可以用 <code>\title&#123;\vspace&#123;-3em&#125; This is Title&#125;</code> 纵向上移. 如果不设置 <code>\author</code>, 使用 <code>\maketitle</code> 默认 <code>title</code> 和 <code>date</code> 之间的距离过大, 可以用 <code>\date&#123;\vspace&#123;-3em&#125; \today&#125;</code> 把日期上移. </p>
+
+<li><p><code>\usepackage&#123;titling&#125;</code> 可以设置 <code>\setlength&#123;\droptitle&#125;&#123;0pt&#125;</code> 消除 <code>title</code> 的顶部距离, 设置 <code>\preauthor&#123;&#125; \author&#123;&#125; \postauthor&#123;&#125;</code> 取消作者并消除相应的纵向间距. </p>
+
+</ul>
+
+<li class=blank >  &#91;2023-09-25&#93; <code>fancyhdr</code> 不改变 <code>\maketitle</code> 默认的 <code>\pagestyle&#123;plain&#125;</code> 格式，可以在 <code>\maketitle</code> 后面用 <code>\thispagestyle&#123;fancy&#125;</code> 设置. 
+<li class=blank >  &#91;2023-06-17&#93; 在制作简历模板时, 将设置部分放在独立的 <code>settings.sty</code> 文件中并 <code>\usepackage&#123;settings&#125;</code>, 居然和直接写入主文件的效果不同.... 
+<p><li class=blank >  &#91;2023-06-15&#93;</p>
+<ul>
+<li><p><code>rotating</code> 提供了 <code>sidewaytable</code> 和 <code>sidewayfigure</code> 环境, 可将表格/图片内容旋转 &#40;页面不旋转&#41;. 它还有 <code>\turnbox&#123;&#125;&#123;&#125;</code> 旋转小部分内容.</p>
+
+<li><p><code>landscape</code> 环境是将页面旋转九十度, 然后渲染内容. </p>
+
+</ul>
+
+<li class=blank >  &#91;2023-05-29&#93; </p>
+<ul>
+<li><p><code>mdframed</code> 对内容添加边框 &#40;参考 <code>24杨帆</code>&#41;, 这基本能实现各种细节控制了.</p>
+
+</ul>
+<ul>
+<li><p>对页面添加外边框</p>
+
+</ul>
+<pre><code class="bash hljs">\usepackage{fancybox}
+\fancypage{\fbox}{}</code></pre>
+<p>
+<li class=blank >  &#91;2023-03-18&#93; <code>beamer</code> 中设置了 <code>allowframebreaks</code>, 如果出现某一页开始的内容被放置在一页内, 没有如愿被分页 &#40;即使用 <code>\framebreak</code> 也不行&#41;, 那就是当前页的内容高度超限, 可以在其中适当设置 <code>\vspace&#123;-2ex&#125;</code> 进行调整. 
+<li class=blank >  &#91;2023-01-15&#93; <code>tabularray</code> 的 <code>tblr</code> 环境中, 表格元素有 <code>enumerate</code> 时, 需要添加 <code>varwidth</code> 支持元素具有可变高度. 文档给出的方案如下:</p>
+<pre><code class="bash hljs">\usepackage{tabularray}
+\UseTblrLibrary{varwidth}
+
+\begin{tblr}{measure=vbox}
+...
+\end{tblr}</code></pre>
+<p>
+<p><li class=blank >  &#91;2023-02-15&#93; <code>enumitem</code> 的说明 &#40;根据文档的示意图 Figure 1&#41;:</p>
+<ul>
+<li><p><code>leftmargin</code> 是内容距离正文左侧边的缩进距离.</p>
+
+<li><p>每个 <code>item</code> 的第一行可以充当后续段落的小标题, 由于 <code>label</code> 的存在, 它的缩进的 paragraph 2 更复杂. 具体缩进流程为: 先将整段内容缩进 <code>leftmargin</code>, 然后内容开头再向内缩进 <code>itemindent</code>, 从开头向左前进 <code>labelsep</code>, 然后以宽度 <code>labelwidth</code> 填充标签. </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2023-01-03&#93;</p>
+<p><code>\includegraphics&#91;clip, viewport&#93;&#123;cover.pdf&#125;</code> 插入文件中特定区域时, 区域外的内容仍然被插入文件中, 只是被设置为不可见 &#40;用 evince 阅读器全选就能看到, 其他阅读器可以选中这部分内容&#41;, 所以这不是一个好思路. 此外, 这个方案需要小心确定所需区域的 <code>viewport</code> 坐标, 这一点也不让人喜欢.</p>
+<p>如下思路更加简单且干净:</p>
+<ol>
+<li><p>将 <code>doc</code> 模板中想要独立的段落调整到一页内, 导出为 <code>pdf</code> 文件.</p>
+
+<li><p>使用 <code>pdfcrop</code> 工具将 <code>pdf</code> 所有页面的边缘裁掉.</p>
+
+<li><p>将裁出的文件的页码作为变量, 定义插图命令: <code>\newcommand&#123;\sectiontitle&#125;&#91;1&#93;&#123; \bigskip \stepcounter&#123;section&#125; \adjustimage&#123;page&#61;&#123;#1&#125;, left, noindent, frame&#125;&#123;template.pdf&#125;&#125;</code> </p>
+
+</ol>
+
+<li class=blank >  &#91;2022-10-16&#93; <code>enumitem</code> 的环境中添加中文序号标签:</p>
+<pre><code class="bash hljs">\usepackage{ctex}
+\AddEnumerateCounter{\chinese}{\chinese}{\quad}</code></pre>
+<p>
+<li class=blank >  &#91;2022-08-25&#93; Beamer 的 <code>\note</code> 想要实现列表环境, 应使用 <code>\note&#91;item&#93;&#123;text&#125;</code>. 文档中的 <code>\note&#91;enumerate&#93;&#123;text&#125;</code> 和 <code>\note&#123;itemize&#125;&#123;text&#125;</code> 是坏的, 不能用 &#40;参考 <a class=href  href=" https://tex.stackexchange.com/questions/185431/notes-in-beamer-document-class-lonely-item">  stackexchange </a>&#41;. 
+<li class=blank >  &#91;2022-08-25&#93; <code>enumitem</code> 提供了良好的列表环境. 可以对它的环境进行全局默认设置:</p>
+<pre><code class="bash hljs">\usepackage[inline]{enumitem}
+
+\setlist[enumerate]{label=\textbullet}
+
+\newlist{homework}{enumerate}{1}
+\setlist[homework]{label=\textbf{\thesection.\arabic*}}</code></pre>
+<p>
+<li class=blank >  &#91;2022-08-25&#93; TiKZ 的 <code>node</code> 中使用 <code>equation</code> 环境时, 需要指定 <code>text width</code>. 例如, 定义添加虚线框的小命令:</p>
+<pre><code class="bash hljs">\newcommand{\dashedbox}[2][{}]{ \tikz[baseline=(X.base)]{ \node[draw, dashed, text width=#1, ] (X) {#2};} }</code></pre>
+<p>行内公式使用 <code>\dashedbox&#123;&#36;p&#40;x&#41;/q&#40;x&#41;&#36;&#125;</code>, 行间公式使用 <code>\inline&#91;\linewidth&#93;&#123;\begin&#123;equation&#125; ... \end&#123;equation&#125;&#125;</code>. 
+<li class=blank >  &#91;2022-06-01&#93; 将 <code>svg</code> 转为 <code>pdf</code> 格式:</p>
+<pre><code class="bash hljs">inkscape --export-type=pdf --export-latex figure.svg</code></pre>
+<p>
+<li class=blank >  &#91;2022-05-25&#93; <code>vscode</code> 的 latex-workshop 拓展中, 对 <code>tex</code> 文件的右上角的绿色编译方式设置:</p>
+<ul>
+<li><p>&#91;240504&#93; <a class=delete >  在设置中搜索 <code>external build</code>, 搜索结果有两项关于 <code>Latex-workshop &gt; Latex &gt; External &gt; Build</code>. </a></p>
+
+<li><p>&#91;240504&#93; <a class=delete >  在 <code>Args</code> 中添加 <code>-xelatex</code>, 在 <code>Command</code> 中添加 <code>latexmk</code> 即可. 另一种方式是仅在 <code>Command</code> 中添加 <code>latexmk -xelatex</code> &#40;不过既然有使用 <code>Args</code> 的规范方式, 就不要偷懒了&#41;. </a></p>
+
+</ul>
+<p>&#91;240504&#93; 这个小图标是由 <code>Latex &gt; Recipe:Default</code> 控制的. 那个 <code>external build</code> 相关的另有作用 &#40;要读懂文档再操作&#41;. 
+<li class=blank >  &#91;2022-05-05&#93; 字体设置:</p>
+<pre><code class="text hljs">\usepackage{ctex}
+% \setCJKsansfont{LXGWWENKAI-REGULAR.TTF} % [BoldFont=LXGWWENKAI-BOLD.TTF]
+\newCJKfontfamily \yozai {YOZAI-REGULAR.TTF}</code></pre>
+<p><code>sans</code> 和 <code>main</code> 分别对应两个字体族. 
+<li class=blank >  &#91;2022-04-23&#93; 文献引用分章节的基本用法:</p>
+<pre><code class="plaintext hljs">\usepackage[style=biblatex-spbasic]{biblatex}
+\addglobalbib{references.bib}
+
+\begin{document}
+
+\begin{refsection}
+\cite{xu2021hypothesis}
+
+\printbibliography[heading=none]
+\end{refsection}
+    
+
+\begin{refsection}
+\cite{zhang2019a}
+
+\printbibliography[heading={subbibliography}, title={论文}]
+\end{refsection}
+
+\end{document}</code></pre>
+<p>
+<li class=blank >  &#91;2022-04-23&#93; 设置字体: <code>TTF</code> 是字体格式, 可直接定义新字体命令&#40;<code>\yozai</code>&#41;.</p>
+<pre><code class="plaintext hljs">\usepackage[]{ctex}
+\setCJKmainfont{LXGWWENKAI-REGULAR.TTF}
+% \setCJKsansfont{LXGWWENKAI-REGULAR.TTF}
+\newCJKfontfamily \yozai {YOZAI-REGULAR.TTF}</code></pre>
+<p>
+<li class=blank >  &#91;2022-04-04&#93; <code>texlive</code> 自带 pdf 文件裁边小工具: <code>pdfcrop file.pdf</code> 
+<li class=blank >  &#91;2022-04-04&#93; <code>xeCJKfntef</code> 是 <code>xeCJK</code> 的子宏包 &#40;需要显式载入&#41;, 它基于 <code>ulem</code>, 提供了丰富的汉语格式修饰 &#40;下划线/删除线和自定义符号&#41;. 它还提供了 <code>CJKfilltwosides</code> 环境, 用于两端对齐. 此外, 两端对齐 &#40;stretch&#41; 可使用基本命令 <code>\makebox&#91;0.4\linewidth&#93;&#91;s&#93;&#123;content&#125;</code> , 这里 <code>s</code> 可以换成居中或左右.</p>
+<pre><code class="plaintext hljs">% \usepackage{tabularray}
+% \usepackage{xeCJKfntef}
+\begin{tblr}{cl}
+    \makebox[0.4\linewidth][s]{姓名}     &amp; \CJKunderline{\makebox[0.6\linewidth][c]{许曾超}}  \\
+    \makebox[0.4\linewidth][s]{论文题目} &amp; \CJKunderline{\makebox[0.6\linewidth][c]{高维矩阵变量数据中的统计推断}} 
+\end{tblr}
+
+\CJKsout{Bee don&#x27;t need to explaining flies that }</code></pre>
+<p>
+<li class=blank >  &#91;2022-04-04&#93; 
+<li class=blank >  编译出现 <em>size substitutions with differences</em> 或 <em>/cmex/m/m in size not available</em> 警告: <code>\usepackage&#123;lmodern&#125;</code> 
+<li class=blank >  公式编号全局居左: <code>\usepackage&#91;leqno&#93;&#123;amsmath&#125;</code> 
+<li class=blank >  公式居左: 使用 <code>flalign</code> 环境 &#40;类比 <code>align</code> 环境&#41;. 
+<p><li class=blank >  编译卡顿在 <code>euenc/eu1lmr.fd</code> / 安装新字体则需要刷新 &#40;否则编译也可能卡顿&#41;:</p>
+<ol>
+<li><p>清空 <code>/texlive/2016/texmf-var/fonts/cache</code></p>
+
+<li><p>管理员身份运行 <code>fc-cache</code> 或 <code>fc-cache -fsv</code> &#40;<code>/texlive/2016/bin/win32/fc-cache.exe</code>&#41;, 等待字体缓存完成即可. </p>
+
+</ol>
+
+<li class=blank >  Beamer 添加页码: <code>\setbeamertemplatefootline&#91;frame number&#93;</code>. 
+<li class=blank >  URL 自动换行:</p>
+<pre><code class="plaintext hljs">\usepackage{hyperref}
+\usepackage[hyphenbreaks]{breakurl}</code></pre>
+<p>
+<li class=blank >  &#91;2022-01-29&#93; </p>
+<p>在 <code>beamer</code> 中通过 <code>tikz</code> 使用 <code>\matrix</code> 时, 会报错 <code>\pgf@matrix@last@nextcell@options</code>. 简单的<a href="https://tex.stackexchange.com/questions/208408/tikz-matrix-undefined-control-sequence">方案</a>是对 <code>frame</code> 添加 <code>fragile</code> 选项. 
+<li class=blank >  &#91;2021-10-20&#93;</p>
+<p><code>beamer / ctexbeamer</code> 默认使用 sans 字族, 想要修改全文的字体时, <code>setCJKmainfont</code> 是不起作用的 &#40;它设置的是 roman 字族, 影响 <code>\rmfamily</code> 和<code>\textrm</code> 的字体&#41; , 应该使用 <code>\setCJKsansfont&#123;KaiTi/SimSun&#125;</code> 修改 &#40;影响 <code>\sffamily</code> 和 <code>\textsf</code> 的字体&#41; . 另外还有 <code>setCJKmonofont</code> 影响 <code>\ttfamily</code> 和 <code>\texttt</code> 字体. 
+<li class=blank >  &#91;2021-08-20&#93;    移除 <code>pdf</code> 边缘空白：<code>pdfcrop blabla.pdf</code>. 
+<li class=blank >  &#91;2020-12-25&#93;    TeX 里的 <code>\bar</code> 太短, <code>\overline</code> 太宽. 如下自定义命令更恰当:</p>
+<pre><code class="plaintext hljs">\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}</code></pre>
+<p>
+<li class=blank >  &#91;2020-07-29&#93; TeX 的表格里用 <code>\multicolumn&#123;3&#125;&#123;c&#125;&#123;Method&#125;</code>, 错写成 <code>\multicolumn&#123;3&#125;&#123;c&#125;Method&#125;</code>, 结果 <code>XeLaTex</code> 编译一直在运行但是不出结果. <strong>这种问题没有报错&#33;</strong> 
+<li class=blank >  &#91;2021-02-21&#93; 导出已安装的字体: 管理员权限打开 <code>cmd</code>, 执行</p>
+<pre><code class="plaintext hljs">fc-list -f &quot;%{family}\n&quot; &gt; fonts.txt</code></pre>
+<p>注意：如果添加 <code>:lang&#61;zh</code> 选项, 可能会漏掉一些中文字体. 
+<li class=blank >  设置中文字体</p>
+<pre><code class="plaintext hljs">\usepackage{xeCJK}
+\newcommand{\shusong}{\CJKfontspec{FZShuSong-Z01S}}%方正书宋
+\newcommand{\kaishu}{\CJKfontspec{FZKai-Z03S}}%方正楷体
+\newcommand{\xingkai}{\CJKfontspec{STXingkai}}%华文行楷
+
+\begin{document}
+\noindent
+    \xingkai 这是华文行楷\\
+    \kaishu 这是方正楷体\\
+    \shusong 这是方正书宋
+\end{document}</code></pre>
+<p>
+<li class=blank > <code>ctex</code> 宏包提供的字体命令</p>
+<pre><code class="plaintext hljs">\songti 宋体    &amp; SimSun          &amp;\verb|\songti 宋体|   \\
+\kaishu 楷体    &amp; KaiTi           &amp;\verb|\kaishu 楷体|   \\
+\heiti 黑体     &amp; SimHei          &amp;\verb|\heiti 黑体|    \\
+\yahei 微软雅黑  &amp; Microsoft YaHei &amp;\verb|\yahei 微软雅黑| \\
+\fangsong 仿宋  &amp; FangSong        &amp;\verb|\fangsong 仿宋| \\ 
+\youyuan 幼圆   &amp; YouYuan         &amp;\verb|\youyuan 幼圆|  \\
+\lishu 隶书     &amp; LiSu            &amp;\verb|\lishu 隶书|    \\</code></pre>
+<p>
+<li class=blank >  字体设置</p>
+<pre><code class="plaintext hljs">\usepackage{xeCJK}
+\renewcommand{\songti}{\CJKfontspec{STSong}}        % 华文宋体
+\newcommand{\zhongsong}{\CJKfontspec{STZhongsong}}  % 华文中宋
+\renewcommand{\kaishu}{\CJKfontspec{STKaiti}}       % 华文楷体
+\newcommand{\xingkai}{\CJKfontspec{STXingkai}}      % 华文行楷
+\newcommand{\xihei}{\CJKfontspec{STXihei}}          % 华文细黑
+\renewcommand{\fangsong}{\CJKfontspec{STFangsong}}  % 华文仿宋
+\renewcommand{\lishu}{\CJKfontspec{STLiti}}         % 华文隶书
+\newcommand{\caiyun}{\CJKfontspec{STCaiyun}}        % 华文彩云
+\newcommand{\hupo}{\CJKfontspec{STHupo}}            % 华文琥珀
+
+\renewcommand{\songti}{\CJKfontspec{Adobe Song Std L}}        % adobe 宋体
+\renewcommand{\kaishu}{\CJKfontspec{Adobe Kaiti Std R}}       % adobe 楷体
+\renewcommand{\heiti}{\CJKfontspec{Adobe Heiti Std R}}        % adobe 黑体
+\renewcommand{\fangsong}{\CJKfontspec{Adobe Fangsong Std R}}  % adobe 仿宋</code></pre>
+<p>
+<li class=blank > <a class=href  href=" https://www.zhihu.com/question/58656895/answer/157896917">  关于 <code>ctex</code> </a></p>
+<p>全中文的文档, 尽量用 ctex 文档类. 也就是 ctexart、ctexrep、ctexbook、ctexbeamer 这些 &#40;<code>\documentclass&#123;ctexart&#125;</code>&#41;. </p>
+<p>比较少见的情形下, 你需要在某个原本不支持中文的文档类中写全中文的文档, 此时用 ctex 包 &#40;<code>\usepackage&#123;ctex&#125;</code>&#41; , 如用 <code>moderncv</code> 写简历. </p>
+<p>英文文档中的几段中文, 建议用 <code>scheme&#61;plain</code> 选项调用 ctex 包, 即 <code>\usepackage&#91;scheme&#61;plain&#93;&#123;ctex&#125;</code>.</p>
+<p>英文文档中的几个汉字 &#40;比如人名&#41; , 建议把汉字做成图片, 插图, 这样不需要限定编译方式. 如果允许用 XeTeX 或 LuaTeX, 也可以直接切成汉字字体写中文, 不加中文相关宏包.</p>
+<p>那么什么时候用 xeCJK 宏包? 当然是写 ctex 包的时候. ctex 包在检测到你使用 XeLaTeX 编译时, 会调用更底层的 xeCJK. 打个比方说的话, ctex 包若是一辆车, xeCJK 就是个轮子. 轮子是车子的重要零件, 但我还是建议你开车, 把装轮胎的事交给工程师. 
+</ul>
+<div class=page-foot >
+  <div class=copyright >
+    
+    &copy; Zengchao XU. Last touched: Sep 1st, 2022.
+  </div>
+</div>
+</div>
+    </div>  
+    
+        
+
+<script>
+    renderMathInElement(document.body)
+</script>
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>

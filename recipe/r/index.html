@@ -1,0 +1,789 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/katex/katex.min.css"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/r-project.svg"> <title>Zengchao XU | R</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> <div class=toc-sidebar > <div class=franklin-toc ><ol><li><a href="#ecosystem_pkgs">Ecosystem / Pkgs</a><li><a href="#sources">Sources</a><li><a href="#tips">Tips</a></ol></div> </div> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <div class=log ><ul> <li><p>生态、社区和应用场景都相当成熟.</p> <li><p>即便用 <a class=href  href=" http://arma.sourceforge.net/"> Armadillo </a> 加速, 它在矩阵变量相关的计算中依旧效率不足.</p> </ul></div> <h1 id=r ><a href="#r" class=header-anchor >R</a></h1> <h2 id=ecosystem_pkgs ><a href="#ecosystem_pkgs" class=header-anchor >Ecosystem / Pkgs</a></h2> <p>&quot;data.table&quot;, &quot;glue&quot;, &quot;xtable&quot;, &quot;Rcpp&quot;, &quot;RcppArmadillo&quot;, &quot;knitr&quot;, &quot;devtools&quot;, </p> <p>&quot;tikzDevice&quot;, &quot;Cairo&quot;,</p> <p>&quot;glmnet&quot;, &quot;brglm2&quot;, &quot;betareg&quot;, </p> <p>&quot;PLFD&quot;, &quot;PPSFS&quot;,</p> <hr /> <p><a class=href  href=" https://cran.r-project.org/web/views/WebTechnologies.html"> TaskViews::WebTechnologies </a> 有 <code>publications</code> 模块可直接调用各出版商和文献的元数据.</p> <h2 id=sources ><a href="#sources" class=header-anchor >Sources</a></h2> <p><ul> <li class=blank > <a class=href  href=" https://nbviewer.org/github/paradoxical-rhapsody/jupyterNBs/blob/master/211104-reshape.ipynb"> ✓ Reshape Data </a> </ul></p> <h2 id=tips ><a href="#tips" class=header-anchor >Tips</a></h2> <ul> <li class=blank > &#91;2025-04-25&#93; <code>rmarkdown</code> 依赖 <code>tinytex</code>, 即使不使用 <code>tinytex</code> 作为系统上的 TeX 编译环境, 也需要安装它. <li class=blank > &#91;2025-04-25&#93; Ubuntu 上在 Rstudio 和 Terminal R 中的 <code>Sys.getenv&#40;&quot;PATH&quot;&#41;</code> 结果不同. Rstudio 包含了从 <code>/etc/environment</code> 中读取的全局环境变量, 也从目前尚未确定的位置载入了一些环境变量. <li class=blank > &#91;2025-03-07&#93; <code>knitr</code> 的 <code>child</code> 文件默认路径是自身所在位置处, 但是生成 <code>tex</code> 是在主文件的位置处. 如果其中涉及文件读取 &#40;比如 <code>\includegraphics / \csvreader</code>&#41;, 就需要将 <code>child</code> 文件的生成的各种数据放在主文件可直接读取的路径下, 可在 <code>child</code> 文件开始加入设置:</p> <pre><code class="bash hljs">&lt;&lt;<span class=hljs-string >include=FALSE&gt;&gt;=
+knitr::opts_knit$set(root.dir=dirname(getwd()))
+@</span></code></pre> <p> <li class=blank > &#91;2025-03-05&#93; <code>knitr</code> 设置代码块渲染时不额外添加环境 &#40;保持原封不动输出&#41;和头文件插入位点:</p> <pre><code class="bash hljs">%% knitr settings
+
+&lt;&lt;<span class=hljs-string >setup, include=FALSE&gt;&gt;=
+rm(list=ls())
+# options(width=105)
+library(magrittr)
+library(data.table)
+library(MASS)
+library(knitr)
+
+knit_patterns$set(header.begin=&quot;%% knitr settings\n&quot;)
+opts_chunk$set(comment=&quot;&quot;, fig.path=&quot;tikzexternalization&quot;)
+
+opts_chunk$set(raw=FALSE)
+hook_chunk &lt;- function(x, options) ifelse(options$raw, x, hooks_latex()$chunk(x, options))
+hook_output &lt;- function(x, options) ifelse(options$raw, x, hooks_latex()$output(x, options))
+knit_hooks$set(chunk=hook_chunk)
+knit_hooks$set(output=hook_output)
+
+baseDir &lt;- &quot;tikzexternalization&quot;
+@</span></code></pre> <p> <li class=blank > &#91;2025-02-26&#93; knitr 的代码块里中文显示为 &lt;U&#43;XXXX&gt;, 需要在文档中设置 </p> <pre><code class="bash hljs">Sys.setlocale(<span class=hljs-string >&quot;LC_ALL&quot;</span>, <span class=hljs-string >&quot;zh_CN.UTF-8&quot;</span>)</code></pre>
+<p>此外可通过 <code>Sys.getlocale&#40;&#41;</code> 查看当前环境的区域语言, 各操作系统的终端也支持 <code>locale</code> 直接查看. 
+<li class=blank >  &#91;2024-12-23&#93; 在 Win 下使用 <code>devtools::build&#40;binary&#61;TRUE&#41;</code> 时抛出 <code>Rcmd.exe</code> 找不到的错误, 按照 <code>CRAN</code> 的文档推荐的 <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Building-binary-packages">build binary package</a> 的操作如下:</p>
+<pre><code class="bash hljs">R CMD build pkg
+R CMD INSTALL --build pkg <span class=hljs-comment ># `pkg` 可以为 tar.gz 或在源文件夹下</span></code></pre>
+<p>
+<li class=blank > <a class=delete >  &#91;2024-11-10&#93; </a>&#91;2025-03-05 有更恰当的方案&#93; <code>knitr</code> 的 <code>1.46 &amp; 1.47</code> 版在执行带有 <code>knitr::knit_hooks&#36;set&#40;hooks_markdown&#40;fence_char&#61;&quot;&quot;&#41;&#41;</code> 的 <code>Rnw</code> 文件时会卡顿, 目前退回 <code>1.45</code> 没有问题. 
+<li class=blank > <a class=delete >  &#91;2024-06-24&#93; </a>&#91;2025-03-05 有更恰当的方案&#93; <code>knitr</code> 输出代码块时有它私有的环境. 如果不想要这些环境, 只希望<strong>保留原样输出不添加额外修饰</strong>, 可在 <code>Rnw</code> 中添加预设置: </p>
+<pre><code class="bash hljs">&lt;&lt;<span class=hljs-string >setup, include=FALSE&gt;&gt;=
+rm(list=ls())
+library(knitr)
+
+# options(width=105)
+knitr::knit_hooks$set(hooks_markdown(fence_char=&quot;&quot;))
+knitr::opts_chunk$set(echo=FALSE, comment=&quot;&quot;)
+@</span></code></pre>
+<p><code>opts_chunk&#36;set</code> 中有很多值得注意的设置, 如 <code>fig.width / fig.height / size &#40;&#61;&quot;scriptsize&quot;&#41;</code>. 
+<li class=blank > <a class=delete >  &#91;2024-06-21&#93; </a>&#91;2025-03-05 有更恰当的方案&#93; <code>knitr</code> 处理 <code>Rnw</code> 时会在输出的 <code>tex</code> 文档中很快插入一段自定义环境, 过程很呆, 甚至不能识别 <code>\documentclass</code> 的多行结构还没有结束就插入新环境了. </p>
+<p><a href="https://stackoverflow.com/questions/57618641/how-to-stop-knitr-from-adding-tex-packages-based-on-documentclass">解决方案</a>: <code>knitr</code> 插入的头文件是通过 <code>knitr:::make_header_latex</code> 进行的, 把它屏蔽掉就好了.</p>
+<pre><code class="bash hljs">assignInNamespace(<span class=hljs-string >&quot;make_header_latex&quot;</span>, <span class=hljs-keyword >function</span>(...) <span class=hljs-string >&quot;&quot;</span>, <span class=hljs-string >&quot;knitr&quot;</span>)</code></pre>
+<p>这很适合添加在 <code>vscode</code> 的链式编译中:</p>
+<pre><code class="bash hljs">{
+    <span class=hljs-string >&quot;name&quot;</span>: <span class=hljs-string >&quot;rnw2tex&quot;</span>,
+    <span class=hljs-string >&quot;command&quot;</span>: <span class=hljs-string >&quot;Rscript&quot;</span>,
+    <span class=hljs-string >&quot;args&quot;</span>: [
+        <span class=hljs-string >&quot;-e&quot;</span>,
+        <span class=hljs-string >&quot;assignInNamespace(&#x27;make_header_latex&#x27;, function(...)&#x27;&#x27;, &#x27;knitr&#x27;); knitr::knit(&#x27;%DOCFILE_EXT%&#x27;)&quot;</span>
+    ],
+    <span class=hljs-string >&quot;env&quot;</span>: {}
+}</code></pre>
+<p>然后在 <code>Rnw</code> 合适的位置插入 <code>knitr</code> 默认设定对 <code>tex</code> 添加的内容. 当前版本的内容如下:</p>
+<pre><code class="tex hljs"><span class=hljs-keyword >\usepackage</span>[]{graphicx}
+<span class=hljs-keyword >\usepackage</span>[]{xcolor}
+<span class=hljs-comment >% maxwidth is the original width if it is less than linewidth</span>
+<span class=hljs-comment >% otherwise use linewidth (to make sure the graphics do not exceed the margin)</span>
+<span class=hljs-keyword >\makeatletter</span>
+<span class=hljs-keyword >\def</span><span class=hljs-keyword >\maxwidth</span>{ <span class=hljs-comment >%</span>
+  <span class=hljs-keyword >\ifdim</span><span class=hljs-keyword >\Gin@nat@width</span>&gt;<span class=hljs-keyword >\linewidth</span>
+    <span class=hljs-keyword >\linewidth</span>
+  <span class=hljs-keyword >\else</span>
+    <span class=hljs-keyword >\Gin@nat@width</span>
+  <span class=hljs-keyword >\fi</span>
+}
+<span class=hljs-keyword >\makeatother</span>
+
+<span class=hljs-keyword >\definecolor</span>{fgcolor}{rgb}{0.345, 0.345, 0.345}
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlnum</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0.686,0.059,0.569}{<span class=hljs-params >#1</span>}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlstr</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0.192,0.494,0.8}{<span class=hljs-params >#1</span>}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlcom</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0.678,0.584,0.686}{<span class=hljs-keyword >\textit</span>{<span class=hljs-params >#1</span>}}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlopt</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0,0,0}{<span class=hljs-params >#1</span>}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlstd</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0.345,0.345,0.345}{<span class=hljs-params >#1</span>}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlkwa</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0.161,0.373,0.58}{<span class=hljs-keyword >\textbf</span>{<span class=hljs-params >#1</span>}}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlkwb</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0.69,0.353,0.396}{<span class=hljs-params >#1</span>}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlkwc</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0.333,0.667,0.333}{<span class=hljs-params >#1</span>}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\newcommand</span>{<span class=hljs-keyword >\hlkwd</span>}[1]{<span class=hljs-keyword >\textcolor</span>[rgb]{0.737,0.353,0.396}{<span class=hljs-keyword >\textbf</span>{<span class=hljs-params >#1</span>}}}<span class=hljs-comment >%</span>
+<span class=hljs-keyword >\let</span><span class=hljs-keyword >\hlipl</span><span class=hljs-keyword >\hlkwb</span>
+
+<span class=hljs-keyword >\usepackage</span>{framed}
+<span class=hljs-keyword >\makeatletter</span>
+<span class=hljs-keyword >\newenvironment</span>{kframe}{<span class=hljs-comment >%</span>
+ <span class=hljs-keyword >\def</span><span class=hljs-keyword >\at@end@of@kframe</span>{}<span class=hljs-comment >%</span>
+ <span class=hljs-keyword >\ifinner</span><span class=hljs-keyword >\ifhmode</span><span class=hljs-comment >%</span>
+  <span class=hljs-keyword >\def</span><span class=hljs-keyword >\at@end@of@kframe</span>{<span class=hljs-keyword >\end</span>{minipage}}<span class=hljs-comment >%</span>
+  <span class=hljs-keyword >\begin</span>{minipage}{<span class=hljs-keyword >\columnwidth</span>}<span class=hljs-comment >%</span>
+ <span class=hljs-keyword >\fi</span><span class=hljs-keyword >\fi</span><span class=hljs-comment >%</span>
+ <span class=hljs-keyword >\def</span><span class=hljs-keyword >\FrameCommand</span><span class=hljs-params >##1</span>{<span class=hljs-keyword >\hskip</span><span class=hljs-keyword >\@totalleftmargin</span> <span class=hljs-keyword >\hskip</span>-<span class=hljs-keyword >\fboxsep</span>
+ <span class=hljs-keyword >\colorbox</span>{shadecolor}{<span class=hljs-params >##1</span>}<span class=hljs-keyword >\hskip</span>-<span class=hljs-keyword >\fboxsep</span>
+     <span class=hljs-comment >% There is no \\@totalrightmargin, so:</span>
+     <span class=hljs-keyword >\hskip</span>-<span class=hljs-keyword >\linewidth</span> <span class=hljs-keyword >\hskip</span>-<span class=hljs-keyword >\@totalleftmargin</span> <span class=hljs-keyword >\hskip</span><span class=hljs-keyword >\columnwidth</span>}<span class=hljs-comment >%</span>
+ <span class=hljs-keyword >\MakeFramed</span> {<span class=hljs-keyword >\advance</span><span class=hljs-keyword >\hsize</span>-<span class=hljs-keyword >\width</span>
+   <span class=hljs-keyword >\@totalleftmargin</span><span class=hljs-keyword >\z@</span> <span class=hljs-keyword >\linewidth</span><span class=hljs-keyword >\hsize</span>
+   <span class=hljs-keyword >\@setminipage</span>}}<span class=hljs-comment >%</span>
+ {<span class=hljs-keyword >\par</span><span class=hljs-keyword >\unskip</span><span class=hljs-keyword >\endMakeFramed</span><span class=hljs-comment >%</span>
+ <span class=hljs-keyword >\at@end@of@kframe</span>}
+<span class=hljs-keyword >\makeatother</span>
+
+<span class=hljs-keyword >\definecolor</span>{shadecolor}{rgb}{.97, .97, .97}
+<span class=hljs-keyword >\definecolor</span>{messagecolor}{rgb}{0, 0, 0}
+<span class=hljs-keyword >\definecolor</span>{warningcolor}{rgb}{1, 0, 1}
+<span class=hljs-keyword >\definecolor</span>{errorcolor}{rgb}{1, 0, 0}
+<span class=hljs-keyword >\newenvironment</span>{knitrout}{}{} <span class=hljs-comment >% an empty environment to be redefined in TeX</span>
+
+<span class=hljs-keyword >\usepackage</span>{alltt}</code></pre>
+<p>
+<li class=blank >  &#91;2024-05-24&#93; <code>sub</code> 的 <code>fixed&#61;TRUE</code> 不使用通配符做匹配, 是很棒的参数. 
+<li class=blank >  &#91;2024-05-04&#93; <code>latex-workshop</code> 编译 <code>Rnw</code> 文件时总是报 <code>Latexmk: No file name specified</code>, 现在确定是 <code>Latex &gt; External &gt; Build: Command</code> 里添加了 <code>latexmk</code> 这个多余的东西&#33; &#40;要理解配置说明啊&#41;</p>
+<p>另外, 可以把 <code>tools</code> 中 <code>rnw2tex</code> 的 <code>knit</code> 改为 <code>knit2pdf</code>, 这样 <code>recipe</code> 里可以相应简化. 
+<li class=blank >  &#91;2024-04-15&#93; <code>knitr</code> 的全局选项设置：</p>
+<pre><code class="R hljs"><span class=hljs-operator >%%</span> knitr options
+<span class=hljs-operator >&lt;</span><span class=hljs-operator >&lt;</span>setup<span class=hljs-punctuation >,</span> include<span class=hljs-operator >=</span><span class=hljs-literal >FALSE</span><span class=hljs-operator >&gt;</span><span class=hljs-operator >&gt;=</span>
+rm<span class=hljs-punctuation >(</span><span class=hljs-built_in >list</span><span class=hljs-operator >=</span>ls<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span>
+options<span class=hljs-punctuation >(</span>width<span class=hljs-operator >=</span><span class=hljs-number >70</span><span class=hljs-punctuation >)</span>
+knitr<span class=hljs-operator >::</span>opts_chunk<span class=hljs-operator >$</span>set<span class=hljs-punctuation >(</span>
+    size<span class=hljs-operator >=</span><span class=hljs-string >&quot;scriptsize&quot;</span><span class=hljs-punctuation >,</span>
+    fig.align <span class=hljs-operator >=</span> <span class=hljs-string >&quot;center&quot;</span><span class=hljs-punctuation >,</span> 
+    fig.path <span class=hljs-operator >=</span> <span class=hljs-string >&quot;figures/&quot;</span><span class=hljs-punctuation >,</span>
+    fig.width <span class=hljs-operator >=</span> <span class=hljs-number >6</span><span class=hljs-punctuation >,</span> 
+    fit.height<span class=hljs-operator >=</span><span class=hljs-number >6</span><span class=hljs-punctuation >,</span>
+    out.width <span class=hljs-operator >=</span> <span class=hljs-string >&quot;.45\\linewidth&quot;</span>
+<span class=hljs-punctuation >)</span>
+<span class=hljs-operator >@</span></code></pre>
+<p>
+<li class=blank >  &#91;2023-10-04&#93; 从<strong>源文件</strong>编译安装 <code>R</code> 时的依赖可以快速解决:</p>
+<pre><code class="bash hljs"><span class=hljs-built_in >sudo</span> sed -i.bak <span class=hljs-string >&quot;/^#.*deb-src.*universe$/s/^# //g&quot;</span> /etc/apt/sources.list
+<span class=hljs-built_in >sudo</span> apt update
+<span class=hljs-built_in >sudo</span> apt build-dep r-base</code></pre>
+<p>&#91;2023-10-03&#93; R-4.3.1 没有提供安装源, 目前用 rstudio 提供的 <code>deb</code> 文件或者<strong>源文件</strong>安装. </p>
+<p><strong>源文件配置/编译/安装</strong>时遇到的依赖:</p>
+<pre><code class="bash hljs"><span class=hljs-built_in >sudo</span> apt-get install build-essential
+<span class=hljs-built_in >sudo</span> apt-get install fort77
+<span class=hljs-built_in >sudo</span> apt-get install xorg-dev
+<span class=hljs-built_in >sudo</span> apt-get install liblzma-dev  libblas-dev gfortran
+<span class=hljs-built_in >sudo</span> apt-get install libbz2-dev
+<span class=hljs-built_in >sudo</span> apt-get install gcc-multilib
+<span class=hljs-built_in >sudo</span> apt-get install gobjc++
+<span class=hljs-built_in >sudo</span> apt-get install aptitude
+<span class=hljs-built_in >sudo</span> apt-get install libreadline-dev</code></pre>
+<p>
+<li class=blank >  &#91;2023-09-03&#93; <code>split-by-combine</code></p>
+<pre><code class="bash hljs">set.seed(2023)
+library(data.table)
+library(microbenchmark)
+
+DT &lt;- data.table(x=matrix(rnorm(1000*4), 1000), g=sample(letters[1:6], 1000, TRUE))
+names(DT) &lt;- sub(<span class=hljs-string >&quot;[.]V&quot;</span>, <span class=hljs-string >&quot;&quot;</span>, names(DT))
+
+microbenchmark(
+    M11 = DT[, lapply(.SD, mean), by=g], 
+    M12 = DT[, colMeans(.SD), by=g], 
+    M2 = aggregate(DT[, -c(<span class=hljs-string >&quot;g&quot;</span>)], by=DT[, <span class=hljs-string >&quot;g&quot;</span>], <span class=hljs-string >&quot;mean&quot;</span>), 
+    M3 = lapply(<span class=hljs-built_in >split</span>(DT[, -c(<span class=hljs-string >&quot;g&quot;</span>)], DT[, g]), colMeans),
+    M4 = by(DT[, -c(<span class=hljs-string >&quot;g&quot;</span>)], DT[, g], colMeans)
+)</code></pre>
+<p>
+<li class=blank >  &#91;2023-09-01&#93; 管道操作 <code>&#37;&gt;&#37;</code> 的链式对象是函数, 不是组合函数, 例如 <code>&quot;A&quot; &#37;&gt;&#37; rep&#40;c&#40;., &quot;B&quot;&#41;, 3&#41;</code> 是不奏效的, 准确形式是 <code>&quot;A&quot; &#37;&gt;&#37; c&#40;., &quot;B&quot;&#41; &#37;&gt;&#37; rep&#40;., 3&#41;</code> 
+<li class=blank >  &#91;2023-08-31&#93; <code>backsolve&#40;mat&#40;4, 4&#41;, vec&#40;6&#41;&#41;</code> 不报错&#33;&#33;&#33; 它根本不检查矩阵和向量的维数是否匹配... 
+<li class=blank >  &#91;2023-08-15&#93; </p>
+<pre><code class="plaintext hljs">set_f &lt;- function(n, p) {
+    A &lt;- .row(c(n, p))
+    # f &lt;- function(x) x * get(&quot;A&quot;, envir=parent.frame())
+    f &lt;- function(x) x * A
+
+    return(f)
+}
+
+A &lt;- matrix(rnorm(3*5), 3)
+f &lt;- set_f(3, 4)</code></pre>
+<p>
+<li class=blank >  &#91;2023-07-13&#93; 正则表达式: &#40;移除不是字母或数字的内容&#41; <code>gsub&#40;&quot;&#91;^&#91;:digit:&#93;&#91;:alpha:&#93;&#93;&quot;, &quot;&quot;, x&#41;</code> 
+<p><li class=blank >  &#91;2023-07-02&#93; 从 pdf 文件中提取内容 &#40;文字/表格&#41;</p>
+<ul>
+<li><p><code>tabulizer::extract_tables / extract_text / extract_areas / extract_metadata</code> is quite easy and flexible to extract the contents.</p>
+
+</ul>
+<ul>
+<li><p><code>pdftools::pdf_text</code> extracts the contents in all pages. For each page, the content splitted by <code>\n</code> can be anchored by the column positions, then it is rather easy to extract the column data using <code>substr</code> and regex &#40;<code>data.table</code> is helpful&#41;</p>
+
+</ul>
+<ul>
+<li><p><code>tesseract</code> is heavy but powerful for OCR &#40;maybe it is applicable to scanned files&#41; </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2023-05-02&#93; <code>Reduce</code> 能把二元函数 <code>f&#40;x, y&#41;</code> 通过序贯方式拓展到一般数量上.</p>
+<ul>
+<li><p>inner-join: <code>Reduce&#40;merge, list&#40;DTx, DTy, DTz&#41;&#41;</code>. </p>
+
+<li><p>full-join: <code>Reduce&#40;\&#40;...&#41; merge&#40;..., by, all&#41;, list&#40;DTx, DTy, DTz&#41;&#41;</code></p>
+
+<li><p>需要显示指定拼接键 <code>by</code> 才能避免它添加 <code>suffix</code> 前缀: <code>Reduce&#40;\&#40;...&#41; merge&#40;..., by&#61;intersect&#40;names&#40;..1&#41;, names&#40;..2&#41;&#41;&#41;, list&#40;DTx, DTy, DTz&#41;&#41;</code></p>
+
+<li><p><strong>注意:</strong> 如果拼接结构为 <code>merge&#40;x, rbind&#40;y1, y2&#41;&#41;</code>, 那就不能使用 <code>Reduce&#40;merge, list&#40;x, y1, y2&#41;&#41;</code>. 这是因为如果 <code>x</code> 中的某些样本在 <code>y2</code> 中时, 在 <code>merge&#40;x, y1, fill&#61;TRUE&#41;</code> 时会将这部分样本填充为 <code>NA</code>, 此时再对 <code>y2</code> 进行拼接时, 两者重复的样本由于取值差异, <code>y2</code> 中的样本会被重新分配列名.</p>
+
+</ul>
+<ul>
+<li><p>bind: <code>Reduce&#40;rbind, list&#40;matrix&#41;&#41;</code> </p>
+
+</ul>
+
+<li class=blank >  &#91;2023-03-08&#93; <code>deparse</code> 将表达式逆向操作转为字符串 &#40;可以用来获取变量的名字&#41;. 
+<li class=blank >  &#91;2023-02-07&#93; <code>glmpath</code> 不能移除截距项, <code>glmnet</code> 就能. 而且 <code>glmpath</code> 适用的模型少多了. 
+<li class=blank >  &#91;2023-02-04&#93; 移除向量元素名: <code>c&#40;x, use.names&#61;FALSE&#41;</code> 
+<li class=blank >  &#91;2023-02-04&#93; RcppArmadillo 的 <code>uvec</code> 用法:</p>
+<pre><code class="bash hljs">//<span class=hljs-string >&#x27; @rdname center.samples
+//&#x27;</span> @<span class=hljs-built_in >export</span>
+// [[Rcpp::<span class=hljs-built_in >export</span>]]
+arma::cube cxx_center_data (const arma::vec &amp; y, const arma::cube &amp; x) {
+    int n=x.n_slices, r=x.n_rows, c=x.n_cols, iN ;
+    arma::cube x0(r, c, n, arma::fill::zeros) ;
+    arma::uvec idx01=arma::find(y == 1.0), idx02=arma::find(y == 2.0) ;
+    arma::mat m1 = arma::mean(x.slices(idx01), 2) ;
+    arma::mat m2 = arma::mean(x.slices(idx02), 2) ;
+    <span class=hljs-keyword >for</span> (iN=0; iN &lt; n; iN++) {
+        <span class=hljs-keyword >if</span> (y(iN) == 1.0)
+            x0.slice(iN) = x.slice(iN) - m1 ;
+        <span class=hljs-keyword >else</span> 
+            x0.slice(iN) = x.slice(iN) - m2 ;
+    }
+    <span class=hljs-built_in >return</span> x0 ;
+}</code></pre>
+<p>
+<li class=blank >  &#91;2023-01-08&#93; 计算 <code>logLik</code> 时 &#40;AIC/BIC&#41;, 尽可能避免自己写公式, 务必优先使用内置函数.</p>
+<pre><code class="bash hljs">mu &lt;- drop(x %*% b.hat)
+nullmodel &lt;- lm(y ~ 0, offset=mu)
+bic &lt;- -2*logLik(nullmodel) + <span class=hljs-built_in >log</span>(N)*dof
+aic &lt;- -2*logLik(nullmodel) + 2*dof</code></pre>
+<p>
+<li class=blank >  &#91;2022-12-20&#93; 在 Ubuntu 的 terminal 中打开帮助文档时, 如果直接打印在终端里, 可以对 <code>help</code> 添加 <code>help_type&#61;&quot;html&quot;</code> 参数, 在浏览器中打开. 在 <code>Rprofile.site</code> 中添加如下选项可更改全局设置:</p>
+<pre><code class="bash hljs">options(help_type=<span class=hljs-string >&quot;html&quot;</span>)</code></pre>
+<p>
+<li class=blank >  &#91;2022-11-26&#93; Ubuntu 下安装 <code>RcppArmadillo</code> 等 R 包时, 提示缺少 <code>-llapack</code> / <code>lblas</code> / <code>-lgfortran</code> 时, 或缺少一些系统文件:</p>
+<pre><code class="bash hljs"><span class=hljs-built_in >sudo</span> apt-get install g++ gfortran libblas-dev liblapack-dev libssl-dev libxml2-dev libz-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev</code></pre>
+<p>
+<li class=blank >  &#91;2022-10-20&#93; <strong>服务器安装 Rstudio Server</strong>:</p>
+<ol>
+<li><p>需要先安装 <a class=href  href=" https://cran.r-project.org/bin/linux/">  r-base </a>.</p>
+
+<li><p>根据系统类型<a class=href  href=" https://www.rstudio.com/products/rstudio/download-server/">  选择相应系统的最新版本安装命令 </a>, 结尾会有绿色的 <code>active</code> 提示.</p>
+
+<li><p>Rstudio server 默认端口是 8787, 需在防火墙中开启. 可在它的设置文件中修改.</p>
+
+</ol>
+<p><strong>注意</strong>: Rstudio server 只能通过<strong>非管理员</strong>账户作登录 &#40;若没有, 可执行 <code>sudo adduser xxx</code> 添加新用户&#41;. 
+<p><li class=blank >  关于 <code>system.time&#40;&#41;</code>:</p>
+<ul>
+<li><p>它的第二个参数 <code>gcFirst&#61;TRUE</code> 默认发生. 此前在 <code>repFun&#40;ss, ...&#41;</code> 最后写入 <code>data.table</code> 时发生的错误有可能就是因为 <code>system.time&#40;&#41;</code> 的回收机制造成的. </p>
+
+<li><p>返回的三个时间中, 第一个 CPU 时间是我们通常需要的. 在并行中, 平台对最后一项 eslapse 时间影响很大, 这是额外开销 &#40;IO / 通信等&#41; 造成的. </p>
+
+</ul>
+
+<li class=blank >  R 包 <code>eggkit</code> 包含了 EGG Data &#40;<span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>256</mn><mo>×</mo><mn>64</mn></mrow><annotation encoding="application/x-tex">256 \times 64</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.72777em;vertical-align:-0.08333em;"></span><span class=mord >256</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >×</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.64444em;vertical-align:0em;"></span><span class=mord >64</span></span></span></span>&#41;, 不过这个数据集有小问题. 
+<li class=blank > <code>Rcpp</code> 创建包</p>
+<p>把要打包的数据和 R 编写的函数&#40;不包括 C&#43;&#43; 定义的那些函数, 否则第一步就会报错&#41;都放进内存中, 以下命令将生成一个架构很全面的文件夹 <code>test</code>:</p>
+<pre><code class="r hljs">library<span class=hljs-punctuation >(</span>Rcpp<span class=hljs-punctuation >)</span>
+Rcpp.package.skeleton<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;test&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >list</span><span class=hljs-operator >=</span>ls<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> cpp_files<span class=hljs-operator >=</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&quot;1.cpp&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&quot;2.cpp&quot;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> example_code<span class=hljs-operator >=</span><span class=hljs-literal >FALSE</span><span class=hljs-punctuation >)</span></code></pre>
+<p>R 函数如果不导入内存的话, 可使用参数 &quot;R_files&quot;.</p>
+<p><code>test/man</code> 中只包含了 R 函数和数据的 &quot;Rd&quot; 文件, 还有 <code>cpp</code> 文件中的函数需要手动生成 &quot;Rd&quot; 文件:</p>
+<pre><code class="r hljs">rm<span class=hljs-punctuation >(</span><span class=hljs-built_in >list</span><span class=hljs-operator >=</span>ls<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span>
+sourceCpp<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;1.cpp&quot;</span><span class=hljs-punctuation >)</span>
+sourceCpp<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;2.cpp&quot;</span><span class=hljs-punctuation >)</span>
+<span class=hljs-keyword >for</span><span class=hljs-punctuation >(</span>fun <span class=hljs-keyword >in</span> ls<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >{</span>
+  prompt<span class=hljs-punctuation >(</span>fun<span class=hljs-punctuation >)</span>
+<span class=hljs-punctuation >}</span></code></pre>
+<p>
+<li class=blank > <code>require&#40;&#41;</code> 和 <code>library&#40;&#41;</code> 的区别</p>
+<p>两者的帮助文档被归在同一页面中, 文档指出 <code>require&#40;&#41;</code> 在导入一个不存在的包时, 会输出一个 <code>warning</code> 并返回 <code>FALSE</code>, 不因为导入失败而终止程序, 所以适合放在函数中. <code>library&#40;&#41;</code> 在导入失败时会抛出 <code>error</code>. </p>
+<p>在 <a class=href  href=" https://stackoverflow.com/questions/5595512/what-is-the-difference-between-require-and-library">  https://stackoverflow.com/questions/5595512/what-is-the-difference-between-require-and-library </a> 上给出了这两者的区别和使用技巧. </p>
+<p>在 <a class=href  href=" https://www.r-bloggers.com/library-vs-require-in-r/">  https://www.r-bloggers.com/library-vs-require-in-r/ </a> 上有人反对用 <code>require&#40;&#41;</code> 执行导入. 如果就为了导入一个包, 用 <code>library&#40;&#41;</code> 会有效规避所有意外. <code>require&#40;&#41;</code> 可以用在一些更基础的程序中, 比如包的编写中或者为了在导入失败时自动安装等情况下使用.</p>
+<pre><code class="r hljs"><span class=hljs-keyword >if</span><span class=hljs-punctuation >(</span>require<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;lme4&quot;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >{</span>
+  print<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;lme4 is loaded correctly&quot;</span><span class=hljs-punctuation >)</span>
+<span class=hljs-punctuation >}</span> <span class=hljs-keyword >else</span> <span class=hljs-punctuation >{</span>
+  print<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;trying to install lme4&quot;</span><span class=hljs-punctuation >)</span>
+  install.packages<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;lme4&quot;</span><span class=hljs-punctuation >)</span>
+  <span class=hljs-keyword >if</span><span class=hljs-punctuation >(</span>require<span class=hljs-punctuation >(</span>lme4<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >{</span>
+    print<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;lme4 installed and loaded&quot;</span><span class=hljs-punctuation >)</span>
+  <span class=hljs-punctuation >}</span> <span class=hljs-keyword >else</span> <span class=hljs-punctuation >{</span>
+    stop<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;could not install lme4&quot;</span><span class=hljs-punctuation >)</span>
+  <span class=hljs-punctuation >}</span>
+<span class=hljs-punctuation >}</span>
+
+<span class=hljs-keyword >for</span> <span class=hljs-punctuation >(</span>package <span class=hljs-keyword >in</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;PLFD&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;PPSFS&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span> <span class=hljs-punctuation >{</span>
+  <span class=hljs-keyword >if</span> <span class=hljs-punctuation >(</span><span class=hljs-operator >!</span>require<span class=hljs-punctuation >(</span>package<span class=hljs-punctuation >,</span> character.only<span class=hljs-operator >=</span><span class=hljs-built_in >T</span><span class=hljs-punctuation >,</span> quietly<span class=hljs-operator >=</span><span class=hljs-built_in >T</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span> <span class=hljs-punctuation >{</span>
+    install.packages<span class=hljs-punctuation >(</span>package<span class=hljs-punctuation >)</span>
+    library<span class=hljs-punctuation >(</span>package<span class=hljs-punctuation >,</span> character.only<span class=hljs-operator >=</span><span class=hljs-built_in >T</span><span class=hljs-punctuation >)</span>
+  <span class=hljs-punctuation >}</span>
+<span class=hljs-punctuation >}</span></code></pre>
+<p>
+<li class=blank >  计算结果为 <code>NaN</code> 可能是得到了 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>n</mi><mi>f</mi><mi mathvariant=normal >/</mi><mi>I</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">Inf/Inf</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class=mord >/</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span> 或者 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>n</mi><mi>f</mi><mo>−</mo><mi>I</mi><mi>n</mi><mi>f</mi></mrow><annotation encoding="application/x-tex">Inf - Inf</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >−</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span>. 例如, 在计算 sigmoid 函数 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy=false >(</mo><mi>β</mi><mo separator=true >,</mo><mi>x</mi><mo stretchy=false >)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy=false >(</mo><mo>−</mo><msup><mi>x</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mi>β</mi><mo stretchy=false >)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">S(\beta, x) = \frac{1}{1 + exp(- x&#x27; \beta)}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class=mopen >(</span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class=mpunct >,</span><span class=mspace  style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">x</span><span class=mclose >)</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span></span><span class=base ><span class=strut  style="height:1.365108em;vertical-align:-0.52em;"></span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.845108em;"><span style="top:-2.655em;"><span class=pstrut  style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">x</span><span class="mord mathnormal mtight">p</span><span class="mopen mtight">(</span><span class="mord mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class=pstrut  style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span><span class="mclose mtight">)</span></span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class=pstrut  style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> 的梯度或 Hessian 时, 需要计算 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy=false >(</mo><mo>−</mo><msup><mi>x</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mi>β</mi><mo stretchy=false >)</mo></mrow><mrow><mo stretchy=false >(</mo><mn>1</mn><mo>+</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy=false >(</mo><mo>−</mo><msup><mi>x</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mi>β</mi><mo stretchy=false >)</mo><msup><mo stretchy=false >)</mo><mn>2</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{exp(- x&#x27; \beta)}{(1+exp(- x&#x27; \beta))^2}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1.58448em;vertical-align:-0.52em;"></span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:1.06448em;"><span style="top:-2.655em;"><span class=pstrut  style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight">1</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">x</span><span class="mord mathnormal mtight">p</span><span class="mopen mtight">(</span><span class="mord mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class=pstrut  style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span><span class="mclose mtight">)</span><span class="mclose mtight"><span class="mclose mtight">)</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.7463142857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class=pstrut  style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class=pstrut  style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">x</span><span class="mord mathnormal mtight">p</span><span class="mopen mtight">(</span><span class="mord mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8278285714285715em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class=pstrut  style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span><span class="mclose mtight">)</span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span> 或 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy=false >(</mo><mo>−</mo><msup><mi>x</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mi>β</mi><mo stretchy=false >)</mo><mo stretchy=false >(</mo><mn>1</mn><mo>−</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy=false >(</mo><mo>−</mo><msup><mi>x</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mi>β</mi><mo stretchy=false >)</mo><mo stretchy=false >)</mo></mrow><mrow><mo stretchy=false >(</mo><mn>1</mn><mo>+</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy=false >(</mo><mo>−</mo><msup><mi>x</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mi>β</mi><mo stretchy=false >)</mo><msup><mo stretchy=false >)</mo><mn>3</mn></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{exp(- x&#x27; \beta) (1 - exp(- x&#x27; \beta))}{(1+exp(- x&#x27; \beta))^3}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1.58448em;vertical-align:-0.52em;"></span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:1.06448em;"><span style="top:-2.655em;"><span class=pstrut  style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight">1</span><span class="mbin mtight">+</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">x</span><span class="mord mathnormal mtight">p</span><span class="mopen mtight">(</span><span class="mord mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class=pstrut  style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span><span class="mclose mtight">)</span><span class="mclose mtight"><span class="mclose mtight">)</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.7463142857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class=pstrut  style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class=pstrut  style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">x</span><span class="mord mathnormal mtight">p</span><span class="mopen mtight">(</span><span class="mord mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8278285714285715em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class=pstrut  style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span><span class="mclose mtight">)</span><span class="mopen mtight">(</span><span class="mord mtight">1</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">x</span><span class="mord mathnormal mtight">p</span><span class="mopen mtight">(</span><span class="mord mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8278285714285715em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class=pstrut  style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal mtight" style="margin-right:0.05278em;">β</span><span class="mclose mtight">))</span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>, 当 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mi>β</mi></mrow><annotation encoding="application/x-tex">x&#x27; \beta</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.946332em;vertical-align:-0.19444em;"></span><span class=mord ><span class="mord mathnormal">x</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span></span></span></span> 很大就会返回 <code>NaN</code> &#40;这个在高维下太容易发生了&#41;, 这时候需要对式子进行整理清洗. 
+<li class=blank >  绘图参数带有中文时, 提示找不到字体或字体不显示, 较好且简洁的方案 <code>showtext</code> 包:</p>
+<pre><code class="r hljs">library<span class=hljs-punctuation >(</span>showtext<span class=hljs-punctuation >)</span>
+showtext.auto<span class=hljs-punctuation >(</span>enable<span class=hljs-operator >=</span><span class=hljs-literal >TRUE</span><span class=hljs-punctuation >)</span>
+font.add<span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;SimSun&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;simsun.ttc&#x27;</span><span class=hljs-punctuation >)</span>
+
+pdf<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;text.pdf&quot;</span><span class=hljs-punctuation >)</span>
+plot<span class=hljs-punctuation >(</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >1</span><span class=hljs-operator >:</span><span class=hljs-number >10</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> xlab<span class=hljs-operator >=</span><span class=hljs-string >&quot;横轴&quot;</span><span class=hljs-punctuation >,</span> ylab<span class=hljs-operator >=</span><span class=hljs-string >&quot;纵轴&quot;</span><span class=hljs-punctuation >,</span>
+      main<span class=hljs-operator >=</span><span class=hljs-string >&quot;中文标题 title&quot;</span><span class=hljs-punctuation >,</span> family<span class=hljs-operator >=</span><span class=hljs-string >&quot;SimSun&quot;</span><span class=hljs-punctuation >)</span>
+dev.off<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span></code></pre>
+<p>
+<li class=blank >  安装 <code>IRkernel</code> 提示 <a class=emph >  kernel –version </a> 不能验证: 原因是在安装 <code>Anaconda/Miniconda</code> 时没有勾选添加环境变量 &#40;提示说如果勾选会遇到一些问题&#41;, 导致安装失败. 可以手动添加环境变量后重新安装 <code>IRkernel</code>, 然后再把环境变量删掉. 
+<li class=blank >  &#91;2022-03-19&#93;   对 <code>egg &lt;- brglmFit&#40;...&#41;</code> 进行 <code>class&#40;egg&#41; &lt;- &#39;glm</code> 后, <code>BIC&#40;egg&#41;</code> 确实就是标准的 BIC, 它等于</p>
+<pre><code class="r hljs"><span class=hljs-operator >-</span><span class=hljs-number >2</span><span class=hljs-operator >*</span>logLik<span class=hljs-punctuation >(</span>egg<span class=hljs-punctuation >)</span> <span class=hljs-operator >+</span> <span class=hljs-built_in >attr</span><span class=hljs-punctuation >(</span>logLik<span class=hljs-punctuation >(</span>egg<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;df) * log( attr(logLik(egg), &#x27;</span>nobs<span class=hljs-string >&#x27;) )</span></code></pre>
+<p>注意 <code>attr&#40;logLik&#40;egg&#41;, &#39;df&#39;&#41;</code> 在 <code>gaussian</code> 等情况下比线性预测器的系数数量多 1 &#40;存在散布参数&#41;, 在 <code>logistic / Poisson</code> 等情形 下与预测器的变量数目相同.</p>
+<p>因此可以直接利用 <code>BIC&#40;egg&#41; &#43; ebic.penalty</code> 得到 EBIC 的取值. 这里 <code>ebic.penalty &#61; 2 * gamma * lchoose&#40;P, s&#41;</code>, <strong>需要仔细确认</strong> <code>P</code> 和 <code>s</code> 的取值 &#40;根据 EBIC 的原始想法&#41;. 
+<li class=blank >  &#91;2022-02-02&#93;   迭代循环中涉及 <code>svd</code> 时抛出了 <code>Error in La.svd&#40;x, nu, nv&#41; : error code 1 from Lapack routine &#39;dgesdd&#39;</code> 错误. 目前测试良好的方式是工具包提供的函数, 但计算速度相对较慢, 将原生函数和工具函数结合使用如下:</p>
+<pre><code class="r hljs">tryCatch<span class=hljs-punctuation >(</span>svd<span class=hljs-punctuation >(</span>x<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> error<span class=hljs-operator >=</span><span class=hljs-keyword >function</span><span class=hljs-punctuation >(</span>e<span class=hljs-punctuation >)</span> svd<span class=hljs-operator >::</span>propack.svd<span class=hljs-punctuation >(</span>x<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span></code></pre>
+<p>
+<li class=blank >  &#91;2021-10-30&#93;   写包的时候，所有的 <code>import</code> 都可以放在 <code>*-package.R</code> 里面，不必分散在各个函数中。 
+<p><li class=blank >  &#91;2021-09-30&#93;   使用 <code>for&#40;i in 1:length&#40;x&#41;&#41;</code> 或 <code>for&#40;i in seq&#40;x&#41;&#41;</code> 得到的索引序列都有问题：</p>
+<ul>
+<li><p><a class=emph >  最保险的方式是 <code>seq_along&#40;x&#41;</code> 或 <code>seq_len&#40;k&#41;</code>. </a></p>
+
+<li><p>当 <code>x &lt;- c&#40;&#41;</code> 时, <code>1:length&#40;x&#41;</code> 和 <code>seq&#40;length&#40;x&#41;&#41;</code> 都会得到 <code>1:0</code>.</p>
+
+<li><p>当 <code>x &lt;- c&#40;22&#41;</code> 时, <code>seq&#40;x&#41;</code> 会得到 <code>1:22</code>（不是 <code>1</code>）. </p>
+
+</ul>
+
+<li class=blank >  &#91;2021-08-24&#93;   在模拟计算中，生成的 <code>X</code> 如果不是中心化的，建议添加一步 <code>scale</code> 操作。一个例子是，在模拟 <code>binomial/poison</code> 的模型中，如果使用偏态数据（例如 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>χ</mi><mn>2</mn></msup><mo stretchy=false >(</mo><mn>4</mn><mo stretchy=false >)</mo></mrow><annotation encoding="application/x-tex">\chi^2(4)</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1.064108em;vertical-align:-0.25em;"></span><span class=mord ><span class="mord mathnormal">χ</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class=mopen >(</span><span class=mord >4</span><span class=mclose >)</span></span></span></span>）和非负系数生成 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi></mrow><annotation encoding="application/x-tex">\eta</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">η</span></span></span></span>，此时 <code>family&#36;linkinv&#40;eta&#41;</code> 在 <code>binomial</code> 下全为一。 
+<li class=blank >  &#91;2021-07-01&#93; 内置函数 <code>boxplot</code> 的 <code>group-by</code> 用法：</p>
+<pre><code class="r hljs">A1 <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span><span class=hljs-number >2</span><span class=hljs-punctuation >,</span><span class=hljs-number >9</span><span class=hljs-punctuation >,</span><span class=hljs-number >6</span><span class=hljs-punctuation >,</span><span class=hljs-number >4</span><span class=hljs-punctuation >)</span>
+A2 <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >5</span><span class=hljs-punctuation >,</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span><span class=hljs-number >9</span><span class=hljs-punctuation >,</span><span class=hljs-number >2</span><span class=hljs-punctuation >,</span><span class=hljs-number >3</span><span class=hljs-punctuation >)</span>
+A3 <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span><span class=hljs-number >2</span><span class=hljs-punctuation >,</span><span class=hljs-number >3</span><span class=hljs-punctuation >,</span><span class=hljs-number >4</span><span class=hljs-punctuation >,</span><span class=hljs-number >5</span><span class=hljs-punctuation >)</span>
+B1 <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >2</span><span class=hljs-punctuation >,</span><span class=hljs-number >4</span><span class=hljs-punctuation >,</span><span class=hljs-number >6</span><span class=hljs-punctuation >,</span><span class=hljs-number >8</span><span class=hljs-punctuation >,</span><span class=hljs-number >10</span><span class=hljs-punctuation >)</span>
+B2 <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >0</span><span class=hljs-punctuation >,</span><span class=hljs-number >3</span><span class=hljs-punctuation >,</span><span class=hljs-number >6</span><span class=hljs-punctuation >,</span><span class=hljs-number >9</span><span class=hljs-punctuation >,</span><span class=hljs-number >12</span><span class=hljs-punctuation >)</span>
+B3 <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span><span class=hljs-number >2</span><span class=hljs-punctuation >,</span><span class=hljs-number >8</span><span class=hljs-punctuation >,</span><span class=hljs-number >7</span><span class=hljs-punctuation >)</span>
+
+DF2 <span class=hljs-operator >&lt;-</span> data.frame<span class=hljs-punctuation >(</span>
+  x <span class=hljs-operator >=</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span>A1<span class=hljs-punctuation >,</span> A2<span class=hljs-punctuation >,</span> A3<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span>B1<span class=hljs-punctuation >,</span> B2<span class=hljs-punctuation >,</span> B3<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span>
+  y <span class=hljs-operator >=</span> <span class=hljs-built_in >rep</span><span class=hljs-punctuation >(</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&quot;A&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&quot;B&quot;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> each <span class=hljs-operator >=</span> <span class=hljs-number >15</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span>
+  z <span class=hljs-operator >=</span> <span class=hljs-built_in >rep</span><span class=hljs-punctuation >(</span><span class=hljs-built_in >rep</span><span class=hljs-punctuation >(</span><span class=hljs-number >1</span><span class=hljs-operator >:</span><span class=hljs-number >3</span><span class=hljs-punctuation >,</span> each<span class=hljs-operator >=</span><span class=hljs-number >5</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> <span class=hljs-number >2</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span>
+  stringsAsFactors <span class=hljs-operator >=</span> <span class=hljs-literal >FALSE</span>
+<span class=hljs-punctuation >)</span>
+str<span class=hljs-punctuation >(</span>DF2<span class=hljs-punctuation >)</span>
+<span class=hljs-comment ># &#x27;data.frame&#x27;: 30 obs. of  3 variables:</span>
+<span class=hljs-comment >#  $ x: num  1 2 9 6 4 5 1 9 2 3 ...</span>
+<span class=hljs-comment >#  $ y: chr  &quot;A&quot; &quot;A&quot; &quot;A&quot; &quot;A&quot; ...</span>
+<span class=hljs-comment >#  $ z: int  1 1 1 1 1 2 2 2 2 2 ...</span>
+
+cols <span class=hljs-operator >&lt;-</span> rainbow<span class=hljs-punctuation >(</span><span class=hljs-number >3</span><span class=hljs-punctuation >,</span> s <span class=hljs-operator >=</span> <span class=hljs-number >0.5</span><span class=hljs-punctuation >)</span>
+boxplot<span class=hljs-punctuation >(</span>x <span class=hljs-operator >~</span> z <span class=hljs-operator >+</span> y<span class=hljs-punctuation >,</span> data <span class=hljs-operator >=</span> DF2<span class=hljs-punctuation >,</span>
+        at <span class=hljs-operator >=</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >1</span><span class=hljs-operator >:</span><span class=hljs-number >3</span><span class=hljs-punctuation >,</span> <span class=hljs-number >5</span><span class=hljs-operator >:</span><span class=hljs-number >7</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> col <span class=hljs-operator >=</span> cols<span class=hljs-punctuation >,</span>
+        <span class=hljs-built_in >names</span> <span class=hljs-operator >=</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&quot;&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&quot;A&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&quot;&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&quot;&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&quot;B&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&quot;&quot;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> xaxs <span class=hljs-operator >=</span> <span class=hljs-literal >FALSE</span><span class=hljs-punctuation >)</span>
+legend<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;topleft&quot;</span><span class=hljs-punctuation >,</span> fill <span class=hljs-operator >=</span> cols<span class=hljs-punctuation >,</span> legend <span class=hljs-operator >=</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span><span class=hljs-number >2</span><span class=hljs-punctuation >,</span><span class=hljs-number >3</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> horiz <span class=hljs-operator >=</span> <span class=hljs-built_in >T</span><span class=hljs-punctuation >)</span></code></pre>
+<p>
+<li class=blank >  &#91;2021-06-30&#93; <code>sub</code> 替换字符串时，只能替换第一个匹配到的内容。用 <code>gsub</code> 可以替换所有匹配到的内容。 
+<li class=blank >  &#91;2021-60-30&#93; 把正则表达式匹配的内容替换成指定内容：</p>
+<pre><code class="r hljs"><span class=hljs-comment ># replace the `0.1=0.1` with `rho=0.1` in file names</span>
+gsub<span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;([[:digit:].]{3})[.]csv&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;#rho=\\1.csv&#x27;</span><span class=hljs-punctuation >,</span> resultFiles<span class=hljs-punctuation >)</span></code></pre>
+<p>
+<li class=blank >  &#91;2021-06-08&#93; <code>message&#40;Sys.time&#40;&#41;&#41;</code> 比 <code>print&#40;Sys.time&#40;&#41;&#41;</code> 更加干净. 
+<li class=blank >  &#91;2021-05-10&#93; 禁用 rstudio 的内置帮助浏览器: 注释掉 <code>R/Options.R</code> 里如下内容</p>
+<pre><code class="R hljs"><span class=hljs-comment ># .rs.setOption(&quot;browser&quot;, function(url)</span>
+<span class=hljs-comment ># {</span>
+<span class=hljs-comment >#    .Call(&quot;rs_browseURL&quot;, url, PACKAGE = &quot;(embedding)&quot;)</span>
+<span class=hljs-comment ># })</span></code></pre>
+<p>
+<li class=blank >  &#91;2021-05-10&#93; 禁用 rstudio 的绘图窗口: 修改 <code>R/Tools.R</code> 里的如下内容</p>
+<pre><code class="R hljs">.rs.addFunction<span class=hljs-punctuation >(</span> <span class=hljs-string >&quot;initGraphicsDevice&quot;</span><span class=hljs-punctuation >,</span> <span class=hljs-keyword >function</span><span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span>
+<span class=hljs-punctuation >{</span>
+    <span class=hljs-comment ># options(device=&quot;RStudioGD&quot;)</span>
+    <span class=hljs-comment ># grDevices::deviceIsInteractive(&quot;RStudioGD&quot;)</span>
+grDevices<span class=hljs-operator >::</span>deviceIsInteractive<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span>
+<span class=hljs-punctuation >}</span><span class=hljs-punctuation >)</span></code></pre>
+<p>
+<li class=blank >  &#91;2021-04-28&#93; 关于 <code>write.table</code> 在 simulation 中 <code>repFun</code> 中的示范用法</p>
+<pre><code class="R hljs">write.table<span class=hljs-punctuation >(</span>result<span class=hljs-punctuation >,</span> file<span class=hljs-operator >=</span>savefile<span class=hljs-punctuation >,</span> append<span class=hljs-operator >=</span>file.exists<span class=hljs-punctuation >(</span>saveFile<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> sep<span class=hljs-operator >=</span><span class=hljs-string >&#x27;,&#x27;</span><span class=hljs-punctuation >,</span> row.names<span class=hljs-operator >=</span><span class=hljs-literal >FALSE</span><span class=hljs-punctuation >,</span> col.names<span class=hljs-operator >=</span><span class=hljs-operator >!</span>file.exists<span class=hljs-punctuation >(</span>saveFile<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span>  fileEncoding<span class=hljs-operator >=</span><span class=hljs-string >&#x27;UTF-8&#x27;</span><span class=hljs-punctuation >)</span></code></pre>
+<p>
+<li class=blank >  &#91;2021-06-07&#93; <code>na.fail&#40;x&#41;</code> / <code>complete.cases&#40;y, x&#41;</code> 可以用来检查数据中的缺失值. 
+<li class=blank >  &#91;2021-04-23&#93; <code>data.table</code> 的变量名通过管道更新时，尽量直接改变到 <code>data.table</code> 上面, 不要将结果保存到 <code>cnames</code> 然后用 <code>names&#40;DT&#41; &lt;- cnames</code>。在逐行测试脚本时，如果做了 <code>setcolorder</code> 操作，如果手误重执行了 <code>names&#40;DT&#41; &lt;- cnames</code>，变量名字就混乱了，相应的属性也不匹配了。 
+<li class=blank >  &#91;2021-04-22&#93; <code>R</code> 里的短路运算 <code>&amp;&amp;</code> 和 <code>||</code> 在使用时, 如果两边都是向量，帮助文档中指出只有第一个元素参与运算，返回值是<strong>标量</strong>. 
+<li class=blank >  &#91;2021-04-17&#93; 数值模拟在保存模拟结果时，要保持紧凑一致。如果最后需要补充一些分析内容（添加图像），这样有极大便利！ 
+<li class=blank >  &#91;2021-04-09&#93; 关于文件和路径的截取、拼接等操作, 一定使用内置方法（可靠、简洁且跨平台，太省心了）。</p>
+<pre><code class="R hljs">file.path<span class=hljs-punctuation >(</span>dirname<span class=hljs-punctuation >(</span>saveDir<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> saveFile<span class=hljs-punctuation >)</span></code></pre>
+<p>
+<li class=blank >  &#91;2021-03-12&#93; <code>identical&#40;c&#40;r0, c0&#41;, dim&#40;x&#41;&#41;</code> 返回 <code>FALSE</code>，因为前者是简单向量，后者有额外属性。可以用 <code>all.equal</code> 仅对数值进行比较。 
+<li class=blank >  &#91;2021-03-07&#93; <code>slurm</code> 任务里如果其中载入了 <code>anaconda</code> 虚拟环境进行计算，那就需要先激活虚拟环境，在环境中进行 <code>sbatch</code> 才可以。 
+<li class=blank >  &#91;2021-02-25&#93; <code>R / Julia</code> 的幂运算都是后缀操作符，<code>2^3^2 &#61; 2^&#40;3^2&#41;</code>。<code>Matlab</code> 是前缀操作符 <code>2^3^2 &#61; &#40;2^3&#41;^2</code>。 
+<li class=blank >  &#91;2021-02-24&#93; <code>mathjaxr</code> 渲染帮助文档效果优秀。注意：每个用到的文档都需要在 <code>description</code> 添加 <code>\loadmathjax</code>。 
+<p><li class=blank >  &#91;2021-02-20&#93; </p>
+<ul>
+<li><p>pkg 里有 <code>cpp</code> 时, 在 <code>check</code> 的时候如果 <code>cpp</code> 函数抛出了 <code>undocumented/documented</code> 这种文档信息警告, 那就是改动了 <code>cpp</code> 函数的文档信息, 但是忘记 <code>compileAttributes</code> 了。</p>
+
+<li><p>如果一个 <code>rdname</code> 包含的所有函数都没有用到某个 <code>param</code>, <code>check</code> 的时候会对排在最后的那个函数抛出一个警告, 表明参数没有被这个函数使用.</p>
+
+<li><p><strong>为了尽可能避免这两个问题，在 <code>check</code> 之前执行一遍 <code>compileAttributes&#40;&#41; / document&#40;&#41;</code>，不要偷懒！</strong> </p>
+
+</ul>
+
+<li class=blank >  &#91;2021-02-04&#93; <code>data.table</code> 的 <code>DT</code> 在语法一致性上很好, 但是 <code>DT&#91;, fun&#40;.SD&#41;&#93;</code> 的效率没有优势。一个 <code>287 x 20532</code> 的 <code>DT</code>, 测试维数</p>
+<pre><code class="R hljs"><span class=hljs-operator >&gt;</span> microbenchmark<span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >[</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >dim</span><span class=hljs-punctuation >(</span>.SD<span class=hljs-punctuation >)</span><span class=hljs-punctuation >]</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >dim</span><span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> times<span class=hljs-operator >=</span><span class=hljs-number >10</span><span class=hljs-punctuation >)</span>
+Unit<span class=hljs-operator >:</span> nanoseconds
+        expr        <span class=hljs-built_in >min</span>         lq       mean     median         uq        <span class=hljs-built_in >max</span> neval
+DT<span class=hljs-punctuation >[</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >dim</span><span class=hljs-punctuation >(</span>.SD<span class=hljs-punctuation >)</span><span class=hljs-punctuation >]</span> <span class=hljs-number >1999441400</span> <span class=hljs-number >2029103400</span> <span class=hljs-number >2070402640</span> <span class=hljs-number >2057064800</span> <span class=hljs-number >2088228700</span> <span class=hljs-number >2160831800</span>    <span class=hljs-number >10</span>
+        <span class=hljs-built_in >dim</span><span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >)</span>        <span class=hljs-number >800</span>       <span class=hljs-number >1100</span>       <span class=hljs-number >6570</span>       <span class=hljs-number >8900</span>       <span class=hljs-number >9900</span>      <span class=hljs-number >13300</span>    <span class=hljs-number >10</span>
+
+
+<span class=hljs-operator >&gt;</span> microbenchmark<span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >[</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >sum</span><span class=hljs-punctuation >(</span>sapply<span class=hljs-punctuation >(</span>.SD<span class=hljs-punctuation >,</span> sd<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >]</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >sum</span><span class=hljs-punctuation >(</span>sapply<span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >,</span> sd<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> times<span class=hljs-operator >=</span><span class=hljs-number >10</span><span class=hljs-punctuation >)</span>
+Unit<span class=hljs-operator >:</span> milliseconds
+                    expr       <span class=hljs-built_in >min</span>        lq      mean    median        uq       <span class=hljs-built_in >max</span> neval
+DT<span class=hljs-punctuation >[</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >sum</span><span class=hljs-punctuation >(</span>sapply<span class=hljs-punctuation >(</span>.SD<span class=hljs-punctuation >,</span> sd<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >]</span> <span class=hljs-number >2242.2378</span> <span class=hljs-number >2274.5062</span> <span class=hljs-number >2442.1339</span> <span class=hljs-number >2346.2941</span> <span class=hljs-number >2473.6010</span> <span class=hljs-number >2963.7093</span>    <span class=hljs-number >10</span>
+        <span class=hljs-built_in >sum</span><span class=hljs-punctuation >(</span>sapply<span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >,</span> sd<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span>  <span class=hljs-number >159.6909</span>  <span class=hljs-number >179.8594</span>  <span class=hljs-number >208.0267</span>  <span class=hljs-number >196.3342</span>  <span class=hljs-number >226.7658</span>  <span class=hljs-number >313.3951</span>    <span class=hljs-number >10</span></code></pre>
+<p>
+<p><li class=blank >  &#91;2020-12-10&#93; 模拟的几个规范点: </p>
+<ul>
+<li><p><code>repFun</code> 里用 <a class=delete > <code>data.table::fwrite&#40;DT, file&#61;savefile, append&#61;file.exists&#40;savefile&#41;&#41;</code> 保存 </a>。在 <code>DT</code> 中, 它的 <code>names</code> 直接由各种模拟方法提供（所以模拟方法的返回值的名字要细心设计）。在两次大规模计算中, <code>fwrite</code> 总是出现个别漏写 &#40;这在小型计算中倒是可以补救&#41;, 以后改用 <code>write.table</code>, 还能减少一个依赖。</p>
+
+<li><p>由于样本量和维数等可能不断变化, 在保存模拟结果时, 文件名需要包含模拟设定的详细信息。</p>
+
+<li><p>&#91;2020-11-13&#93; 生成的数据中, 记得进行精度验证: <code>ifelse&#40;A &gt; .Machine&#36;double.eps, A, 0.0&#41;</code> </p>
+
+</ul>
+
+<li class=blank >  &#91;2020-12-07&#93; <code>duplicated</code> 和 <code>unique</code> 的作用: 前者找出重复/不重复的记录后, 可以对记录里的其他变量操作；后者就是为了找出不重复的记录&#40;直接返回记录&#41;. 
+<li class=blank >  &#91;2020-12-05&#93; 对每一份与 <code>r</code> 对应地 <code>cxx</code> 函数, 在 <code>@examples</code> 里添加 <code>stopifnot</code> 对结果判断, 把代码测试交给程序做。 
+<li class=blank >  &#91;2020-12-02&#93; <a class=delete > <code>Rcpp</code> 的 <code>cpp</code> 文件之间不要互项调用, 不然不好处理. </a> 用头文件 &#40;<code>.h</code>&#41; 可以实现互相调用. 
+<li class=blank >  &#91;2020-08-24&#93; <code>sort&#40;c&#40;&#39;2&#39;, &#39;13&#39;&#41;&#41;</code> 和 <code>sort&#40;c&#40;2, 13&#41;&#41;</code> 是不同的. 前者按照逐个字符排序, 后者按照数字大小排序. 
+<li class=blank >  &#91;2020-08-23&#93; <code>glm</code> 的参数 <code>singular.ok</code> 慎用. 如果需要严格精确拟合模型, 这个参数显式设置成 <code>FALSE</code>. 
+<p><li class=blank > <code>glm</code> 拟合时, 区分如下两条警告:</p>
+<ol>
+<li><p><code>glm.fit: algorithm did not converge</code> &#40;算法不收敛, 表明结果不可信, 需要尝试其他初始值, 得到收敛结果. &#41;</p>
+
+<li><p><code>glm.fit: fitted probabilities numerically 0 or 1 occurred</code> &#40;表示 <code>binomial</code> 模型拟合的 <code>mu</code> 与 <code>0/1</code> 的误差小于 <code>10 * .Machine&#36;double.eps</code>, <strong>目前看来没啥问题</strong>&#41;. </p>
+
+</ol>
+
+<p><li class=blank >  &#91;2020-08-20&#93;</p>
+<ul>
+<li><p><a class=delete > <code>glm</code> 和 <code>glm.fit</code> 的结果不一样? 而且计算一个 <code>binomial</code> 时, 前者发散, 后者收敛. </a> <code>glm</code> 用默认 <code>mehtod&#61;&quot;glm.fit&quot;</code> 时, 两者的结果完全一样&#40;同时收敛或不收敛, 拟合结果也完全相同&#41;. 两者的区别是: <code>glm.fit</code> 的截距项必须手动添加到 <code>x</code> 中, 它的 <code>intercept</code> 参数不是设置是否包含截距项&#40;回看 2020-04-26&#41;.</p>
+
+<li><p>如果已经有矩阵 <code>x</code>&#40;或通过 <code>model.matrix</code> 算好了&#41;, 那么 <code>glm.fit</code> 比 <code>glm</code> 要高效&#40;避免了 <code>glm</code> 重新生成 <code>model.matrix</code> 的操作&#41;. </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2020-08-19&#93; <code>nanset</code> 是一个索引向量, <code>x&#91;, -nanset&#93;</code> 在 <code>length&#40;nanset&#41; &#33;&#61; 0</code> 时才有效. 如果 <code>nanset</code> 是 <code>integer&#40;0&#41;</code>, 那 <code>x&#91;, -nanset&#93;</code> 是空矩阵&#40;<code>NCOL&#40;x&#91;, -nanset&#93;</code> 为零&#41;.  <p><li class=blank >  &#91;2020-08-17&#93;</p>
+<ul>
+<li><p><code>rpois&#40;1, exp&#40;21.5&#41;&#41;</code> 会报错.</p>
+
+<li><p>在 <code>canonical poisson</code> 回归的模拟里&#40;<code>log-linear</code>&#41;, 只要 <code>eta&#61;x&#39;b</code> 超过 <code>21.5</code>, 随机数就不能生成了. </p>
+
+<li><p>一种解决方式是修改设定, 使得 <code>x&#39;b</code> 不能超过 <code>21.5</code>. 另一种方式是 <code>pmin&#40;x&#39;b, 21&#41;</code>, 对过分大的 <code>eta</code> 截断. </p>
+
+</ul>
+ <p><li class=blank > <code>MASS::mvrnorm</code> 是基础功能包提供的内容, 它包含了详细的参数有效性检查, 其中用到了特征值分解和奇异值分解, 哪怕效率稍差, 但是可靠性很好. 就不要自己重造多元正态的生成函数了&#40;用 <code>cholesky</code> 对协差阵进行分解的方式虽然原理上可用, 但是 ...&#41; <strong>当 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span></span></span></span> 很大时&#40;<span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>≈</mo><mn>10000</mn></mrow><annotation encoding="application/x-tex">\approx 10000</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.48312em;vertical-align:0em;"></span><span class=mrel >≈</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span></span><span class=base ><span class=strut  style="height:0.64444em;vertical-align:0em;"></span><span class=mord >10000</span></span></span></span>&#41;, <code>MASS::mvrnorm</code> 需要对协差阵进行特征分解&#40;这是 <code>R</code> 不够快, 也是因为这么大矩阵的分解本身也不快&#41;, 速度奇慢. 尽量避免这么大的模拟设定.</strong></p>
+<pre><code class="R hljs">w1 <span class=hljs-operator >&lt;-</span> 0.1
+s2 <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >sqrt</span><span class=hljs-punctuation >(</span><span class=hljs-number >1</span> <span class=hljs-operator >-</span> w1<span class=hljs-operator >^</span><span class=hljs-number >2</span><span class=hljs-punctuation >)</span>
+A <span class=hljs-operator >&lt;-</span> outer<span class=hljs-punctuation >(</span>seq<span class=hljs-punctuation >(</span><span class=hljs-number >300</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> seq<span class=hljs-punctuation >(</span><span class=hljs-number >300</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> <span class=hljs-keyword >function</span><span class=hljs-punctuation >(</span>i<span class=hljs-punctuation >,</span> j<span class=hljs-punctuation >)</span> w1<span class=hljs-operator >^</span><span class=hljs-punctuation >(</span>i<span class=hljs-operator >-</span>j<span class=hljs-punctuation >)</span> <span class=hljs-operator >*</span> w2 <span class=hljs-operator >*</span> <span class=hljs-punctuation >(</span>i <span class=hljs-operator >&gt;=</span> j<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span></code></pre>
+<p>这段代码出现了两个问题:</p>
+<ul>
+<li><p><code>i &lt;&lt; j</code> 时, <code>w1^&#40;i-j&#41; &#61; Inf</code>, 导致 <code>Inf * &#40;i &gt;&#61; j&#41; &#61; NaN</code>. 一种可靠的方式: <code>ifelse&#40;i&gt;&#61;j, w1^&#40;i-j&#41; * w2, 0.0&#41;</code>.</p>
+
+<li><p>当 <code>i &gt;&gt; j</code> 时, 比如 <code>i&#61;100, j&#61;1</code>, 此时 <code>w1^&#40;i-j&#41; &#61; 1e-99</code>, 这个数字参与计算是不准确的. <strong>在多数情况下</strong>, 可以对上述矩阵 <code>A</code> 进行误差截断: <code>A &lt;- ifelse&#40;A &gt; .Machine&#36;double.eps, A, 0.0&#41;</code>. </p>
+
+<li><p>如果计算需要保留高精度, 上述截断方式太粗暴了, 需要使用高精度的数据类型&#40;<code>R</code> 和 <code>python</code> 都有 <code>decimal</code> 类型&#41;.</p>
+
+<li><p><code>.Machine</code> 提供了很多基本精度和范围, 按需要进行选择. 这里是因为 <code>A</code> 的元素确定非负, 所以用 <code>.Machine&#36;double.eps</code> 作为截断下界. </p>
+
+</ul>
+</p>
+<li class=blank >  &#91;2020-08-14&#93; 想要对一个已有的 <code>GLM</code> 涉及的 <code>x</code> 和 <code>y</code> 进行进一步分析, 不需要从原始数据集里找变量, 把 <code>GLM</code> 里 <code>x</code> 和 <code>y</code> 的参数设为 <code>TRUE</code>, 自然可以提取其中的数据. 
+<p><li class=blank >  &#91;2020-08-11&#93; 在并行计算中将每份执行结果都写入文件, 是很好的习惯. 但是文件存储的方式要设计成高效有序的形式&#40;方便整理和打开阅读&#41;, 目前良好的方式如下:</p>
+<ul>
+<li><p>每次 replicate 的结果整理成向量.</p>
+
+<li><p>同一个设定的 replicates 结果写进同一个文件中.</p>
+
+<li><p>不同设定的结果存放在不同的文件中. </p>
+
+</ul>
+
+<li class=blank >  &#91;2020-08-11&#93; 在 <code>R</code> 里创建临时文件夹 <code>tempdir&#40;&#41;</code> 和临时文件 <code>tempfile&#40;&#41;</code>. 临时文件先返回文件名, 有数据写入时, 才会创建文件. 退出当前 <code>R</code> 进程时, 临时文件夹连同下面的临时文件都会被删除. 
+<p><li class=blank >  &#91;2020-08-09&#93;</p>
+<ul>
+<li><p>用 <code>write.table</code> 的 <code>col.names&#61;FALSE</code> 控制不输出列名&#40;没有列名时, 不自动生成&#41;. </p>
+
+<li><p><code>write.csv</code> 的 <code>col.names</code><strong>不能用来控制列名称是否输出</strong>.</p>
+
+<li><p>以后都用 <code>write.table</code> 吧, <code>col.names/row.names</code> 设置行列名称是否输出, <code>sep&#61;&#39;,&#39;</code> 输出 <code>csv</code> 文件, <code>quote&#61;FALSE</code> 确保字符串/因子变量输出时没有引号. </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2020-08-04&#93;</p>
+<ul>
+<li><p><code>R</code> 的 <code>gaussian&#40;&#41;</code> 等 <code>family</code> 函数会提供 <code>dev.resids&#40;y, mu, weights&#41;</code> 函数, 其中 <code>mu</code> 是对每个样本的 <code>fitted.values</code>, 等于 <code>linkinv&#40;linear.predictor&#41;</code>. </p>
+
+<li><p><code>dev.resids</code> 计算了 <code>y</code> 中每个样本在给定 <code>mu</code> 时的 <code>-2*logLik</code>, 按道理它和 <code>-2*sum&#40;log f&#40;yi, mui&#41;&#41;</code> 相差一个常数, 这个常数与数据 <code>y</code> 有关. 当 <code>y</code> 给定时, 当 <code>y</code> 给定时, 这个常数是固定的. <a class=emph >  但是, 拟合线性模型时&#40;<code>lm/glm</code>&#41;, 用 <code>deviance</code> 的到的结果不是 <code>-2logLik</code>, 这太坑了！！！ </a></p>
+
+</ul>
+<ul>
+<li><p><code>GLM</code> 中, 在得到 <code>mu&#61;family&#40;&#41;&#36;linkenv&#40;eta&#41;</code>&#40;eta 就是 linear.predictor&#41; 之后, 可以计算出分布族中其他参数, 进一步使用 <code>-2*sum&#40;f&#40;y, paras, log&#61;TRUE&#41;&#41;</code> 计算完整的 <code>-2*logLik</code>. 例如, 在 <code>binomial</code> 和 <code>poisson</code> 中, <code>mu</code> 就是这两个分布的唯一参数&#40;期望&#41;, 可以直接调用 <code>-2*sum&#40;dbinom&#40;y, size&#61;1, prob&#61;mu, log&#61;TRUE&#41;</code> 和 <code>-2*sum&#40;dpois&#40;y, lambda&#61;mu, log&#61;TRUE&#41;&#41;</code>. <a class=emph >  模型的结果精确等于 <code>-2*logLik</code>, 对 <code>poisson</code> 模型的结果与 <code>-2*logLik</code> 相差一个定值常数&#40;与 <code>y</code> 有关&#41;. </a> </p>
+
+</ul>
+
+<li class=blank >  &#91;2020-11-23&#93; <code>R</code> 提供了 <code>stats::logLik</code> 和 <code>stats4::logLik</code> , 可靠性很好. 
+<p><li class=blank >  &#91;2020-11-12&#93;</p>
+<ul>
+<li><p><code>RcppArmadillo/RcppEigen</code> 的 cpp 文件里, 如果使用了 <code>using Eigen::MatrixXd ;</code> 这样的内容, 直接 <code>compileAttributes&#40;&#41;</code> 时不会把这些内容写入 <code>RcppExports.cpp</code> 中, 导致编译错误。</p>
+
+<li><p>可以手动将这部分内容写到 <code>RcppExports.cpp</code> 里面.</p>
+
+<li><p>但是 Dirk 建议使用完整的类型 &#40;https://stackoverflow.com/questions/55403651/how-can-i-use-using-namespace-eigen-in-an-rcppeigen-based-r-package&#41;</p>
+
+<li><p>再次强调: <code>Rcpp</code> 函数需要 <code>@export</code> 才能导出外部使用. <code>&#91;&#91;Rcpp::export&#93;&#93; 可以在包内部使用</code>.</p>
+
+<li><p><code>RcppEigen</code> 和 <code>RcppArmadillo</code> 各自生成的 <code>src/Makevars</code> 和 <code>src/Makevars.win</code> 不同。前者生成的这两个文件里都是注释，后者生成的文件中有编译设置。目前测试结果表明，如果同时需要两者，使用 <code>RcppArmadillo.package.skeleton&#40;.&#41;</code>。</p>
+
+<li><p>自己写的 package 使用 <code>Rcpp*</code> 系列时, 不管是否用到了 package <code>Rcpp</code> 自身的内容, 都要添加如下两项内容:</p>
+<ol>
+<li><p><code>@useDynLib fastEigen, .registration&#61;TRUE</code></p>
+
+<li><p><code>@importFrom Rcpp evalCpp</code> 【缺少这一项时, 编译安装没问题，调用函数时抛出 <code>RNG</code> 有关的错误。这个问题是用 <code>R CMD check ...</code> 发现的, 用 <code>devtools::document&#40;...&#41;</code> 没有发现有用的提示.】 </p>
+
+</ol>
+
+</ul>
+
+<li class=blank >  &#91;2020-11-11&#93; 从文件读入的数据&#40;<code>readxl::read_xlsx</code> 等&#41;, 可能不会设置列名称（比如列名称以数字开头），可以用 <code>R</code> 提供的函数进行设置:</p>
+<pre><code class="R hljs"><span class=hljs-built_in >names</span><span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >)</span> <span class=hljs-operator >&lt;-</span> make.names<span class=hljs-punctuation >(</span><span class=hljs-built_in >names</span><span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span></code></pre>
+<p>
+<p><li class=blank >  &#91;2020-10-30&#93;</p>
+<ul>
+<li><p>双层 <code>for</code> 循环, 一定要小心边界位置是否与逻辑相同.</p>
+
+<li><p>就我们遇到的代码来说, 不要为了一点点性能提升而过分优化代码&#40;导致可读性降低很多&#41;. </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2020-10-29&#93;</p>
+<ul>
+<li><p>目前遇到的机器报错，都是自己写错了。</p>
+
+<li><p>Armadillo 里, <code>symmatu&#40;&#41;/symmatl&#40;&#41;</code> 可以从用一个矩阵的上三角/下三角部分创建对称矩阵。这比手工进行对称赋值要简单稳定多了&#40;检查了好几遍都自信满满没查出来&#41;。 </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2020-10-24&#93;</p>
+<ul>
+<li><p><code>roxygenize&#40;.&#41;</code> 生成 <code>Rd</code> 文档时, 要求函数内部不能用 <code>#&#39;</code> 格式注释, 否则 <code>export</code> 会有警告 <code>@export may only span a single line</code>, 而且这个函数也不会被导出.</p>
+
+<li><p><code>function &#39;enterRNGScope&#39; not provided by package &#39;Rcpp&#39;</code>: 需要在 package 中添加 <code>@importFrom Rcpp evalCpp</code>. </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2020-10-23&#93;</p>
+<ul>
+<li><p>在 interaction feature selection 时, 用 <code>scale&#40;x&#41;</code> 和 <code>x</code> 生成的 interaction feature 在 selection 中的结果差别很大. 测试使用 <code>scale&#40;x&#41;</code> 时, 选了好多 false interaction feature.</p>
+
+<li><p><a class=delete > <code>residuals&#40;.&#41;</code> 在 <code>glm</code>&#40;non-Gaussian&#41; 下的结果与 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>−</mo><mover accent=true ><mi>μ</mi><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">y - \hat{\mu}</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >−</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:0.69444em;"><span style="top:-3em;"><span class=pstrut  style="height:3em;"></span><span class="mord mathnormal">μ</span></span><span style="top:-3em;"><span class=pstrut  style="height:3em;"></span><span class=accent-body  style="left:-0.22222em;"><span class=mord >^</span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.19444em;"><span></span></span></span></span></span></span></span></span> 不一样, 这是坑. </a> 经过测试, 又发现这两者是相同的. </p>
+
+</ul>
+
+<li class=blank >  &#91;2020-10-06&#93; <code>make.names</code> 检查 data.frame 里变量的名字是否合法. 
+<li class=blank >  &#91;2020-10-05&#93; <code>binomial-beta 分布</code>: 假定 binomial 分布的参数 <code>p</code> 服从 <code>beta</code> 分布, 可以 capture the overdispersion in binomial type distributed data. 
+<p><li class=blank >  &#91;2020-07-22&#93; <code>R</code> 的 <code>stats::formula</code> 用法:</p>
+<ul>
+<li><p><strong>连续变量的交互项就是数值相乘</strong>, <strong>类别变量的交互项是 dummy 的组合</strong>.</p>
+
+<li><p><code>y ~ x1 &#43; x2</code>: 标准的 linear predictor.</p>
+
+<li><p><code>y ~ x1:x2</code>: <code>x1</code> 与 <code>x2</code> 的交互项.</p>
+
+<li><p><code>y ~ x1*x2</code>: <code>x1*x2</code> 等价于 <code>x1 &#43; x2 &#43; x1:x2</code>.</p>
+
+<li><p><code>y ~ &#40;x1&#43;x2&#41;^2</code>: 等价于 <code>x1 &#43; x2 &#43; x1:x2</code>, 这里的幂次表示 <strong>至多 p-order 交互项</strong>.</p>
+
+<li><p><code>y ~ &#40;x1&#43;x2&#41;^3</code>: 等价于 <code>x1 &#43; x2 &#43; x1:x2</code></p>
+
+<li><p><code>y ~ &#40;x1&#43;x2&#43;x3&#41;^2</code>: 等价于 <code>x1 &#43; x2 &#43; x3 &#43; x1:x2 &#43; x1:x3 &#43; x2:x3</code></p>
+
+<li><p><code>y ~ &#40;x1&#43;x2&#43;x3&#41;^2</code>: 等价于 <code>x1 &#43; x2 &#43; x3 &#43; x1:x2 &#43; x1:x3 &#43; x2:x3 &#43; x1:x2:x3</code>.</p>
+
+<li><p>可以用 <code>-</code> 去掉上述方式结果中的某一项.</p>
+
+<li><p><code>y ~ x1 &#43; log&#40;x2&#41;</code>: <code>log&#40;x2&#41;</code> 作为 predictor 进入模型.</p>
+
+<li><p><code>y ~ x1 &#43; I&#40;x2&#43;x3&#41;</code>: <code>x2&#43;x3</code> 作为 predictor 进入模型.</p>
+
+<li><p><code>y ~ x1 &#43; offset&#40;z&#41;</code>: <code>z</code> 作为 <code>offset</code> 进入 linear predictor&#40;系数固定为 1&#41;.</p>
+
+<li><p>可以用 <code>as.formula&#40;str&#41;</code> 将字符串转换成公式, 此时 <code>str</code> 可以通过 <code>paste/glue</code> 等字符串函数生成. </p>
+
+</ul>
+
+<p><li class=blank >  &#91;2020-07-18&#93; <code>glm</code> 拟合结果中, </p>
+<ul>
+<li><p><code>linear.predictor</code> 是 <code>eta</code>. </p>
+
+<li><p><code>fitted.values</code> 是 <code>mu</code>, 可以用 <code>fitted&#40;result&#41;</code> 提取</p>
+
+<li><p><code>residuals</code> 是 <code>working residuals</code>, 等于 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy=false >(</mo><mi>y</mi><mo>−</mo><mi>μ</mi><mo stretchy=false >)</mo><mi mathvariant=normal >/</mi><msup><mi>h</mi><mo mathvariant=normal  lspace=0em  rspace=0em >′</mo></msup><mo stretchy=false >(</mo><mi>μ</mi><mo stretchy=false >)</mo></mrow><annotation encoding="application/x-tex">(y - \mu) / h&#x27;(\mu)</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:1em;vertical-align:-0.25em;"></span><span class=mopen >(</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >−</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:1.001892em;vertical-align:-0.25em;"></span><span class="mord mathnormal">μ</span><span class=mclose >)</span><span class=mord >/</span><span class=mord ><span class="mord mathnormal">h</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class=mopen >(</span><span class="mord mathnormal">μ</span><span class=mclose >)</span></span></span></span>, 可以用 <code>residuals&#40;result, &#39;working&#39;&#41;</code> 提取.</p>
+
+<li><p><code>y - fitted&#40;result&#41;</code> 被称为 <code>response residuals</code>, 可以用 <code>residuals&#40;result, &#39;response&#39;&#41;</code> 提取.</p>
+
+<li><p>查看 <code>resudials.glm/residuals.lm</code> 源码, 它提供了五种 <code>residuals</code>. </p>
+
+</ul>
+
+<li class=blank >  &#91;2020-06-19&#93; <code>source</code> 在 <code>win</code> 下对文件名的大小写不敏感, 在服务器上必须准确. 
+<li class=blank >  &#91;2020-06-16&#93; <a class=emph >  在 cmd 里执行 matlab 脚本文件, 文件名需要用<code>双引号</code>或者不用引号, 单引号不行. </a> 
+<p><li class=blank >  &#91;2020-06-08&#93;</p>
+<ul>
+<li><p>计算除法时, 小心分母是否低于机器精度&#40;如果分母低于机器精度, 结果失真&#41;, 此时可以添加 ridge 项保留精度&#40;<a class=emph >  着重考虑分子是否近零, 添加合适的 ridge 项或者其他处理 </a>&#41;.</p>
+
+<li><p><code>R</code> 的 <code>cor&#40;x, y&#41;</code> 等价于 <code>cov&#40;x, y&#41; / sd&#40;x&#41; / sd&#40;y&#41;</code>, 没有解决 <code>sd&#40;x&#41;</code> 低于小于机器精度的问题. </p>
+
+</ul>
+
+<li class=blank >  &#91;2020-05-12&#93; 在 <code>glue&#40;&#39;&#123;mean&#40;.&#41;&#125;&#40;&#123;sd&#40;.&#41;&#125;&#41;&#39;</code> 中, 为了均值和标准差能够在 <code>xtable</code> 之后对齐, 需要对它们的小数点后长度进行设置, 使用 <code>format&#40;.&#41;</code> 实现.</p>
+<pre><code class="R hljs">glue<span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;{format(mean(.), digits=3, nsmall=3)}({format(sd(.), digits=3, nsmall=3)})&#x27;</span><span class=hljs-punctuation >)</span></code></pre>
+<p>
+<p><li class=blank >  &#91;2020-04-30&#93; 在 HPC 上从源码安装配置 R:</p>
+<ol>
+<li><p>从 CRAN 或清华镜像上用 <code>wget</code> 下载 R-3.6.3 的源码, 解压. 尝试用 <code>./configure</code>, <code>make</code>, <code>make install</code> 进行编译安装. 目前在 <code>./configure</code> 的时候报错, 提示需要 <code>libcurl</code>.</p>
+
+<li><p>安装配置 <code>curl</code>.</p>
+
+</ol>
+<pre><code class="bash hljs">wget https://curl.haxx.se/download/curl-7.61.0.tar.gz
+tar -zxvf curl-7.61.0.tar.gz
+./configure --prefix=/lustre/home/acct-matls/matls/depends/curl-7.61.0
+make 
+make install</code></pre>
+<p>然后把 <code>curl</code> 的 <code>bin</code> 路径添加到 <code>~/.bash_profile</code> 中, 并且要 <code>source</code> 一下.</p>
+<ol start=3 >
+<li><p>进入解压的 <code>R</code> 源码文件夹, 编译安装. 中间遇到了 <code>jni.h</code> 的一个错误, 不用管他, 仍然能安装成功.</p>
+
+<li><p>把 <code>R</code> 的 <code>bin</code> 添加到路径中, <code>source</code> 一下. </p>
+
+</ol>
+
+<li class=blank >  &#91;2020-04-30&#93; <code>RcppArmadillo</code> 不完全是值传递&#40;还没有理清原理&#41;   下面的函数在 <code>x &lt;- array&#40;1:24, 2:4&#41;</code> 时, <code>cxx_Sigma&#40;x&#41;</code> 不改变 <code>x</code> 的值. 当 <code>x &lt;- array&#40;1:24, 2:4&#41; / 2</code> 时, <code>cxx_Sigma&#40;x&#41;</code> 会改变 <code>x</code> 的值.</p>
+<pre><code class="R hljs"><span class=hljs-operator >/</span><span class=hljs-operator >/</span> <span class=hljs-punctuation >[[</span>Rcpp<span class=hljs-operator >::</span>export<span class=hljs-punctuation >]</span><span class=hljs-punctuation >]</span>
+arma<span class=hljs-operator >::</span>mat cxx_Sigma <span class=hljs-punctuation >(</span>arma<span class=hljs-operator >::</span>cube x<span class=hljs-punctuation >)</span> <span class=hljs-punctuation >{</span>
+  unsigned int n0<span class=hljs-operator >=</span>x.n_slices<span class=hljs-punctuation >,</span> r0<span class=hljs-operator >=</span>x.n_rows<span class=hljs-punctuation >,</span> c0<span class=hljs-operator >=</span>x.n_cols<span class=hljs-punctuation >,</span> i<span class=hljs-operator >=</span><span class=hljs-number >0</span> ;
+  double A0 <span class=hljs-operator >=</span> <span class=hljs-punctuation >(</span>double<span class=hljs-punctuation >)</span> <span class=hljs-punctuation >(</span>n0<span class=hljs-operator >-</span><span class=hljs-number >1</span><span class=hljs-punctuation >)</span><span class=hljs-operator >*</span>r0 ;
+  x <span class=hljs-operator >=</span> x <span class=hljs-operator >/</span> A0 ;
+  arma<span class=hljs-operator >::</span>mat Sig <span class=hljs-operator >=</span> arma<span class=hljs-operator >::</span>zeros<span class=hljs-punctuation >(</span>c0<span class=hljs-punctuation >,</span> c0<span class=hljs-punctuation >)</span> ;
+  <span class=hljs-keyword >for</span> <span class=hljs-punctuation >(</span>i<span class=hljs-operator >=</span><span class=hljs-number >0</span>; i <span class=hljs-operator >&lt;</span> n0; i<span class=hljs-operator >+</span><span class=hljs-operator >+</span><span class=hljs-punctuation >)</span> <span class=hljs-punctuation >{</span>
+    Sig <span class=hljs-operator >+</span><span class=hljs-operator >=</span> arma<span class=hljs-operator >::</span>trans<span class=hljs-punctuation >(</span>x.slice<span class=hljs-punctuation >(</span>i<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span> <span class=hljs-operator >*</span> x.slice<span class=hljs-punctuation >(</span>i<span class=hljs-punctuation >)</span> ;
+  <span class=hljs-punctuation >}</span>
+  <span class=hljs-built_in >return</span> A0 <span class=hljs-operator >*</span> Sig ;
+<span class=hljs-punctuation >}</span></code></pre>
+<p>
+<li class=blank >  &#91;2020-04-26&#93; <code>glm.fit&#40;&#41;</code> 的参数 <code>intercept</code> 是指 Null model 中是否引入截距项. 想要拟合截距项的话, 需要将截距项放到 <code>x</code> 中. 
+<li class=blank >  &#91;2020-04-19&#93; 使用 <code>RcppArmadillo</code> 的 <code>mat/cube</code> 提取子部分是 <code>submat/subcube</code>类型, 不能直接与 <code>vec</code> 进行运算, 需要用 <code>&#40;vec&#41;x&#40;span&#40;0&#41;, span&#40;0&#41;, span::all&#41;</code> 将 <code>x&#91;0, 0, &#93;</code> 显式进行类型转换. 与 <code>NumericVector</code> 类型的互相转换是类似的. 
+<li class=blank >  &#91;2020-04-19&#93; 使用<code>Rcpp::NumericVector</code> 作为函数参数是引用传递,  使用<code>RcppArmadillo::vec</code> 作为函数参数是值传递. <a class=emph >  可以在函数中利用 <code>Rcpp::NumericVector xnew&#40;x.begin&#40;&#41;, x.end&#40;&#41;&#41;</code> 对变量进行值传递, 然后用 <code>xnew</code> 进行计算即可. </a> 
+<li class=blank >  &#91;2020-04-10&#93; 线性回归的信噪比&#40;可能要除以 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>&#41;:</p>
+<div class=no-number ><div class=nonumber ><span class=katex-display ><span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML" display=block ><semantics><mrow><mtext>SNR</mtext><mo>=</mo><mfrac><mrow><mo stretchy=false >∥</mo><mi>X</mi><mi>β</mi><msup><mo stretchy=false >∥</mo><mn>2</mn></msup></mrow><msup><mi>σ</mi><mn>2</mn></msup></mfrac><mo separator=true >,</mo></mrow><annotation encoding="application/x-tex">
+    \text{SNR} = \frac{\lVert X\beta\rVert^2}{\sigma^2} ,
+  </annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord text"><span class=mord >SNR</span></span><span class=mspace  style="margin-right:0.2777777777777778em;"></span><span class=mrel >=</span><span class=mspace  style="margin-right:0.2777777777777778em;"></span></span><span class=base ><span class=strut  style="height:2.177108em;vertical-align:-0.686em;"></span><span class=mord ><span class="mopen nulldelimiter"></span><span class=mfrac ><span class="vlist-t vlist-t2"><span class=vlist-r ><span class=vlist  style="height:1.491108em;"><span style="top:-2.314em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mord ><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class=pstrut  style="height:3em;"></span><span class=frac-line  style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class=pstrut  style="height:3em;"></span><span class=mord ><span class=mopen >∥</span><span class="mord mathnormal" style="margin-right:0.05278em;">Xβ</span><span class=mclose ><span class=mclose >∥</span><span class=msupsub ><span class=vlist-t ><span class=vlist-r ><span class=vlist  style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class=pstrut  style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class=vlist-s >​</span></span><span class=vlist-r ><span class=vlist  style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class=mpunct >,</span></span></span></span></span></div></div>
+<p>其中 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">X \beta</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">Xβ</span></span></span></span> 是 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span> 个样本的真实值. 
+<li class=blank >  &#91;2020-03-18&#93;</p>
+<p>绘制倾斜的坐标标签&#40;不是坐标轴标签&#41;</p>
+<pre><code class="R hljs">x <span class=hljs-operator >&lt;-</span> barplot<span class=hljs-punctuation >(</span>table<span class=hljs-punctuation >(</span>mtcars<span class=hljs-operator >$</span>cyl<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> xaxt<span class=hljs-operator >=</span><span class=hljs-string >&quot;n&quot;</span><span class=hljs-punctuation >)</span>
+labs <span class=hljs-operator >&lt;-</span> paste<span class=hljs-punctuation >(</span><span class=hljs-built_in >names</span><span class=hljs-punctuation >(</span>table<span class=hljs-punctuation >(</span>mtcars<span class=hljs-operator >$</span>cyl<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&quot;cylinders&quot;</span><span class=hljs-punctuation >)</span>
+<span class=hljs-comment ># text(cex=1, x=x-.25, y=-1.25, labs, xpd=TRUE, srt=45)</span>
+text<span class=hljs-punctuation >(</span>cex<span class=hljs-operator >=</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span> x<span class=hljs-operator >=</span>x<span class=hljs-operator >-</span><span class=hljs-number >.25</span><span class=hljs-punctuation >,</span> y<span class=hljs-operator >=</span>par<span class=hljs-punctuation >(</span><span class=hljs-string >&quot;usr&quot;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >[</span><span class=hljs-number >3</span><span class=hljs-punctuation >]</span><span class=hljs-operator >-</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span> labs<span class=hljs-punctuation >,</span> xpd<span class=hljs-operator >=</span><span class=hljs-literal >TRUE</span><span class=hljs-punctuation >,</span> srt<span class=hljs-operator >=</span><span class=hljs-number >45</span><span class=hljs-punctuation >)</span></code></pre>
+<p>根据<a href="https://www.r-graph-gallery.com/4-barplot-with-error-bar/">介绍</a>, 设有向量 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span></span></span></span>, 它的 <code>sd</code>, <code>se</code>, <code>CI</code> 分别为:</p>
+<ul>
+<li><p><code>sd &#61; sd&#40;x&#41; &#61; sqrt&#40;var&#40;x&#41;&#41;</code></p>
+
+<li><p><code>se &#61; sd / sqrt&#40;length&#40;x&#41;&#41;</code></p>
+
+<li><p>给定 alpha, <code>CI &#61; qt&#40;1-alpha/2, length&#40;x&#41;-1&#41; * se</code></p>
+
+</ul>
+<hr />
+<p>绘制 error-bar 图像 &#40;设 <code>fit</code> 是用 <code>optim</code> 得到的结果, 其中包含 <code>Hessian</code>. 样本量为 <code>n</code>&#41;</p>
+<pre><code class="R hljs">x <span class=hljs-operator >&lt;-</span> fit<span class=hljs-operator >$</span>par
+x.se <span class=hljs-operator >&lt;-</span> 1 <span class=hljs-operator >/</span> <span class=hljs-built_in >sqrt</span><span class=hljs-punctuation >(</span>diag<span class=hljs-punctuation >(</span>fit<span class=hljs-operator >$</span>hessian<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span> <span class=hljs-operator >/</span> <span class=hljs-built_in >sqrt</span><span class=hljs-punctuation >(</span>n<span class=hljs-punctuation >)</span>
+ant <span class=hljs-operator >&lt;-</span> <span class=hljs-keyword >function</span> <span class=hljs-punctuation >(</span>x<span class=hljs-punctuation >,</span> x.se<span class=hljs-punctuation >,</span> alpha<span class=hljs-operator >=</span><span class=hljs-number >0.05</span><span class=hljs-punctuation >)</span> <span class=hljs-punctuation >{</span>
+  x.se <span class=hljs-operator >&lt;-</span> qt<span class=hljs-punctuation >(</span><span class=hljs-number >1</span><span class=hljs-operator >-</span>alpha<span class=hljs-operator >/</span><span class=hljs-number >2</span><span class=hljs-punctuation >,</span> n<span class=hljs-operator >-</span><span class=hljs-number >1</span><span class=hljs-punctuation >)</span> <span class=hljs-operator >*</span> x.se
+  plot<span class=hljs-punctuation >(</span>x<span class=hljs-punctuation >,</span> type<span class=hljs-operator >=</span><span class=hljs-string >&#x27;p&#x27;</span><span class=hljs-punctuation >,</span> pch<span class=hljs-operator >=</span><span class=hljs-number >20</span><span class=hljs-punctuation >,</span> ylim<span class=hljs-operator >=</span><span class=hljs-built_in >range</span><span class=hljs-punctuation >(</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span>x<span class=hljs-operator >-</span>x.se<span class=hljs-punctuation >,</span> x<span class=hljs-operator >+</span>x.se<span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span>
+  arrows<span class=hljs-punctuation >(</span>seq<span class=hljs-punctuation >(</span>x<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> x<span class=hljs-operator >-</span>x.se<span class=hljs-punctuation >,</span> seq<span class=hljs-punctuation >(</span>x<span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> x<span class=hljs-operator >+</span>x.se<span class=hljs-punctuation >,</span> angle<span class=hljs-operator >=</span><span class=hljs-number >90</span><span class=hljs-punctuation >,</span> code<span class=hljs-operator >=</span><span class=hljs-number >3</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >length</span><span class=hljs-operator >=</span><span class=hljs-number >0.05</span><span class=hljs-punctuation >)</span>
+  <span class=hljs-comment ># segments(seq(x), x-x.se, seq(x), x+x.se)</span>
+<span class=hljs-punctuation >}</span>
+windows<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span>; ant<span class=hljs-punctuation >(</span>x<span class=hljs-punctuation >,</span> x.se<span class=hljs-punctuation >)</span></code></pre>
+<p>注意, <code>arraws</code> 函数比 <code>segments</code> 函数多了箭头, 能控制箭头的角度, 长度. 
+<p><li class=blank > <code>nliminb</code>, <code>optim</code></p>
+<p>如果用 <code>nlminb</code> 寻优, 结果中不含有 <code>Hessian</code>, 可以调用包 <code>numDeriv</code> 计算出来, 其余步骤相同. </p>
+<hr />
+<ul>
+<li><p><code>optim</code> 和 <code>nlminb</code> 好用, 前者可以返回 Hessian 矩阵, 后者不行. 但是可以通过 <code>numDeriv</code> 包对似然函数定义 Hessian, 并带入优化结果, 仍然可以得到 Hessian 矩阵.</p>
+
+<li><p>目前用钱小邪的数据测试, 是否提供梯度函数对 <code>optim</code> 的结果有明显影响, 对 <code>nlminb</code> 的影响不大.</p>
+
+<li><p>测试中, <code>nlm</code> 报警告, 而且寻优结果不理想.</p>
+
+<li><p><code>numDeriv</code> 只能计算数值梯度, 不能对目标函数返回梯度函数, 所以用它包装出的梯度函数放到 <code>optim/nlminb</code> 中比显式梯度函数的速度显著降低. </p>
+
+</ul>
+
+<li class=blank >  &#91;2020-03-17&#93; 制作 R 包如果需要内置一些 <code>rds</code> 格式数据, 在程序内部调用, 不需要暴露给用户, 可以把数据放在 <code>inst</code> 文件夹下. 暴露给用户的数据大概要求是 <code>rda/rdata</code>  格式. 
+<li class=blank >  &#91;2020-03-16&#93; R 提供的 <code>optim</code> 和 <code>nlminb</code> 都是最小化目标函数, 如果是计算 MLE, 那么目标函数需要<strong>负对数似然</strong>. 能提供梯度函数会加快计算, 但是也要注意使用<strong>负梯度</strong>.</p>
+<p>验证收敛性, 需要看参数估计指定梯度是否接近零. 
+<li class=blank >  &#91;2020-03-09&#93; 制作 R-pkg 时, 在 <code>R CMD build ...</code> 后会生成 <code>tar.gz</code> 文件. 接下来执行 <code>R CMD check ...</code> 时, 以前对包所在的整个文件夹进行, 这样的检查信息中总是会有几个 <code>Note</code> 无法消除, 包括 <code>Checking should be performed on sources prepared by &#39;R CMD build&#39;</code> 和 <code>Found the following sources/headers with CR or CRLF line endings</code>. </p>
+<p>查看 <code>R CMD check --help</code>, 这个检查可以对文件夹进行, 也可以对 <code>tar</code> 类型的文件执行. 以后还是运行 <code>R CMD check *.tar.gz</code> 更好, 一个好处是避免编译 <code>*.cxx</code> 生成的文件出现在源代码的 <code>src</code> 文件夹下, 不然每次要手动删除. 
+<li class=blank >  &#91;2020-03-08&#93; 编写 R-pkg 时, 如果把模型的返回结果设为 <code>S3</code> class, 可以提供一些泛型函数&#40;<code>predict</code>, <code>print</code>&#41;, 这样看起来更简洁和正式. 泛型函数要包含原函数所有的参数, 另外可根据需要自行添加参数. 以 <code>predict&#40;object, ...&#41;</code> 和 <code>print&#40;x, ...&#41;</code> 为例, <code>PLFD</code> 中自行编写的函数格式为</p>
+<pre><code class="julia hljs">predict.plfd &lt;- <span class=hljs-keyword >function</span>(object, x, ...) {...}
+print.plfd &lt;- <span class=hljs-keyword >function</span>(x, ...) {...}</code></pre>
+<p>
+<li class=blank >  &#91;2017-05-04&#93;  <strong><a href="https://en.wikipedia.org/wiki/Cram&#37;C3&#37;A9r&#37;27s_theorem &quot;Carmer&#39;s theorem&quot;">Carmer&#39;s theorem</a></strong></p>
+<blockquote>
+<p>如果 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 和 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi></mrow><annotation encoding="application/x-tex">Y</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> 是两个 <strong>独立</strong> 实值随机变量，满足 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>+</mo><mi>Y</mi></mrow><annotation encoding="application/x-tex">X+Y</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span><span class=mbin >+</span><span class=mspace  style="margin-right:0.2222222222222222em;"></span></span><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> 是正态随机变量，那么 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi></mrow><annotation encoding="application/x-tex">X</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span> 和 <span class=katex ><span class=katex-mathml ><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi></mrow><annotation encoding="application/x-tex">Y</annotation></semantics></math></span><span class=katex-html  aria-hidden=true ><span class=base ><span class=strut  style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span></span></span></span> 必定正态.&#40;通过归纳法，可以推广至任意<strong>有限独立</strong>实值随机变量的和&#41;</p>
+</blockquote>
+<p>中心极限定理表明：均值方差有限的独立同分布随机变量的均值渐近正态. Carmer&#39;s theorem 表明：除非各个随机变量服从正态，否则 <strong>有限</strong> 的平均值不是正态. 
+</ul>
+<div class=page-foot >
+  <div class=copyright >
+    
+    &copy; Zengchao XU. Last touched: Sep 1st, 2022.
+  </div>
+</div>
+</div>
+    </div>  
+    
+        
+
+<script>
+    renderMathInElement(document.body)
+</script>
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>

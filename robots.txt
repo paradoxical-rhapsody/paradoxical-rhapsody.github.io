@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /archived-expo/
+Disallow: /cv
+Disallow: /dataexpo/
+Disallow: /pgp-mail
+Disallow: /recipe/
+Disallow: /research
+Disallow: /tales/
+Disallow: /teaching

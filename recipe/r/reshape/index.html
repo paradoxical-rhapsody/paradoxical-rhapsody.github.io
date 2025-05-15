@@ -1,0 +1,132 @@
+<!doctype html> <html lang=en > <meta charset=UTF-8 > <meta name=viewport  content="width=device-width, initial-scale=1"> <link rel=stylesheet  href="/libs/highlight/github.min.css"> <script src="/libs/clipboard.min.js"></script> <link rel=stylesheet  href="/css/franklin.css"> <link rel=stylesheet  href="/css/poole_hyde.css"> <link rel=stylesheet  href="/css/zengc.css"> <style> html {font-size: 17px;} .franklin-content {position: relative; padding-left: 8%; padding-right: 5%; line-height: 1.35em;} @media (min-width: 940px) { .franklin-content {width: 100%; margin-left: auto; margin-right: auto;} } @media (max-width: 768px) { .franklin-content {padding-left: 6%; padding-right: 6%;} } </style> <link rel=icon  href="/assets/icons/r-project.svg"> <title>Zengchao XU | ✓ Reshape Data</title> <div class=sidebar > <div class="container sidebar-sticky"> <div class=sidebar-about > <h1>Zengchao XU</h1> <p class=lead >Heal the world :)</p> </div> <nav class=sidebar-nav > <a class="sidebar-nav-item " href="/">Home</a> <a class="sidebar-nav-item " href="/research/pubs/">Publications</a> <!-- <a class="sidebar-nav-item {{ispage research/development/*}}active{{end}}" href="/research/development/">Development</a> <a class="sidebar-nav-item {{ispage cv/*}}active{{end}}" href="/cv/">CV</a> --> </nav> </div> <div class="container sidebar-foot"> <!-- <p>&copy; {{fill author}}.</p> <a href="https://beian.miit.gov.cn/">豫ICP备18034822号</a> --> </div> </div> <div class="content container"> <div class=franklin-content > <h1 id=reshape_data ><a href="#reshape_data" class=header-anchor >Reshape Data</a></h1> <p><em>2021-11-04</em></p> <p>The repeated measurements in observed data can be orginazed as <code>wide</code> or <code>long</code> format:</p> <ul> <li><p><code>wide</code>: the repeated measurements are arranged into sepearated columns of the same row.</p> <li><p><code>long</code>: repeated measurements are arranged into sepearated rows of the same column.</p> </ul> <p>Two ways to tranform the data between long and wide format are considered:</p> <ol> <li><p>Built-in fuction <code>reshape</code> is qualified to the conversion.</p> <li><p>Pkg <code>data.table</code> provide function <code>melt</code> &#40;wide-to-long&#41; and <code>dcast</code> &#40;long-to-wide&#41;.</p> </ol> <h2 id=statsreshape ><a href="#statsreshape" class=header-anchor ><code>stats::reshape</code></a></h2> <p>Let <code>DF</code> be a wide data, i.e.</p> <pre><code class="r hljs">rm<span class=hljs-punctuation >(</span><span class=hljs-built_in >list</span><span class=hljs-operator >=</span>ls<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span>
+set.seed<span class=hljs-punctuation >(</span><span class=hljs-number >2021</span><span class=hljs-punctuation >)</span>
+DF <span class=hljs-operator >&lt;-</span> matrix<span class=hljs-punctuation >(</span>rnorm<span class=hljs-punctuation >(</span><span class=hljs-number >3</span><span class=hljs-operator >*</span><span class=hljs-number >9</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> <span class=hljs-number >3</span><span class=hljs-punctuation >)</span> <span class=hljs-operator >|&gt;</span> <span class=hljs-built_in >round</span><span class=hljs-punctuation >(</span>digits<span class=hljs-operator >=</span><span class=hljs-number >2</span><span class=hljs-punctuation >)</span> <span class=hljs-operator >|&gt;</span> data.frame<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span>
+colnames<span class=hljs-punctuation >(</span>DF<span class=hljs-punctuation >)</span> <span class=hljs-operator >&lt;-</span> paste<span class=hljs-punctuation >(</span><span class=hljs-built_in >rep</span><span class=hljs-punctuation >(</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;F&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;G&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;H&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> each<span class=hljs-operator >=</span><span class=hljs-number >3</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;a&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;b&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;c&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> sep<span class=hljs-operator >=</span><span class=hljs-string >&#x27;.&#x27;</span><span class=hljs-punctuation >)</span>
+
+DF <span class=hljs-operator >&lt;-</span> data.frame<span class=hljs-punctuation >(</span>ID<span class=hljs-operator >=</span><span class=hljs-built_in >letters</span><span class=hljs-punctuation >[</span><span class=hljs-number >1</span><span class=hljs-operator >:</span><span class=hljs-number >3</span><span class=hljs-punctuation >]</span><span class=hljs-punctuation >,</span> DF<span class=hljs-punctuation >)</span>
+show<span class=hljs-punctuation >(</span>DF<span class=hljs-punctuation >)</span></code></pre> <pre><code class="julia hljs"><span class=hljs-comment >##   ID   F.a   F.b  F.c   G.a  G.b   G.c   H.a   H.b   H.c</span>
+<span class=hljs-comment >## 1  a -0.12  0.36 0.26  1.73 0.18 -1.84  1.48 -0.19 -1.62</span>
+<span class=hljs-comment >## 2  b  0.55  0.90 0.92 -1.08 1.51  1.62  1.51 -1.10  0.11</span>
+<span class=hljs-comment >## 3  c  0.35 -1.92 0.01 -0.27 1.60  0.13 -0.94  1.21 -1.46</span></code></pre> <p>In the cell below the <code>DF</code> is melted into a long table.</p> <pre><code class="r hljs">varying <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >list</span><span class=hljs-punctuation >(</span>
+    <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;F.a&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;G.a&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;H.a&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span>
+    <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;F.b&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;G.b&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;H.b&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span>
+    <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;F.c&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;G.c&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;H.c&#x27;</span><span class=hljs-punctuation >)</span>
+<span class=hljs-punctuation >)</span>
+
+times <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;F&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;G&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;H&#x27;</span><span class=hljs-punctuation >)</span>
+
+v.names <span class=hljs-operator >&lt;-</span> <span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;a&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;b&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;c&#x27;</span><span class=hljs-punctuation >)</span>
+timevar <span class=hljs-operator >&lt;-</span> <span class=hljs-string >&#x27;method&#x27;</span>
+
+DF.long <span class=hljs-operator >&lt;-</span> reshape<span class=hljs-punctuation >(</span>DF<span class=hljs-punctuation >,</span> direction<span class=hljs-operator >=</span><span class=hljs-string >&#x27;long&#x27;</span><span class=hljs-punctuation >,</span> varying<span class=hljs-operator >=</span>varying<span class=hljs-punctuation >,</span> times<span class=hljs-operator >=</span>times<span class=hljs-punctuation >,</span> v.names<span class=hljs-operator >=</span>v.names<span class=hljs-punctuation >,</span> timevar<span class=hljs-operator >=</span>timevar<span class=hljs-punctuation >)</span>
+show<span class=hljs-punctuation >(</span>DF.long<span class=hljs-punctuation >)</span></code></pre> <pre><code class="julia hljs"><span class=hljs-comment >##     ID method     a     b     c id</span>
+<span class=hljs-comment >## 1.F  a      F -0.12  0.36  0.26  1</span>
+<span class=hljs-comment >## 2.F  b      F  0.55  0.90  0.92  2</span>
+<span class=hljs-comment >## 3.F  c      F  0.35 -1.92  0.01  3</span>
+<span class=hljs-comment >## 1.G  a      G  1.73  0.18 -1.84  1</span>
+<span class=hljs-comment >## 2.G  b      G -1.08  1.51  1.62  2</span>
+<span class=hljs-comment >## 3.G  c      G -0.27  1.60  0.13  3</span>
+<span class=hljs-comment >## 1.H  a      H  1.48 -0.19 -1.62  1</span>
+<span class=hljs-comment >## 2.H  b      H  1.51 -1.10  0.11  2</span>
+<span class=hljs-comment >## 3.H  c      H -0.94  1.21 -1.46  3</span></code></pre> <h2 id=datatablemeltdcast ><a href="#datatablemeltdcast" class=header-anchor ><code>data.table::melt/dcast</code></a></h2> <pre><code class="r hljs">library<span class=hljs-punctuation >(</span>data.table<span class=hljs-punctuation >)</span>
+DT <span class=hljs-operator >&lt;-</span> copy<span class=hljs-punctuation >(</span>DF<span class=hljs-punctuation >)</span> <span class=hljs-operator >|&gt;</span> as.data.table<span class=hljs-punctuation >(</span><span class=hljs-punctuation >)</span>
+
+DT.long <span class=hljs-operator >&lt;-</span> melt<span class=hljs-punctuation >(</span>DT<span class=hljs-punctuation >,</span> id.vars<span class=hljs-operator >=</span><span class=hljs-string >&#x27;ID&#x27;</span><span class=hljs-punctuation >,</span> 
+    measure.vars<span class=hljs-operator >=</span><span class=hljs-built_in >list</span><span class=hljs-punctuation >(</span>
+        a<span class=hljs-operator >=</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;F.a&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;G.a&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;H.a&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> 
+        b<span class=hljs-operator >=</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;F.b&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;G.b&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;H.b&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> 
+        <span class=hljs-built_in >c</span><span class=hljs-operator >=</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;F.c&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;G.c&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;H.c&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >,</span> 
+    variable.name<span class=hljs-operator >=</span><span class=hljs-string >&#x27;method&#x27;</span><span class=hljs-punctuation >)</span>
+
+DT.long<span class=hljs-punctuation >[</span>method<span class=hljs-operator >==</span><span class=hljs-number >1</span><span class=hljs-punctuation >,</span> method<span class=hljs-operator >:=</span><span class=hljs-string >&#x27;F&#x27;</span><span class=hljs-punctuation >]</span>
+DT.long<span class=hljs-punctuation >[</span>method<span class=hljs-operator >==</span><span class=hljs-number >2</span><span class=hljs-punctuation >,</span> method<span class=hljs-operator >:=</span><span class=hljs-string >&#x27;G&#x27;</span><span class=hljs-punctuation >]</span>
+DT.long<span class=hljs-punctuation >[</span>method<span class=hljs-operator >==</span><span class=hljs-number >3</span><span class=hljs-punctuation >,</span> method<span class=hljs-operator >:=</span><span class=hljs-string >&#x27;H&#x27;</span><span class=hljs-punctuation >]</span>
+
+show<span class=hljs-punctuation >(</span>DT.long<span class=hljs-punctuation >)</span></code></pre> <pre><code class="julia hljs"><span class=hljs-comment >##    ID method     a     b     c</span>
+<span class=hljs-comment >## 1:  a      F -0.12  0.36  0.26</span>
+<span class=hljs-comment >## 2:  b      F  0.55  0.90  0.92</span>
+<span class=hljs-comment >## 3:  c      F  0.35 -1.92  0.01</span>
+<span class=hljs-comment >## 4:  a      G  1.73  0.18 -1.84</span>
+<span class=hljs-comment >## 5:  b      G -1.08  1.51  1.62</span>
+<span class=hljs-comment >## 6:  c      G -0.27  1.60  0.13</span>
+<span class=hljs-comment >## 7:  a      H  1.48 -0.19 -1.62</span>
+<span class=hljs-comment >## 8:  b      H  1.51 -1.10  0.11</span>
+<span class=hljs-comment >## 9:  c      H -0.94  1.21 -1.46</span></code></pre> <pre><code class="r hljs">show<span class=hljs-punctuation >(</span>dcast<span class=hljs-punctuation >(</span>DT.long<span class=hljs-punctuation >,</span> ID <span class=hljs-operator >~</span> method<span class=hljs-punctuation >,</span> value.var<span class=hljs-operator >=</span><span class=hljs-built_in >c</span><span class=hljs-punctuation >(</span><span class=hljs-string >&#x27;a&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;b&#x27;</span><span class=hljs-punctuation >,</span> <span class=hljs-string >&#x27;c&#x27;</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span><span class=hljs-punctuation >)</span></code></pre>
+<pre><code class="julia hljs"><span class=hljs-comment >##    ID   a_F   a_G   a_H   b_F  b_G   b_H  c_F   c_G   c_H</span>
+<span class=hljs-comment >## 1:  a -0.12  1.73  1.48  0.36 0.18 -0.19 0.26 -1.84 -1.62</span>
+<span class=hljs-comment >## 2:  b  0.55 -1.08  1.51  0.90 1.51 -1.10 0.92  1.62  0.11</span>
+<span class=hljs-comment >## 3:  c  0.35 -0.27 -0.94 -1.92 1.60  1.21 0.01  0.13 -1.46</span></code></pre>
+<div class=page-foot >
+  <div class=copyright >
+    
+    &copy; Zengchao XU. Last touched: Sep 1st, 2022.
+  </div>
+</div>
+</div>
+    </div>  
+    
+    
+        
+
+
+        
+
+<script>
+(function(){
+
+	// Get the elements.
+	// - the 'pre' element.
+	// - the 'div' with the 'paste-content' id.
+
+	var pre = document.getElementsByTagName('pre');
+
+	// Add a copy button in the 'pre' element.
+	// which only has the className of 'language-'.
+
+	for (var i = 0; i < pre.length; i++) {
+		var isLanguage = pre[i].children[0].className.indexOf('language-');
+
+		if ( isLanguage === 0 ) {
+			var button           = document.createElement('button');
+					button.className = 'copy-button';
+					button.textContent = 'Copy';
+
+					pre[i].appendChild(button);
+		}
+	};
+
+	// Run Clipboard
+
+	var copyCode = new Clipboard('.copy-button', {
+		target: function(trigger) {
+			return trigger.previousElementSibling;
+    }
+	});
+
+	// On success:
+	// - Change the "Copy" text to "Copied".
+	// - Swap it to "Copy" in 2s.
+	// - Lead user to the "contenteditable" area with Velocity scroll.
+
+	copyCode.on('success', function(event) {
+		event.clearSelection();
+		event.trigger.textContent = 'Copied';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 2000);
+
+	});
+
+	// On error (Safari):
+	// - Change the  "Press Ctrl+C to copy"
+	// - Swap it to "Copy" in 2s.
+
+	copyCode.on('error', function(event) {
+		event.trigger.textContent = 'Press "Ctrl + C" to copy';
+		window.setTimeout(function() {
+			event.trigger.textContent = 'Copy';
+		}, 5000);
+	});
+
+})();
+</script>
