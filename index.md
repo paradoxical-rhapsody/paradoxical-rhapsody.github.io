@@ -4,10 +4,12 @@
 
 ## Contact
 
-\icon{envelope-fill} Email: `xuzengchao@domain` with `domain=shnu.edu.cn` <!-- `Y=sjtu.edu.cn` 20220901-->
+\icon{envelope-fill} Email: `xuzengchao@domain` with `domain=shnu.edu.cn`
 
 <!-- \icon{geo-alt-fill} Minhang campus, Shanghai Jiao Tong University, 200240, Shanghai. -->
-\icon{geo-alt-fill} Office 110 in math building, Xuhui campus, Shanghai Normal Univ., 100 Guilin RD, Shanghai.
+\icon{geo-alt-fill} Address: Xuhui campus, Shanghai Normal Univ., No.100 Guilin RD, Shanghai.
+
+\icon{buildings-fill} Office: Room 110 in math building.
 
 
 ## Links
